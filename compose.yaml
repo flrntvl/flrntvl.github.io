@@ -1,0 +1,15 @@
+services:
+  web:
+    build: .
+    ports:
+      - '4321:4321'
+    volumes:
+      # Source tree from the host, so edits are picked up without a rebuild.
+      # `node_modules` stays in this mount instead of a named volume: it keeps
+      # native deps like `sharp` shared with the host and lets an editor outside
+      # the container resolve imports.
+      - .:/app
+    # Keeps Astro's colored output readable.
+    tty: true
+    environment:
+      ASTRO_TELEMETRY_DISABLED: '1'

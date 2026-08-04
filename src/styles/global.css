@@ -1,0 +1,207 @@
+@import 'tailwindcss';
+@import 'tw-animate-css';
+@import 'shadcn/tailwind.css';
+
+@custom-variant dark (&:is(.dark *));
+
+/* ---------------------------------------------------------------
+   flrntvl.dev — shadcn preset
+   Base color: Stone · Radius: 0.5rem · Font: mono everywhere
+   Palette taken from the mockups (bg / fg / mut / line / card / acc)
+   --------------------------------------------------------------- */
+
+:root {
+	--radius: 0.5rem;
+
+	--background: oklch(0.985 0.002 95); /* #fbfbfa */
+	--foreground: oklch(0.202 0.003 95); /* #151514 */
+
+	--card: oklch(1 0 0); /* #ffffff */
+	--card-foreground: var(--foreground);
+	--popover: oklch(1 0 0);
+	--popover-foreground: var(--foreground);
+
+	/* terminal accent: understated indigo */
+	--primary: oklch(0.52 0.11 250);
+	--primary-foreground: oklch(0.985 0.002 95);
+
+	--secondary: oklch(0.958 0.004 95);
+	--secondary-foreground: var(--foreground);
+
+	--muted: oklch(0.958 0.004 95);
+	--muted-foreground: oklch(0.545 0.005 95); /* #71716c */
+
+	--accent: oklch(0.945 0.012 250);
+	--accent-foreground: oklch(0.42 0.11 250);
+
+	--destructive: oklch(0.577 0.192 27.3);
+	--destructive-foreground: oklch(0.985 0.002 95);
+
+	--border: oklch(0.918 0.005 95); /* #e5e4df */
+	--input: oklch(0.918 0.005 95);
+	--ring: oklch(0.52 0.11 250);
+
+	--chart-1: oklch(0.52 0.11 250);
+	--chart-2: oklch(0.62 0.09 210);
+	--chart-3: oklch(0.68 0.08 160);
+	--chart-4: oklch(0.72 0.11 80);
+	--chart-5: oklch(0.62 0.13 30);
+
+	--sidebar: oklch(0.985 0.002 95);
+	--sidebar-foreground: var(--foreground);
+	--sidebar-primary: oklch(0.52 0.11 250);
+	--sidebar-primary-foreground: oklch(0.985 0.002 95);
+	--sidebar-accent: oklch(0.958 0.004 95);
+	--sidebar-accent-foreground: var(--foreground);
+	--sidebar-border: oklch(0.918 0.005 95);
+	--sidebar-ring: oklch(0.52 0.11 250);
+}
+
+.dark {
+	--background: oklch(0.155 0.003 285); /* #0e0e0f */
+	--foreground: oklch(0.955 0.005 95); /* #f2f1ed */
+
+	--card: oklch(0.19 0.004 285); /* #141416 */
+	--card-foreground: var(--foreground);
+	--popover: oklch(0.19 0.004 285);
+	--popover-foreground: var(--foreground);
+
+	--primary: oklch(0.76 0.11 250);
+	--primary-foreground: oklch(0.155 0.003 285);
+
+	--secondary: oklch(0.245 0.005 285);
+	--secondary-foreground: var(--foreground);
+
+	--muted: oklch(0.245 0.005 285);
+	--muted-foreground: oklch(0.645 0.005 95); /* #8d8d88 */
+
+	--accent: oklch(0.265 0.012 250);
+	--accent-foreground: oklch(0.86 0.08 250);
+
+	--destructive: oklch(0.65 0.17 25);
+	--destructive-foreground: oklch(0.155 0.003 285);
+
+	--border: oklch(0.265 0.005 285); /* #232326 */
+	--input: oklch(0.265 0.005 285);
+	--ring: oklch(0.76 0.11 250);
+
+	--sidebar: oklch(0.155 0.003 285);
+	--sidebar-foreground: var(--foreground);
+	--sidebar-primary: oklch(0.76 0.11 250);
+	--sidebar-primary-foreground: oklch(0.155 0.003 285);
+	--sidebar-accent: oklch(0.245 0.005 285);
+	--sidebar-accent-foreground: var(--foreground);
+	--sidebar-border: oklch(0.265 0.005 285);
+	--sidebar-ring: oklch(0.76 0.11 250);
+}
+
+/* Declared outside any layer so they are always emitted, whichever utilities
+   the JSX actually ends up using. */
+@keyframes caret-blink {
+	0%,
+	49% {
+		opacity: 1;
+	}
+	50%,
+	100% {
+		opacity: 0;
+	}
+}
+
+@keyframes out-in {
+	from {
+		opacity: 0;
+		transform: translateY(6px);
+		filter: blur(1px);
+	}
+	to {
+		opacity: 1;
+		transform: none;
+		filter: none;
+	}
+}
+
+@theme inline {
+	--radius-sm: calc(var(--radius) * 0.6);
+	--radius-md: calc(var(--radius) * 0.8);
+	--radius-lg: var(--radius);
+	--radius-xl: calc(var(--radius) * 1.4);
+	--radius-2xl: calc(var(--radius) * 1.8);
+	--radius-3xl: calc(var(--radius) * 2.2);
+	--radius-4xl: calc(var(--radius) * 2.6);
+
+	--color-background: var(--background);
+	--color-foreground: var(--foreground);
+	--color-card: var(--card);
+	--color-card-foreground: var(--card-foreground);
+	--color-popover: var(--popover);
+	--color-popover-foreground: var(--popover-foreground);
+	--color-primary: var(--primary);
+	--color-primary-foreground: var(--primary-foreground);
+	--color-secondary: var(--secondary);
+	--color-secondary-foreground: var(--secondary-foreground);
+	--color-muted: var(--muted);
+	--color-muted-foreground: var(--muted-foreground);
+	--color-accent: var(--accent);
+	--color-accent-foreground: var(--accent-foreground);
+	--color-destructive: var(--destructive);
+	--color-destructive-foreground: var(--destructive-foreground);
+	--color-border: var(--border);
+	--color-input: var(--input);
+	--color-ring: var(--ring);
+	--color-chart-1: var(--chart-1);
+	--color-chart-2: var(--chart-2);
+	--color-chart-3: var(--chart-3);
+	--color-chart-4: var(--chart-4);
+	--color-chart-5: var(--chart-5);
+	--color-sidebar: var(--sidebar);
+	--color-sidebar-foreground: var(--sidebar-foreground);
+	--color-sidebar-primary: var(--sidebar-primary);
+	--color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+	--color-sidebar-accent: var(--sidebar-accent);
+	--color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+	--color-sidebar-border: var(--sidebar-border);
+	--color-sidebar-ring: var(--sidebar-ring);
+
+	/* Mono everywhere: the site IS a terminal.
+	   Astro's <Font> component sets the variable; the fallback covers a page
+	   that forgets to render it. */
+	--font-sans: var(--font-jetbrains-mono, ui-monospace, SFMono-Regular, Menlo, monospace);
+	--font-mono: var(--font-sans);
+	--font-heading: var(--font-sans);
+
+	--animate-caret: caret-blink 1.1s steps(1) infinite;
+	--animate-dot: caret-blink 1.6s steps(1) infinite;
+	--animate-out-in: out-in 0.3s cubic-bezier(0.2, 0.7, 0.3, 1) both;
+}
+
+@layer base {
+	* {
+		@apply border-border outline-ring/50;
+	}
+	body {
+		@apply bg-background font-mono text-foreground antialiased;
+		font-feature-settings: 'liga' 0;
+	}
+	a {
+		color: inherit;
+		text-decoration: none;
+	}
+	a:hover {
+		@apply text-primary;
+	}
+	::selection {
+		@apply bg-primary/20;
+	}
+}
+
+/* Background effects are decorative: they freeze, they don't explain themselves. */
+@media (prefers-reduced-motion: reduce) {
+	*,
+	*::before,
+	*::after {
+		animation-duration: 0.01ms !important;
+		animation-iteration-count: 1 !important;
+		transition-duration: 0.01ms !important;
+	}
+}

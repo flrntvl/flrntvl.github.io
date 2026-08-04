@@ -1,0 +1,60 @@
+name: Deploy to GitHub Pages
+
+on:
+  # Every push to the deployed branch.
+  push:
+    branches: [main]
+  # Allows running the workflow manually from the Actions tab.
+  workflow_dispatch:
+
+# Allow jobs to clone the repository by default.
+# Deployment permissions stays scoped to the only job that needs them.
+permissions:
+  contents: read
+
+# One deployment at a time.
+# A newer push queues behind the running one rather than cancelling it, so Pages never ends up on a half-published build.
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  # Same gates as `make check`, before anything reaches Pages.
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout the repository
+        uses: actions/checkout@v7
+      - name: Set up Node
+        uses: actions/setup-node@v7
+        with:
+          # Same major as the development image, see Dockerfile.
+          node-version: 24
+          cache: npm
+      - name: Install what package-lock.json pins
+        run: npm ci
+      - name: Types, lint and formatting
+        run: npm run check
+
+  build:
+    needs: check
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout the repository
+        uses: actions/checkout@v7
+      - name: Install, build, and upload the site
+        uses: withastro/action@v6
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v5
