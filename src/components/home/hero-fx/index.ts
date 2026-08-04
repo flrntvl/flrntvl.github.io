@@ -13,4 +13,7 @@ export const BUILDERS: Record<Fx, Builder> = {
 	grid: buildGrid,
 };
 
+/** Not part of the home chip picker (see DESIGN.md §5) — used standalone on the 404 page. */
+export { buildStorm } from './storm';
+
 export type { Builder, Mouse, SceneObj, ThreeNS } from './shared';

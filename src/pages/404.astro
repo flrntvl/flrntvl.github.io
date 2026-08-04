@@ -1,0 +1,41 @@
+---
+import '../styles/global.css';
+import { Font } from 'astro:assets';
+import NotFoundPage from '../components/notfound/NotFoundPage';
+---
+
+<!doctype html>
+<html lang="fr">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width,initial-scale=1" />
+		<meta name="robots" content="noindex" />
+		<link rel="icon" href="/favicon.ico" sizes="32x32" />
+		<link rel="icon" type="image/png" href="/icon-192.png" sizes="192x192" />
+		<link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+		<meta name="generator" content={Astro.generator} />
+
+		<Font cssVariable="--font-jetbrains-mono" preload />
+
+		<title>404 — flrntvl.dev</title>
+
+		{/* Applies the theme before first paint; without it the page flashes light. */}
+		<script is:inline>
+			try {
+				const stored = localStorage.getItem('theme');
+				const dark = stored ? stored === 'dark' : matchMedia('(prefers-color-scheme: dark)').matches;
+				document.documentElement.classList.toggle('dark', dark);
+			} catch {
+				// Storage unavailable: fall back to the light theme.
+			}
+		</script>
+	</head>
+	<body>
+		{
+			/* client:only — this page reads window.location for the path the visitor actually
+		    requested (GitHub Pages serves this file as-is for any unmatched URL), so there
+		    is nothing meaningful to server-render at build time. */
+		}
+		<NotFoundPage client:only="react" />
+	</body>
+</html>

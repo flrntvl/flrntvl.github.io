@@ -86,6 +86,34 @@ export const SHELL: Record<Lang, ShellLine[]> = {
 	],
 };
 
+type NotFoundLabels = {
+	message: string;
+	cta: string;
+	/** The exchange played in the terminal: the failed `cat`, then its exit code — see DESIGN.md §7. */
+	lines: (path: string) => ShellLine[];
+};
+
+export const NOT_FOUND: Record<Lang, NotFoundLabels> = {
+	fr: {
+		message: "Cette page n'existe pas — ou plus.",
+		cta: 'cd ~ — retour à l’accueil',
+		lines: (path) => [
+			{ cmd: `cat ${path}`, out: `cat: ${path}: Aucun fichier ou dossier de ce type` },
+			{ cmd: 'echo $?', out: '404' },
+		],
+	},
+	en: {
+		message: "This page doesn't exist — or not anymore.",
+		cta: 'cd ~ — back home',
+		lines: (path) => [
+			{ cmd: `cat ${path}`, out: `cat: ${path}: No such file or directory` },
+			{ cmd: 'echo $?', out: '404' },
+		],
+	},
+};
+
+export const WINDOW_DOTS = ['#ff5f57', '#febc2e', '#28c840'];
+
 export const WIP_STATUS = 'HTTP 206 — Partial Content';
 
 export const GITHUB_URL = 'https://github.com/flrntvl';

@@ -1,22 +1,23 @@
 import { useEffect, useRef } from 'react';
 import type * as THREE from 'three';
-import { BUILDERS, type Mouse, type ThreeNS } from '@/components/home/hero-fx';
-import type { Fx } from '@/lib/site-content';
+import type { Builder, Mouse, ThreeNS } from '@/components/home/hero-fx';
 
 /**
  * Decorative hero background. Three rules: low opacity, no legible text competing
  * with the terminal, and a silent fallback when WebGL is missing.
  */
-export default function HeroCanvas({ fx, dark }: { fx: Fx; dark: boolean }) {
+export default function HeroCanvas({ builder, dark }: { builder: Builder; dark: boolean }) {
 	const canvasRef = useRef<HTMLCanvasElement>(null);
-	const apiRef = useRef<{ rebuild: (fx: Fx) => void; setTheme: (dark: boolean) => void } | null>(null);
+	const apiRef = useRef<{ rebuild: (builder: Builder) => void; setTheme: (dark: boolean) => void } | null>(
+		null,
+	);
 	// Props mirror kept current after every render: `import('three')` resolves after
 	// the theme has been applied, so the scene must be built from the value at that
 	// moment rather than the one captured on mount. Written from an effect because a
 	// ref must not be touched during render; the initial value covers the first pass.
-	const latest = useRef({ fx, dark });
+	const latest = useRef({ builder, dark });
 	useEffect(() => {
-		latest.current = { fx, dark };
+		latest.current = { builder, dark };
 	});
 
 	useEffect(() => {
@@ -62,7 +63,7 @@ export default function HeroCanvas({ fx, dark }: { fx: Fx; dark: boolean }) {
 			};
 			host?.addEventListener('pointermove', onPointer);
 
-			let obj = BUILDERS[latest.current.fx](THREE, scene, camera, latest.current.dark);
+			let obj = latest.current.builder(THREE, scene, camera, latest.current.dark);
 
 			const resize = () => {
 				const r = canvas.getBoundingClientRect();
@@ -89,7 +90,7 @@ export default function HeroCanvas({ fx, dark }: { fx: Fx; dark: boolean }) {
 					camera.position.set(0, 0, 12);
 					camera.rotation.set(0, 0, 0);
 					camera.updateProjectionMatrix();
-					obj = BUILDERS[next](THREE, scene, camera, latest.current.dark);
+					obj = next(THREE, scene, camera, latest.current.dark);
 					resize();
 					if (reduced) draw(0, { x: 0, y: 0 });
 				},
@@ -134,8 +135,8 @@ export default function HeroCanvas({ fx, dark }: { fx: Fx; dark: boolean }) {
 	}, []);
 
 	useEffect(() => {
-		apiRef.current?.rebuild(fx);
-	}, [fx]);
+		apiRef.current?.rebuild(builder);
+	}, [builder]);
 
 	useEffect(() => {
 		apiRef.current?.setTheme(dark);
