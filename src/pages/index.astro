@@ -1,49 +1,8 @@
 ---
-import '../styles/global.css';
-import { Font } from 'astro:assets';
-import HomePage from '../components/home/HomePage';
-import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
-import { AVATAR_URL } from '../lib/site-content';
-
-const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+import HomePage from '@/components/home/HomePage';
+import Base from '@/layouts/Base.astro';
 ---
 
-<!doctype html>
-<html lang="fr">
-	<head>
-		<meta charset="utf-8" />
-		<meta name="viewport" content="width=device-width,initial-scale=1" />
-		<link rel="icon" href="/favicon.ico" sizes="32x32" />
-		<link rel="icon" type="image/png" href="/icon-192.png" sizes="192x192" />
-		<link rel="apple-touch-icon" href="/apple-touch-icon.png" />
-		<link rel="sitemap" href="/sitemap-index.xml" />
-		<link rel="canonical" href={canonicalURL} />
-		<meta name="generator" content={Astro.generator} />
-
-		<Font cssVariable="--font-jetbrains-mono" preload />
-
-		<title>{SITE_TITLE}</title>
-		<meta name="description" content={SITE_DESCRIPTION} />
-
-		<meta property="og:type" content="website" />
-		<meta property="og:url" content={Astro.url} />
-		<meta property="og:title" content={SITE_TITLE} />
-		<meta property="og:description" content={SITE_DESCRIPTION} />
-		<meta property="og:image" content={AVATAR_URL} />
-		<meta name="twitter:card" content="summary" />
-
-		{/* Applies the theme before first paint; without it the page flashes light. */}
-		<script is:inline>
-			try {
-				const stored = localStorage.getItem('theme');
-				const dark = stored ? stored === 'dark' : matchMedia('(prefers-color-scheme: dark)').matches;
-				document.documentElement.classList.toggle('dark', dark);
-			} catch {
-				// Storage unavailable: fall back to the light theme.
-			}
-		</script>
-	</head>
-	<body>
-		<HomePage client:load />
-	</body>
-</html>
+<Base>
+	<HomePage client:load />
+</Base>
