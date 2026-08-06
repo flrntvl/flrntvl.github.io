@@ -7,7 +7,7 @@ import { AVATAR_URL } from '@/lib/site-content';
 interface Props {
 	title?: string;
 	description?: string;
-	lang?: 'fr' | 'en';
+	lang: 'fr' | 'en';
 	image?: string;
 	noindex?: boolean;
 }
@@ -15,7 +15,7 @@ interface Props {
 const {
 	title = SITE_TITLE,
 	description = SITE_DESCRIPTION,
-	lang = 'fr',
+	lang,
 	image = AVATAR_URL,
 	noindex = false,
 } = Astro.props;

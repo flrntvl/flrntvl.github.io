@@ -1,0 +1,11 @@
+---
+import HomePage from '@/components/home/HomePage';
+import Base from '@/layouts/Base.astro';
+
+const title = 'Florent Val — flrntvl.dev';
+const description = 'Web engineer — based in France. TypeScript, Astro, React, PHP.';
+---
+
+<Base title={title} description={description} lang="en">
+	<HomePage client:load lang="en" />
+</Base>

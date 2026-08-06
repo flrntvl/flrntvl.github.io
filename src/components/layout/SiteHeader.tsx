@@ -4,13 +4,13 @@ import type { Lang } from '@/lib/site-content';
 export default function SiteHeader({
 	path,
 	lang,
-	onToggleLang,
+	langHref,
 	dark,
 	onToggleTheme,
 }: {
 	path: string;
 	lang: Lang;
-	onToggleLang: () => void;
+	langHref: string;
 	dark: boolean;
 	onToggleTheme: () => void;
 }) {
@@ -25,15 +25,14 @@ export default function SiteHeader({
 				<span className="text-muted-foreground">$</span>
 			</a>
 			<div className="flex items-center gap-3 sm:gap-[22px]">
-				<button
-					type="button"
-					onClick={onToggleLang}
+				<a
+					href={langHref}
 					title="Language"
-					className="flex cursor-pointer items-center gap-[7px] rounded-[7px] border px-2.5 py-[5px] font-[inherit] text-foreground"
+					className="flex items-center gap-[7px] rounded-[7px] border px-2.5 py-[5px] font-[inherit] text-foreground"
 				>
 					<Globe size={14} strokeWidth={1.6} aria-hidden="true" />
 					<span>{lang === 'fr' ? 'EN' : 'FR'}</span>
-				</button>
+				</a>
 				<button
 					type="button"
 					onClick={onToggleTheme}

@@ -1,29 +1,34 @@
+import { getRelativeLocaleUrl } from 'astro:i18n';
+import { useEffect } from 'react';
 import HeroCanvas from '@/components/home/HeroCanvas';
 import { buildStorm } from '@/components/home/hero-fx';
 import Terminal from '@/components/home/Terminal';
 import SiteFooter from '@/components/layout/SiteFooter';
 import SiteHeader from '@/components/layout/SiteHeader';
-import { NOT_FOUND, WINDOW_DOTS } from '@/lib/site-content';
-import { useLang } from '@/lib/use-lang';
+import { NOT_FOUND, WINDOW_DOTS, type Lang } from '@/lib/site-content';
 import { useTheme } from '@/lib/use-theme';
 
-/** GitHub Pages serves this file for any unmatched path, so `window.location`
- *  still holds the URL the visitor actually tried — unlike whatever Astro assigns
- *  this page at build time. Rendered client:only, so `window` is always there. */
 const requestedPath = () => window.location.pathname.replace(/^\//, '') || '.';
 
+const currentLang = (): Lang => (window.location.pathname.replace(/^\//, '').startsWith('en/') ? 'en' : 'fr');
+
 export default function NotFoundPage() {
-	const [lang, setLang] = useLang();
+	const lang = currentLang();
+	const otherLang: Lang = lang === 'fr' ? 'en' : 'fr';
 	const [dark, toggleTheme] = useTheme();
 	const nf = NOT_FOUND[lang];
 	const path = requestedPath();
+
+	useEffect(() => {
+		document.documentElement.lang = lang;
+	}, [lang]);
 
 	return (
 		<div className="min-h-screen bg-background text-foreground">
 			<SiteHeader
 				path="~"
 				lang={lang}
-				onToggleLang={() => setLang(lang === 'fr' ? 'en' : 'fr')}
+				langHref={getRelativeLocaleUrl(otherLang)}
 				dark={dark}
 				onToggleTheme={toggleTheme}
 			/>
@@ -47,13 +52,11 @@ export default function NotFoundPage() {
 						<span className="w-10" />
 					</div>
 
-					{/* Keyed on the language: a switch remounts the terminal, which restarts
-					    the typing from the new lines instead of resetting state mid-run. */}
-					<Terminal key={lang} lines={nf.lines(path)} />
+					<Terminal lines={nf.lines(path)} />
 				</div>
 
 				<a
-					href="/"
+					href={getRelativeLocaleUrl(lang)}
 					className="relative z-[1] rounded-lg bg-foreground px-[18px] py-[11px] text-[13px] text-background hover:text-background"
 				>
 					{nf.cta}

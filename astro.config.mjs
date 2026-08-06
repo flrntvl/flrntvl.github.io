@@ -9,6 +9,10 @@ import react from '@astrojs/react';
 // https://astro.build/config
 export default defineConfig({
 	site: 'https://flrntvl.dev',
+	i18n: {
+		defaultLocale: 'fr',
+		locales: ['fr', 'en'],
+	},
 	integrations: [mdx(), sitemap(), react()],
 	fonts: [
 		{

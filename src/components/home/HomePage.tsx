@@ -1,27 +1,36 @@
+import { getRelativeLocaleUrl } from 'astro:i18n';
 import { useState } from 'react';
 import { BUILDERS } from './hero-fx';
 import HeroCanvas from './HeroCanvas';
 import Terminal from './Terminal';
 import SiteFooter from '@/components/layout/SiteFooter';
 import SiteHeader from '@/components/layout/SiteHeader';
-import { AVATAR_URL, GITHUB_URL, LABELS, SHELL, WINDOW_DOTS, WIP_STATUS, type Fx } from '@/lib/site-content';
-import { useLang } from '@/lib/use-lang';
+import {
+	AVATAR_URL,
+	GITHUB_URL,
+	LABELS,
+	SHELL,
+	WINDOW_DOTS,
+	WIP_STATUS,
+	type Fx,
+	type Lang,
+} from '@/lib/site-content';
 import { useTheme } from '@/lib/use-theme';
 
 const FX_ORDER: Fx[] = ['matrix', 'dots', 'grid'];
 
-export default function HomePage() {
-	const [lang, setLang] = useLang();
+export default function HomePage({ lang }: { lang: Lang }) {
 	const [dark, toggleTheme] = useTheme();
 	const [fx, setFx] = useState<Fx>('matrix');
 	const t = LABELS[lang];
+	const otherLang: Lang = lang === 'fr' ? 'en' : 'fr';
 
 	return (
 		<div className="min-h-screen bg-background text-foreground">
 			<SiteHeader
 				path="~"
 				lang={lang}
-				onToggleLang={() => setLang(lang === 'fr' ? 'en' : 'fr')}
+				langHref={getRelativeLocaleUrl(otherLang)}
 				dark={dark}
 				onToggleTheme={toggleTheme}
 			/>
@@ -60,9 +69,7 @@ export default function HomePage() {
 						<span className="w-10" />
 					</div>
 
-					{/* Keyed on the language: a switch remounts the terminal, which restarts
-					    the typing from the new lines instead of resetting state mid-run. */}
-					<Terminal key={lang} lines={SHELL[lang]} />
+					<Terminal lines={SHELL[lang]} />
 
 					<div className="flex items-center justify-between border-t bg-background px-4 py-[9px] text-[11.5px] text-muted-foreground">
 						<div className="flex gap-4.5">
