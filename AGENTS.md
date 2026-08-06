@@ -14,6 +14,8 @@ Development happens inside Docker only. Never run `npm install` or `npm run dev`
 make install      # first time only: build the image, install dependencies, start
 make up           # start the dev server on http://localhost:4321, with hot reload
 make down         # stop it
+make reup         # stop, then start again — a clean restart
+make cc           # clear the Astro cache (.astro, node_modules/.astro) then reup
 make deps         # install what package-lock.json pins
 make deps-update  # interactive picker over every available upgrade, majors included
 ```
