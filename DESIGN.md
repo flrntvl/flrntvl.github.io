@@ -90,7 +90,7 @@ A window with three macOS buttons. Five commands played in sequence (`whoami`, `
 
 ### Hero background
 
-A three.js render behind the terminal, with four effects to choose from (`matrix`, `wall`, `dots`, `grid`) exposed as chips. They react to the mouse and recolour with the theme. Rules: decorative, low opacity, never readable text competing with the terminal. `three` is imported dynamically, so it lands in its own chunk instead of weighing on the initial bundle.
+A three.js render behind the terminal, with three effects to choose from (`matrix`, `dots`, `grid`) exposed as chips. They react to the mouse and recolour with the theme. Rules: decorative, low opacity, never readable text competing with the terminal. `three` is imported dynamically, so it lands in its own chunk instead of weighing on the initial bundle.
 
 ### List row
 

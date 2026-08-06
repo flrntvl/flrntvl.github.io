@@ -2,7 +2,7 @@ export type Lang = 'fr' | 'en';
 
 export type ShellLine = { cmd: string; out: string };
 
-export type Fx = 'matrix' | 'wall' | 'dots' | 'grid';
+export type Fx = 'matrix' | 'dots' | 'grid';
 
 type Labels = {
 	based: string;
@@ -25,7 +25,6 @@ export const LABELS: Record<Lang, Labels> = {
 		background: 'fond :',
 		fx: {
 			matrix: 'matrix',
-			wall: 'mur de code',
 			dots: 'particules',
 			grid: 'grille de points',
 		},
@@ -43,7 +42,6 @@ export const LABELS: Record<Lang, Labels> = {
 		background: 'background:',
 		fx: {
 			matrix: 'matrix',
-			wall: 'code wall',
 			dots: 'particles',
 			grid: 'dot grid',
 		},

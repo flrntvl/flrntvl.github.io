@@ -8,7 +8,7 @@ import { AVATAR_URL, GITHUB_URL, LABELS, SHELL, WINDOW_DOTS, WIP_STATUS, type Fx
 import { useLang } from '@/lib/use-lang';
 import { useTheme } from '@/lib/use-theme';
 
-const FX_ORDER: Fx[] = ['matrix', 'wall', 'dots', 'grid'];
+const FX_ORDER: Fx[] = ['matrix', 'dots', 'grid'];
 
 export default function HomePage() {
 	const [lang, setLang] = useLang();
