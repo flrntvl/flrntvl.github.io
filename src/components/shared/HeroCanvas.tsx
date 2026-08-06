@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react';
 import type * as THREE from 'three';
-import type { Builder, Mouse, ThreeNS } from '@/components/home/hero-fx';
+import type { Builder, Mouse, ThreeNS } from '@/components/shared/hero-fx';
 
 /**
  * Decorative hero background. Three rules: low opacity, no legible text competing

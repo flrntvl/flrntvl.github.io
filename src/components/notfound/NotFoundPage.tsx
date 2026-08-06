@@ -1,8 +1,8 @@
 import { getRelativeLocaleUrl } from 'astro:i18n';
 import { useEffect } from 'react';
-import HeroCanvas from '@/components/home/HeroCanvas';
-import { buildStorm } from '@/components/home/hero-fx';
-import Terminal from '@/components/home/Terminal';
+import HeroCanvas from '@/components/shared/HeroCanvas';
+import { buildStorm } from '@/components/shared/hero-fx';
+import Terminal from '@/components/shared/Terminal';
 import { NOT_FOUND, WINDOW_DOTS, type Lang } from '@/lib/site-content';
 import { useTheme } from '@/lib/use-theme';
 

@@ -1,7 +1,7 @@
 import { useState } from 'react';
-import { BUILDERS } from './hero-fx';
-import HeroCanvas from './HeroCanvas';
-import Terminal from './Terminal';
+import HeroCanvas from '@/components/shared/HeroCanvas';
+import { BUILDERS } from '@/components/shared/hero-fx';
+import Terminal from '@/components/shared/Terminal';
 import {
 	AVATAR_URL,
 	GITHUB_URL,
