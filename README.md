@@ -22,7 +22,7 @@ flrntvl.github.io/
 ├── public/               # static assets served as-is (favicons, app icons)
 ├── scripts/              # install.sh, wrapped by `make install`
 ├── src/
-│   ├── components/       # home/ holds the terminal UI, ui/ the shadcn primitives
+│   ├── components/       # base/ header+footer, shared/ cross-page pieces, home/ and not-found/ per-route
 │   ├── lib/              # site copy and shared helpers
 │   ├── pages/            # file-based routing
 │   │   └── index.astro
@@ -105,4 +105,4 @@ Note the asymmetry worth remembering: `make build` builds the Docker image, whil
 
 [DESIGN.md](DESIGN.md) is the reference for every new page, section or component — colour tokens, type scale, spacing, signature components, and the rule that keeps the terminal credible: the prompt states the current directory, and the command is relative to it.
 
-Read it before touching [src/styles/global.css](src/styles/global.css), which implements its tokens as a shadcn preset.
+Read it before touching [src/styles/global.css](src/styles/global.css), which implements its tokens.

@@ -9,9 +9,7 @@ import globals from 'globals';
 import tseslint from 'typescript-eslint';
 
 export default defineConfig(
-	// Build output, plus the shadcn/ui components: the CLI regenerates those on
-	// every update, so linting them would fight the generator.
-	globalIgnores(['dist/', '.astro/', 'src/components/ui/']),
+	globalIgnores(['dist/', '.astro/']),
 	js.configs.recommended,
 	tseslint.configs.recommended,
 	astro.configs['flat/recommended'],
