@@ -1,6 +1,9 @@
 # Development image only. Production is static files served by GitHub Pages.
 FROM node:24-bookworm-slim
 
+# git: the build reads each article's last commit date (src/lib/remark-modified-time.mjs).
+RUN apt-get update && apt-get install -y --no-install-recommends git && rm -rf /var/lib/apt/lists/*
+
 # No npm install here: the bind mount replaces /app at runtime. The Makefile installs into the mount instead.
 
 # /app must exist and belong to `node` before the user switch (WORKDIR would create it as root, and too late).

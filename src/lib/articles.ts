@@ -46,8 +46,8 @@ export async function readingTime(entry: Article, lang: Lang) {
 	return LABELS[lang].readingTime(remarkPluginFrontmatter.readingMinutes as number);
 }
 
-function isSameDay(a: Date, b: Date) {
-	return a.toISOString().slice(0, 10) === b.toISOString().slice(0, 10);
+function isSameHour(a: Date, b: Date) {
+	return a.toISOString().slice(0, 13) === b.toISOString().slice(0, 13);
 }
 
 export async function lastModifiedDate(entry: Article): Promise<Date | null> {
@@ -60,7 +60,7 @@ export async function lastModifiedDate(entry: Article): Promise<Date | null> {
 
 	const modified = new Date(raw);
 
-	return isSameDay(modified, entry.data.date) ? null : modified;
+	return isSameHour(modified, entry.data.date) ? null : modified;
 }
 
 export type PostSummary = {
