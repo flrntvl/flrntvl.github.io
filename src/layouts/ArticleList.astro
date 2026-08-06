@@ -3,7 +3,7 @@ import type { Page } from 'astro';
 import { getRelativeLocaleUrl } from 'astro:i18n';
 import Base from '@/layouts/Base.astro';
 import {
-	formatDate,
+	formatCommitDateTime,
 	formatDateCompact,
 	lastModifiedDate,
 	readingTime,
@@ -62,7 +62,7 @@ const rows = await Promise.all(
 					<span class="hidden sm:block">
 						{formatDateCompact(entry.data.date, lang)}
 						{modified && (
-							<span class="text-primary" title={t.modifiedLabel(formatDate(modified, lang))}>
+							<span class="text-primary" title={t.modifiedLabel(formatCommitDateTime(modified, lang) ?? '')}>
 								*
 							</span>
 						)}

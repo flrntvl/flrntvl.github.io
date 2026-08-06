@@ -1,7 +1,7 @@
 ---
 import type { MarkdownHeading } from 'astro';
 import Base from '@/layouts/Base.astro';
-import { formatDate } from '@/lib/articles';
+import { formatCommitDateTime } from '@/lib/articles';
 import { LABELS, type Lang } from '@/lib/site-content';
 
 interface Props {
@@ -9,17 +9,17 @@ interface Props {
 	slug: string;
 	title: string;
 	standfirst: string;
-	date: Date;
-	modified: Date | null;
+	published: string;
+	modified: string | null;
 	readingTime: string;
 	headings: MarkdownHeading[];
 }
 
-const { langHref, slug, title, standfirst, date, modified, readingTime, headings } = Astro.props;
+const { langHref, slug, title, standfirst, published, modified, readingTime, headings } = Astro.props;
 const lang = (Astro.currentLocale ?? 'fr') as Lang;
 const t = LABELS[lang];
-const formattedDate = formatDate(date, lang);
-const modifiedLabel = modified ? t.modifiedLabel(formatDate(modified, lang)) : null;
+const publishedLabel = t.publishedLabel(formatCommitDateTime(published, lang) ?? '');
+const modifiedLabel = modified ? t.modifiedLabel(formatCommitDateTime(modified, lang) ?? '') : null;
 const readingTimeLabel = t.readingTimeLabel(readingTime);
 const toc = headings.filter((heading) => heading.depth === 2);
 ---
@@ -57,9 +57,7 @@ const toc = headings.filter((heading) => heading.depth === 2);
 
 				<h1 class="mt-6 text-[38px] leading-[1.15] font-medium tracking-[-0.03em]">{title}</h1>
 
-				<time class="mt-4 block text-xs text-muted-foreground" datetime={date.toISOString()}
-					>{formattedDate}</time
-				>
+				<time class="mt-4 block text-xs text-muted-foreground" datetime={published}>{publishedLabel}</time>
 				{modifiedLabel && <p class="mt-1 text-xs text-muted-foreground">{modifiedLabel}</p>}
 				<p class="mt-1 text-xs text-muted-foreground">{readingTimeLabel}</p>
 

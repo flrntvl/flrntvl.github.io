@@ -23,6 +23,7 @@ type Labels = {
 	articlesCount: (n: number) => string;
 	readingTime: (minutes: number) => string;
 	readingTimeLabel: (time: string) => string;
+	publishedLabel: (date: string) => string;
 	modifiedLabel: (date: string) => string;
 	columns: { type: string; date: string; duration: string; title: string; tags: string };
 	pagination: { prev: string; next: string };
@@ -51,6 +52,7 @@ export const LABELS: Record<Lang, Labels> = {
 		articlesCount: (n) => `${n} fichier${n > 1 ? 's' : ''}`,
 		readingTime: (n) => `${n} min`,
 		readingTimeLabel: (time) => `Temps de lecture : ${time}`,
+		publishedLabel: (date) => `Publié le : ${date}`,
 		modifiedLabel: (date) => `Modifié le : ${date}`,
 		columns: { type: 'type', date: 'date', duration: 'durée', title: 'titre', tags: 'tags' },
 		pagination: { prev: '← précédent', next: 'suivant →' },
@@ -77,6 +79,7 @@ export const LABELS: Record<Lang, Labels> = {
 		articlesCount: (n) => `${n} file${n > 1 ? 's' : ''}`,
 		readingTime: (n) => `${n} min`,
 		readingTimeLabel: (time) => `Reading time: ${time}`,
+		publishedLabel: (date) => `Published: ${date}`,
 		modifiedLabel: (date) => `Updated: ${date}`,
 		columns: { type: 'type', date: 'date', duration: 'duration', title: 'title', tags: 'tags' },
 		pagination: { prev: '← previous', next: 'next →' },

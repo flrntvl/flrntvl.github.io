@@ -4,6 +4,7 @@ import ArticleContent from '@/layouts/ArticleContent.astro';
 import {
 	articlesIn,
 	lastModifiedDate,
+	publishedAt,
 	readingTime,
 	slugOf,
 	translationHref,
@@ -24,6 +25,7 @@ const { Content, headings } = await render(entry);
 const langHref = await translationHref(entry, 'fr');
 const readingTimeLabel = await readingTime(entry, 'en');
 const modified = await lastModifiedDate(entry);
+const published = await publishedAt(entry);
 ---
 
 <ArticleContent
@@ -31,7 +33,7 @@ const modified = await lastModifiedDate(entry);
 	slug={slugOf(entry)}
 	title={entry.data.title}
 	standfirst={entry.data.standfirst}
-	date={entry.data.date}
+	published={published}
 	modified={modified}
 	readingTime={readingTimeLabel}
 	headings={headings}
