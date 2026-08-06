@@ -3,8 +3,8 @@ import '@/styles/global.css';
 import { getRelativeLocaleUrl } from 'astro:i18n';
 import { Font } from 'astro:assets';
 import { SITE_DESCRIPTION, SITE_TITLE } from '@/consts';
-import SiteFooter from '@/components/layout/SiteFooter';
-import SiteHeader from '@/components/layout/SiteHeader';
+import Footer from '@/components/layout/Footer';
+import Header from '@/components/layout/Header';
 import { AVATAR_URL, type Lang } from '@/lib/site-content';
 
 interface Props {
@@ -72,8 +72,8 @@ const langHref = getRelativeLocaleUrl(otherLang);
 		</script>
 	</head>
 	<body>
-		<SiteHeader client:load path={path} lang={lang} langHref={langHref} />
+		<Header client:load path={path} lang={lang} langHref={langHref} />
 		<slot />
-		<SiteFooter lang={lang} />
+		<Footer lang={lang} />
 	</body>
 </html>

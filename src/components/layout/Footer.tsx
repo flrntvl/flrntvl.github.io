@@ -8,7 +8,7 @@ import {
 	type Lang,
 } from '@/lib/site-content';
 
-export default function SiteFooter({ lang }: { lang: Lang }) {
+export default function Footer({ lang }: { lang: Lang }) {
 	const t = LABELS[lang];
 
 	return (

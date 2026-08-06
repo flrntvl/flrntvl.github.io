@@ -2,7 +2,7 @@ import { Globe, Moon, Sun } from 'lucide-react';
 import type { Lang } from '@/lib/site-content';
 import { useTheme } from '@/lib/use-theme';
 
-export default function SiteHeader({ path, lang, langHref }: { path: string; lang: Lang; langHref: string }) {
+export default function Header({ path, lang, langHref }: { path: string; lang: Lang; langHref: string }) {
 	const [dark, toggleTheme] = useTheme();
 
 	return (
