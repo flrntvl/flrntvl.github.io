@@ -1,13 +1,17 @@
 ---
 import '@/styles/global.css';
+import { getRelativeLocaleUrl } from 'astro:i18n';
 import { Font } from 'astro:assets';
 import { SITE_DESCRIPTION, SITE_TITLE } from '@/consts';
-import { AVATAR_URL } from '@/lib/site-content';
+import SiteFooter from '@/components/layout/SiteFooter';
+import SiteHeader from '@/components/layout/SiteHeader';
+import { AVATAR_URL, type Lang } from '@/lib/site-content';
 
 interface Props {
 	title?: string;
 	description?: string;
-	lang: 'fr' | 'en';
+	lang: Lang;
+	path?: string;
 	image?: string;
 	noindex?: boolean;
 }
@@ -16,11 +20,14 @@ const {
 	title = SITE_TITLE,
 	description = SITE_DESCRIPTION,
 	lang,
+	path = '~',
 	image = AVATAR_URL,
 	noindex = false,
 } = Astro.props;
 
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+const otherLang: Lang = lang === 'fr' ? 'en' : 'fr';
+const langHref = getRelativeLocaleUrl(otherLang);
 ---
 
 <!doctype html>
@@ -65,6 +72,8 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 		</script>
 	</head>
 	<body>
+		<SiteHeader client:load path={path} lang={lang} langHref={langHref} />
 		<slot />
+		<SiteFooter lang={lang} />
 	</body>
 </html>

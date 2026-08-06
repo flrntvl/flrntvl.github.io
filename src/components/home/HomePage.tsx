@@ -1,10 +1,7 @@
-import { getRelativeLocaleUrl } from 'astro:i18n';
 import { useState } from 'react';
 import { BUILDERS } from './hero-fx';
 import HeroCanvas from './HeroCanvas';
 import Terminal from './Terminal';
-import SiteFooter from '@/components/layout/SiteFooter';
-import SiteHeader from '@/components/layout/SiteHeader';
 import {
 	AVATAR_URL,
 	GITHUB_URL,
@@ -20,21 +17,12 @@ import { useTheme } from '@/lib/use-theme';
 const FX_ORDER: Fx[] = ['matrix', 'dots', 'grid'];
 
 export default function HomePage({ lang }: { lang: Lang }) {
-	const [dark, toggleTheme] = useTheme();
+	const [dark] = useTheme();
 	const [fx, setFx] = useState<Fx>('matrix');
 	const t = LABELS[lang];
-	const otherLang: Lang = lang === 'fr' ? 'en' : 'fr';
 
 	return (
 		<div className="min-h-screen bg-background text-foreground">
-			<SiteHeader
-				path="~"
-				lang={lang}
-				langHref={getRelativeLocaleUrl(otherLang)}
-				dark={dark}
-				onToggleTheme={toggleTheme}
-			/>
-
 			<section className="relative flex flex-col items-center gap-10 overflow-hidden px-6 pt-16 pb-[76px] sm:px-10">
 				<HeroCanvas builder={BUILDERS[fx]} dark={dark} />
 
@@ -108,8 +96,6 @@ export default function HomePage({ lang }: { lang: Lang }) {
 					</div>
 				</div>
 			</section>
-
-			<SiteFooter lang={lang} />
 		</div>
 	);
 }

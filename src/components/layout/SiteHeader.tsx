@@ -1,19 +1,10 @@
 import { Globe, Moon, Sun } from 'lucide-react';
 import type { Lang } from '@/lib/site-content';
+import { useTheme } from '@/lib/use-theme';
 
-export default function SiteHeader({
-	path,
-	lang,
-	langHref,
-	dark,
-	onToggleTheme,
-}: {
-	path: string;
-	lang: Lang;
-	langHref: string;
-	dark: boolean;
-	onToggleTheme: () => void;
-}) {
+export default function SiteHeader({ path, lang, langHref }: { path: string; lang: Lang; langHref: string }) {
+	const [dark, toggleTheme] = useTheme();
+
 	return (
 		<header className="flex items-center justify-between border-b px-6 py-4 text-[13px] sm:px-10">
 			<a href="/" className="flex items-center">
@@ -35,7 +26,7 @@ export default function SiteHeader({
 				</a>
 				<button
 					type="button"
-					onClick={onToggleTheme}
+					onClick={toggleTheme}
 					title="Theme"
 					aria-pressed={dark}
 					className="flex cursor-pointer items-center rounded-[7px] border px-2.5 py-[5px] font-[inherit] text-foreground"

@@ -3,8 +3,6 @@ import { useEffect } from 'react';
 import HeroCanvas from '@/components/home/HeroCanvas';
 import { buildStorm } from '@/components/home/hero-fx';
 import Terminal from '@/components/home/Terminal';
-import SiteFooter from '@/components/layout/SiteFooter';
-import SiteHeader from '@/components/layout/SiteHeader';
 import { NOT_FOUND, WINDOW_DOTS, type Lang } from '@/lib/site-content';
 import { useTheme } from '@/lib/use-theme';
 
@@ -14,8 +12,7 @@ const currentLang = (): Lang => (window.location.pathname.replace(/^\//, '').sta
 
 export default function NotFoundPage() {
 	const lang = currentLang();
-	const otherLang: Lang = lang === 'fr' ? 'en' : 'fr';
-	const [dark, toggleTheme] = useTheme();
+	const [dark] = useTheme();
 	const nf = NOT_FOUND[lang];
 	const path = requestedPath();
 
@@ -25,14 +22,6 @@ export default function NotFoundPage() {
 
 	return (
 		<div className="min-h-screen bg-background text-foreground">
-			<SiteHeader
-				path="~"
-				lang={lang}
-				langHref={getRelativeLocaleUrl(otherLang)}
-				dark={dark}
-				onToggleTheme={toggleTheme}
-			/>
-
 			<section className="relative flex flex-col items-center gap-8 overflow-hidden px-6 pt-20 pb-24 sm:px-10">
 				<HeroCanvas builder={buildStorm} dark={dark} />
 
@@ -62,8 +51,6 @@ export default function NotFoundPage() {
 					{nf.cta}
 				</a>
 			</section>
-
-			<SiteFooter lang={lang} />
 		</div>
 	);
 }
