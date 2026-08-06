@@ -56,6 +56,7 @@ export function formatCommitDateTime(iso: string | null | undefined, lang: Lang)
 	const tz = tzFromOffset(iso);
 	if (tz) {
 		options.timeZone = tz;
+		options.timeZoneName = 'short';
 	}
 	return new Intl.DateTimeFormat(lang === 'fr' ? 'fr-FR' : 'en-US', options).format(new Date(iso));
 }
