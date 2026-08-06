@@ -10,7 +10,7 @@ const requestedPath = () => window.location.pathname.replace(/^\//, '') || '.';
 
 const currentLang = (): Lang => (window.location.pathname.replace(/^\//, '').startsWith('en/') ? 'en' : 'fr');
 
-export default function NotFoundPage() {
+export default function NotFoundContent() {
 	const lang = currentLang();
 	const [dark] = useTheme();
 	const nf = NOT_FOUND[lang];
