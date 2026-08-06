@@ -1,3 +1,5 @@
+import { SITE_DESCRIPTION, SITE_TITLE } from '@/consts';
+
 export type Lang = 'fr' | 'en';
 
 export type ShellLine = { cmd: string; out: string };
@@ -16,6 +18,15 @@ type Labels = {
 	legal: string;
 	privacy: string;
 	faviconCredit: { by: string; on: string };
+	latestArticles: string;
+	tableOfContents: string;
+	articlesCount: (n: number) => string;
+	readingTime: (minutes: number) => string;
+	readingTimeLabel: (time: string) => string;
+	modifiedLabel: (date: string) => string;
+	columns: { type: string; date: string; duration: string; title: string; tags: string };
+	pagination: { prev: string; next: string };
+	meta: { title: string; description: string };
 };
 
 export const LABELS: Record<Lang, Labels> = {
@@ -35,6 +46,15 @@ export const LABELS: Record<Lang, Labels> = {
 		legal: 'Mentions légales',
 		privacy: 'Confidentialité',
 		faviconCredit: { by: 'Favicon créé par', on: 'sur' },
+		latestArticles: 'Derniers articles',
+		tableOfContents: 'Sommaire',
+		articlesCount: (n) => `${n} fichier${n > 1 ? 's' : ''}`,
+		readingTime: (n) => `${n} min`,
+		readingTimeLabel: (time) => `Temps de lecture : ${time}`,
+		modifiedLabel: (date) => `Modifié le : ${date}`,
+		columns: { type: 'type', date: 'date', duration: 'durée', title: 'titre', tags: 'tags' },
+		pagination: { prev: '← précédent', next: 'suivant →' },
+		meta: { title: SITE_TITLE, description: SITE_DESCRIPTION },
 	},
 	en: {
 		based: 'Web engineer — based in France',
@@ -52,6 +72,18 @@ export const LABELS: Record<Lang, Labels> = {
 		legal: 'Legal notice',
 		privacy: 'Privacy',
 		faviconCredit: { by: 'Favicon created by', on: 'on' },
+		latestArticles: 'Latest posts',
+		tableOfContents: 'Contents',
+		articlesCount: (n) => `${n} file${n > 1 ? 's' : ''}`,
+		readingTime: (n) => `${n} min`,
+		readingTimeLabel: (time) => `Reading time: ${time}`,
+		modifiedLabel: (date) => `Updated: ${date}`,
+		columns: { type: 'type', date: 'date', duration: 'duration', title: 'title', tags: 'tags' },
+		pagination: { prev: '← previous', next: 'next →' },
+		meta: {
+			title: 'Florent Val — flrntvl.dev',
+			description: 'Web engineer — based in France. TypeScript, Astro, React, PHP.',
+		},
 	},
 };
 

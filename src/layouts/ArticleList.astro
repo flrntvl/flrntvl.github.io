@@ -1,0 +1,101 @@
+---
+import type { Page } from 'astro';
+import { getRelativeLocaleUrl } from 'astro:i18n';
+import Base from '@/layouts/Base.astro';
+import {
+	formatDate,
+	formatDateCompact,
+	lastModifiedDate,
+	readingTime,
+	slugOf,
+	type Article,
+} from '@/lib/articles';
+import { LABELS, type Lang } from '@/lib/site-content';
+
+interface Props {
+	page: Page<Article>;
+}
+
+const { page } = Astro.props;
+const lang = (Astro.currentLocale ?? 'fr') as Lang;
+const t = LABELS[lang];
+const otherLang: Lang = lang === 'fr' ? 'en' : 'fr';
+const langHref = getRelativeLocaleUrl(otherLang, 'blog');
+
+// readingTime()/lastModifiedDate() render each entry to read remarkPluginFrontmatter,
+// so they can't run inside the template's synchronous .map() below — resolved here instead.
+const rows = await Promise.all(
+	page.data.map(async (entry) => ({
+		entry,
+		minutesRead: await readingTime(entry, lang),
+		modified: await lastModifiedDate(entry),
+	})),
+);
+---
+
+<Base lang={lang} path="~/blog/" langHref={langHref} title="Blog — flrntvl.dev">
+	<section class="mx-auto max-w-[1180px] px-6 pt-16 pb-24 sm:px-10">
+		<p class="text-[15px]">
+			<span class="text-primary">~/blog/</span>
+			<span class="text-muted-foreground">$</span>
+			<span class="text-foreground">ls -lh --all</span>
+		</p>
+		<p class="mt-1.5 text-[12.5px] text-muted-foreground">{t.articlesCount(page.total)}</p>
+
+		<div
+			class="mt-8 hidden grid-cols-[96px_84px_70px_1fr_120px] gap-5 border-b px-2.5 pb-2 text-[11px] text-muted-foreground sm:grid"
+		>
+			<span>{t.columns.type}</span>
+			<span>{t.columns.date}</span>
+			<span>{t.columns.duration}</span>
+			<span>{t.columns.title}</span>
+			<span class="text-right">{t.columns.tags}</span>
+		</div>
+
+		{
+			rows.map(({ entry, minutesRead, modified }) => (
+				<a
+					href={getRelativeLocaleUrl(lang, `blog/${slugOf(entry)}`)}
+					class="grid grid-cols-[1fr_auto] items-baseline gap-3 border-b px-2.5 py-4 text-[13px] text-muted-foreground hover:bg-card hover:text-foreground sm:grid-cols-[96px_84px_70px_1fr_120px] sm:gap-5"
+				>
+					<span class="hidden sm:block">-rw-r--r--</span>
+					<span class="hidden sm:block">
+						{formatDateCompact(entry.data.date, lang)}
+						{modified && (
+							<span class="text-primary" title={t.modifiedLabel(formatDate(modified, lang))}>
+								*
+							</span>
+						)}
+					</span>
+					<span class="hidden sm:block">{minutesRead}</span>
+					<span class="text-[15px] text-foreground">{slugOf(entry)}.md</span>
+					<span class="text-right text-primary">#{entry.data.tags[0]}</span>
+				</a>
+			))
+		}
+
+		{
+			page.lastPage > 1 && (
+				<div class="mt-8 flex items-center justify-between text-[13px] text-muted-foreground">
+					{page.url.prev ? (
+						<a href={page.url.prev} class="border-b border-border pb-0.5">
+							{t.pagination.prev}
+						</a>
+					) : (
+						<span />
+					)}
+					<span>
+						{page.currentPage} / {page.lastPage}
+					</span>
+					{page.url.next ? (
+						<a href={page.url.next} class="border-b border-border pb-0.5">
+							{t.pagination.next}
+						</a>
+					) : (
+						<span />
+					)}
+				</div>
+			)
+		}
+	</section>
+</Base>

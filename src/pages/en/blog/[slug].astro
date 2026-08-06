@@ -1,0 +1,40 @@
+---
+import { render } from 'astro:content';
+import ArticleContent from '@/layouts/ArticleContent.astro';
+import {
+	articlesIn,
+	lastModifiedDate,
+	readingTime,
+	slugOf,
+	translationHref,
+	type Article,
+} from '@/lib/articles';
+
+interface Props {
+	entry: Article;
+}
+
+export async function getStaticPaths() {
+	const entries = await articlesIn('en');
+	return entries.map((entry) => ({ params: { slug: slugOf(entry) }, props: { entry } }));
+}
+
+const { entry } = Astro.props;
+const { Content, headings } = await render(entry);
+const langHref = await translationHref(entry, 'fr');
+const readingTimeLabel = await readingTime(entry, 'en');
+const modified = await lastModifiedDate(entry);
+---
+
+<ArticleContent
+	langHref={langHref}
+	slug={slugOf(entry)}
+	title={entry.data.title}
+	standfirst={entry.data.standfirst}
+	date={entry.data.date}
+	modified={modified}
+	readingTime={readingTimeLabel}
+	headings={headings}
+>
+	<Content />
+</ArticleContent>

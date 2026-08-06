@@ -12,6 +12,7 @@ interface Props {
 	description?: string;
 	lang: Lang;
 	path?: string;
+	langHref?: string;
 	image?: string;
 	noindex?: boolean;
 }
@@ -21,13 +22,14 @@ const {
 	description = SITE_DESCRIPTION,
 	lang,
 	path = '~',
+	langHref,
 	image = AVATAR_URL,
 	noindex = false,
 } = Astro.props;
 
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 const otherLang: Lang = lang === 'fr' ? 'en' : 'fr';
-const langHref = getRelativeLocaleUrl(otherLang);
+const resolvedLangHref = langHref ?? getRelativeLocaleUrl(otherLang);
 ---
 
 <!doctype html>
@@ -71,9 +73,11 @@ const langHref = getRelativeLocaleUrl(otherLang);
 			}
 		</script>
 	</head>
-	<body>
-		<Header client:load path={path} lang={lang} langHref={langHref} />
-		<slot />
+	<body class="flex min-h-screen flex-col">
+		<Header client:load path={path} lang={lang} langHref={resolvedLangHref} />
+		<main class="flex-1">
+			<slot />
+		</main>
 		<Footer lang={lang} />
 	</body>
 </html>

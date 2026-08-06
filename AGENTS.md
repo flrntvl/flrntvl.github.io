@@ -36,7 +36,7 @@ Quality gates: `make check` runs the three below and stops at the first failure 
 
 - `output: 'static'`, no adapter. GitHub Pages serves files, so no SSR, no API route, no middleware that needs a server.
 - No third-party request at runtime. Fonts are downloaded at build time and self-hosted, logos are inlined; no analytics, no share widget, no CDN.
-- The home page is a single React island, mounted with `client:load` in `src/pages/index.astro`. `three.js` is imported dynamically inside `HeroCanvas`, so it lands in its own chunk rather than in the initial bundle.
+- The home page's interactive parts are a single React island (`HomeContent`), mounted with `client:load` from `src/layouts/Home.astro` — the page files under `src/pages/` just pick the locale. `three.js` is imported dynamically inside `HeroCanvas`, so it lands in its own chunk rather than in the initial bundle.
 
 ## Conventions
 
@@ -44,6 +44,10 @@ Quality gates: `make check` runs the three below and stops at the first failure 
 - TypeScript strict. Import from `src/` with the `@/*` alias.
 - Tailwind 4 is CSS-first: there is no `tailwind.config`, everything lives in `src/styles/global.css`.
 - No component library: markup is hand-written Tailwind against the DESIGN.md tokens. `lucide-react` for icons.
+- Blog articles live in `src/content/blog/<lang>/<slug>.md`, one subfolder per language; a shared `translationKey` in the frontmatter links a page to its counterpart for the language switcher (see `src/lib/articles.ts`).
+- A `.astro` file with a `<slot />`, or that calls `Base` itself, belongs in `src/layouts/`. Content with neither goes in `src/components/`.
+- Read the current locale from `Astro.currentLocale` inside layouts, rather than threading a `lang` prop down from the page.
+- Reading time and last-modified date come from remark plugins (`src/lib/remark-*.mjs`) via `remarkPluginFrontmatter` — see `markdown.processor` in `astro.config.mjs`. Last-modified reads real git history, which is why the deploy workflow checks out with `fetch-depth: 0`.
 
 ## Documentation
 

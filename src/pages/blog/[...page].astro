@@ -1,0 +1,18 @@
+---
+import type { GetStaticPaths, Page } from 'astro';
+import ArticleList from '@/layouts/ArticleList.astro';
+import { articlesSortedByDate, type Article } from '@/lib/articles';
+
+export const getStaticPaths = (async ({ paginate }) => {
+	const entries = await articlesSortedByDate('fr');
+	return paginate(entries, { pageSize: 10 });
+}) satisfies GetStaticPaths;
+
+interface Props {
+	page: Page<Article>;
+}
+
+const { page } = Astro.props;
+---
+
+<ArticleList page={page} />

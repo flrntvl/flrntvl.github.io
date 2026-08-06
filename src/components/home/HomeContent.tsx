@@ -1,7 +1,9 @@
+import { getRelativeLocaleUrl } from 'astro:i18n';
 import { useState } from 'react';
 import HeroCanvas from '@/components/shared/HeroCanvas';
 import { BUILDERS } from '@/components/shared/hero-fx';
 import Terminal from '@/components/shared/Terminal';
+import type { PostSummary } from '@/lib/articles';
 import {
 	AVATAR_URL,
 	GITHUB_URL,
@@ -16,13 +18,13 @@ import { useTheme } from '@/lib/use-theme';
 
 const FX_ORDER: Fx[] = ['matrix', 'dots', 'grid'];
 
-export default function HomeContent({ lang }: { lang: Lang }) {
+export default function HomeContent({ lang, posts }: { lang: Lang; posts: PostSummary[] }) {
 	const [dark] = useTheme();
 	const [fx, setFx] = useState<Fx>('matrix');
 	const t = LABELS[lang];
 
 	return (
-		<div className="min-h-screen bg-background text-foreground">
+		<div className="bg-background text-foreground">
 			<section className="relative flex flex-col items-center gap-10 overflow-hidden px-6 pt-16 pb-[76px] sm:px-10">
 				<HeroCanvas builder={BUILDERS[fx]} dark={dark} />
 
@@ -94,6 +96,48 @@ export default function HomeContent({ lang }: { lang: Lang }) {
 							</button>
 						))}
 					</div>
+				</div>
+			</section>
+
+			<section className="flex flex-col items-center gap-6 border-t px-6 pt-16 pb-24 sm:px-10">
+				<div className="w-full max-w-[860px]">
+					<p className="text-[15px]">
+						<span className="text-primary">~/</span> <span className="text-muted-foreground">$</span>{' '}
+						<span className="text-foreground">ls -t blog/ | head -5</span>
+					</p>
+					<p className="mt-1.5 text-[12.5px] text-muted-foreground">
+						{t.latestArticles} — {t.articlesCount(posts.length)}
+					</p>
+
+					<div className="mt-6">
+						{posts.map((post) => (
+							<a
+								key={post.slug}
+								href={post.href}
+								className="grid grid-cols-[1fr_auto] items-baseline gap-3 border-t px-2.5 py-4 text-[13px] text-muted-foreground hover:bg-card hover:text-foreground sm:grid-cols-[96px_84px_70px_1fr_120px] sm:gap-5"
+							>
+								<span className="hidden sm:block">-rw-r--r--</span>
+								<span className="hidden sm:block">
+									{post.date}
+									{post.modifiedTooltip && (
+										<span className="text-primary" title={post.modifiedTooltip}>
+											*
+										</span>
+									)}
+								</span>
+								<span className="hidden sm:block">{post.readingTime}</span>
+								<span className="text-[15px] text-foreground">{post.slug}.md</span>
+								<span className="text-right text-primary">#{post.tag}</span>
+							</a>
+						))}
+					</div>
+
+					<p className="mt-7 text-[15px]">
+						<span className="text-primary">~/</span> <span className="text-muted-foreground">$</span>{' '}
+						<a href={getRelativeLocaleUrl(lang, 'blog')} className="border-b border-border pb-0.5">
+							open blog --all
+						</a>
+					</p>
 				</div>
 			</section>
 		</div>

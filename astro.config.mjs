@@ -5,6 +5,9 @@ import sitemap from '@astrojs/sitemap';
 import { defineConfig, fontProviders } from 'astro/config';
 import tailwindcss from '@tailwindcss/vite';
 import react from '@astrojs/react';
+import { unified } from '@astrojs/markdown-remark';
+import { remarkReadingTime } from './src/lib/remark-reading-time.mjs';
+import { remarkModifiedTime } from './src/lib/remark-modified-time.mjs';
 
 // https://astro.build/config
 export default defineConfig({
@@ -12,6 +15,13 @@ export default defineConfig({
 	i18n: {
 		defaultLocale: 'fr',
 		locales: ['fr', 'en'],
+	},
+	markdown: {
+		// Swaps Astro's default `satteri()` processor for the remark/rehype pipeline,
+		// needed to run these two remark plugins (see the Astro recipes for both).
+		processor: unified({
+			remarkPlugins: [remarkReadingTime, remarkModifiedTime],
+		}),
 	},
 	integrations: [mdx(), sitemap(), react()],
 	fonts: [

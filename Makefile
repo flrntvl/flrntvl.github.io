@@ -12,6 +12,10 @@ up:
 down:
 	@docker compose down
 
+reup:
+	@docker compose down
+	@docker compose up -d
+
 web:
 	@docker compose exec web bash
 

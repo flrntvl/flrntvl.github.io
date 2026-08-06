@@ -27,7 +27,7 @@ The theme is driven by `data-t="light|dark"` on the root container (in Astro: a 
 
 ### Usage rules
 
-- **Indigo (`--acc`)** = path segments (`~/`, `~/articles/`), active links, status chips and tree bullets, and nothing else. Never a solid background, never a button.
+- **Indigo (`--acc`)** = path segments (`~/`, `~/blog/`), active links, status chips and tree bullets, and nothing else. Never a solid background, never a button.
 - **Primary button** = `--fg` background, `--bg` text. There is only one filled button per screen.
 - **Active chip** (filters, selectors) = `data-active="true"` → `--fg` background, `--bg` text.
 - The three macOS buttons appear in **two places only**: the terminal window on the home page and the header of code blocks (`#ff5f57`, `#febc2e`, `#28c840`).
@@ -72,7 +72,7 @@ Article subheadings: `## Title` at 15px, `uppercase`, `letter-spacing: 0.06em`, 
 
 ### Header
 
-`flrntvl@flrntvl.dev:<current path>$` on the left (clickable → home), nav on the right: `articles/`, `projets/`, `stack.md`, `contact.md`, then the language selector (globe + `FR`/`EN`) and the theme selector (moon/sun). The path follows the page: `~` on home and on `stack.md`, `~/articles/` on the list and on an article, `~/projets/`, `~/legal/`.
+`flrntvl@flrntvl.dev:<current path>$` on the left (clickable → home), nav on the right: `blog/`, `projets/`, `stack.md`, `contact.md`, then the language selector (globe + `FR`/`EN`) and the theme selector (moon/sun). The path follows the page: `~` on home and on `stack.md`, `~/blog/` on the list and on an article, `~/projets/`, `~/legal/`.
 
 ### Section prompt
 
@@ -94,7 +94,7 @@ A three.js render behind the terminal, with three effects to choose from (`matri
 
 ### List row
 
-A column grid (type/date/duration/title/tags) separated by `1px solid var(--line)`, hover = `--card` background and `--fg` text. No card, no shadow: this is the output of `ls -lh`.
+A column grid (type/date/duration/title/tags) separated by `1px solid var(--line)`, hover = `--card` background and `--fg` text. No card, no shadow: this is the output of `ls -lh`. A `*` in `--acc` after the date marks an article revised since publishing — hover it for the date.
 
 ### Filters
 
@@ -104,9 +104,13 @@ Chips for discrete values, a text field for free search, a month picker for date
 
 Header with three macOS buttons + file name on the left, language on the right; `<pre>` on a `--card` background, 13px, `line-height: 1.65`.
 
+### Table of contents
+
+An article's `##` subheadings, Tree-styled, sitting in the right margin next to the 760px column — sticky, so it stays in view while the article scrolls. Below the width where there's no margin to put it in, it collapses into a native disclosure right above the section prompt, closed by default.
+
 ### Tree
 
-Short lists rendered with `├─` / `└─`, bullet in `--acc`. Used for the footer, the social links, and a project's feature list.
+Short lists rendered with `├─` / `└─`, bullet in `--acc`. Used for the footer, the social links, a project's feature list, and an article's table of contents.
 
 ### Footer
 
@@ -125,18 +129,18 @@ Identical on every page, preceded by `~/ $ cat footer.md` (always `~/`, never th
 
 One simple rule: **the prompt states the current directory, and the command is relative to that directory.**
 
-| Page         | Prompt          | Commands                                                                                                         |
-| ------------ | --------------- | ---------------------------------------------------------------------------------------------------------------- |
-| Home         | `~/ $`          | `whoami`, `cat about.txt`, `cat now.md`, `ls ~/stack`, `ls articles/*.md \| wc -l`, `ls -t articles/ \| head -5` |
-| Article list | `~/articles/ $` | `ls -lh --all`, `grep -iR "…" .`                                                                                 |
-| Article      | `~/articles/ $` | `cat <slug>.md`                                                                                                  |
-| Projects     | `~/projets/ $`  | `cat iter/README.md`, `ls -lh --all`                                                                             |
-| Stack        | `~/ $`          | `cat stack.md`                                                                                                   |
-| Contact      | `~/ $`          | `cat contact.md`, `mail --compose`, `cat contacts.json`                                                          |
-| Legal        | `~/legal/ $`    | `cat mentions-legales.md`, `cat confidentialite.md`                                                              |
-| Footer       | `~/ $`          | `cat footer.md`                                                                                                  |
+| Page         | Prompt         | Commands                                                                                                     |
+| ------------ | -------------- | ------------------------------------------------------------------------------------------------------------ |
+| Home         | `~/ $`         | `whoami`, `cat about.txt`, `cat now.md`, `ls ~/stack`, `ls articles/*.md \| wc -l`, `ls -t blog/ \| head -5` |
+| Article list | `~/blog/ $`    | `ls -lh --all`, `grep -iR "…" .`                                                                             |
+| Article      | `~/blog/ $`    | `cat <slug>.md`                                                                                              |
+| Projects     | `~/projets/ $` | `cat iter/README.md`, `ls -lh --all`                                                                         |
+| Stack        | `~/ $`         | `cat stack.md`                                                                                               |
+| Contact      | `~/ $`         | `cat contact.md`, `mail --compose`, `cat contacts.json`                                                      |
+| Legal        | `~/legal/ $`   | `cat mentions-legales.md`, `cat confidentialite.md`                                                          |
+| Footer       | `~/ $`         | `cat footer.md`                                                                                              |
 
-Never `ls articles/` when we are already inside `~/articles/`. Never a decorative command that matches nothing of what is displayed.
+Never `ls blog/` when we are already inside `~/blog/`. Never a decorative command that matches nothing of what is displayed.
 
 ## 8. Editorial tone
 

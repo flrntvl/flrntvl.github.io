@@ -23,11 +23,13 @@ flrntvl.github.io/
 ├── scripts/              # install.sh, wrapped by `make install`
 ├── src/
 │   ├── components/       # base/ header+footer, shared/ cross-page pieces, home/ and not-found/ per-route
+│   ├── content/          # blog articles, one subfolder per language — see content.config.ts
+│   ├── layouts/          # Base (site chrome) + per-route layouts (Home, Article content/list)
 │   ├── lib/              # site copy and shared helpers
-│   ├── pages/            # file-based routing
-│   │   └── index.astro
+│   ├── pages/            # file-based routing: home, blog, 404 — each mirrored under en/
 │   ├── styles/           # global.css — Tailwind 4 + the DESIGN.md tokens
-│   └── consts.ts         # site-wide constants
+│   ├── consts.ts         # site-wide constants
+│   └── content.config.ts # blog collection schema
 ├── DESIGN.md             # design reference, read before adding any UI
 ├── Dockerfile            # dev image
 ├── compose.yaml          # dev service + the source bind mount

@@ -1,0 +1,14 @@
+---
+import HomeContent from '@/components/home/HomeContent';
+import Base from '@/layouts/Base.astro';
+import { latestArticles, summarize } from '@/lib/articles';
+import { LABELS, type Lang } from '@/lib/site-content';
+
+const lang = (Astro.currentLocale ?? 'fr') as Lang;
+const t = LABELS[lang];
+const posts = await Promise.all((await latestArticles(lang, 5)).map(summarize));
+---
+
+<Base lang={lang} title={t.meta.title} description={t.meta.description}>
+	<HomeContent client:load lang={lang} posts={posts} />
+</Base>

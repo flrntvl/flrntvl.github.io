@@ -21,7 +21,7 @@ export default function NotFoundContent() {
 	}, [lang]);
 
 	return (
-		<div className="min-h-screen bg-background text-foreground">
+		<div className="bg-background text-foreground">
 			<section className="relative flex flex-col items-center gap-8 overflow-hidden px-6 pt-20 pb-24 sm:px-10">
 				<HeroCanvas builder={buildStorm} dark={dark} />
 
