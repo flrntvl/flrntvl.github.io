@@ -43,7 +43,7 @@ Quality gates: `make check` runs the three below and stops at the first failure 
 - Code comments in English, always — including in config files.
 - TypeScript strict. Import from `src/` with the `@/*` alias.
 - Tailwind 4 is CSS-first: there is no `tailwind.config`, everything lives in `src/styles/global.css`.
-- shadcn/ui on Base UI, `base-nova` style, `lucide` icons — see [components.json](components.json). Add components with the shadcn CLI rather than by hand, then restyle them to the DESIGN.md tokens.
+- No component library: markup is hand-written Tailwind against the DESIGN.md tokens. `lucide-react` for icons.
 
 ## Documentation
 

@@ -42,7 +42,7 @@ font-family:
   'JetBrains Mono', ui-monospace, 'SF Mono', SFMono-Regular, Menlo, Consolas, 'Liberation Mono', monospace;
 ```
 
-In Astro, `--font-sans` **and** `--font-mono` point at the same family, otherwise the shadcn components break the effect.
+In Astro, `--font-sans` **and** `--font-mono` point at the same family, so nothing accidentally renders in the browser's default sans-serif.
 
 ### Scale
 
