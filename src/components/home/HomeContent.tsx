@@ -16,7 +16,7 @@ import { useTheme } from '@/lib/use-theme';
 
 const FX_ORDER: Fx[] = ['matrix', 'dots', 'grid'];
 
-export default function HomePage({ lang }: { lang: Lang }) {
+export default function HomeContent({ lang }: { lang: Lang }) {
 	const [dark] = useTheme();
 	const [fx, setFx] = useState<Fx>('matrix');
 	const t = LABELS[lang];
