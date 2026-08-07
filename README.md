@@ -65,7 +65,7 @@ Everything runs through `make`, which wraps `docker compose` so no command depen
 | `make up`      | Starts the dev server in the background, on port 4321, with hot reload              |
 | `make down`    | Stops it and removes the container                                                  |
 | `make build`   | Rebuilds the **Docker image** — not the site. Needed after editing the `Dockerfile` |
-| `make reup`    | Stops the container and starts it again — a clean restart                            |
+| `make reup`    | Stops the container and starts it again — a clean restart                           |
 | `make cc`      | Clears the Astro content/type cache (`.astro`, `node_modules/.astro`) then `reup`   |
 
 ### Dependencies
