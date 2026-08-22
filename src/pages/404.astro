@@ -4,5 +4,6 @@ import Base from '@/layouts/Base.astro';
 ---
 
 <Base title="404 — flrntvl.dev" lang="fr" noindex>
-	<NotFoundContent client:only="react" />
+	{/* Prerendered French defaults; NotFoundContent swaps language and path on mount. */}
+	<NotFoundContent client:load />
 </Base>

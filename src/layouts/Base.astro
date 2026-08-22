@@ -91,6 +91,11 @@ const xDefaultURL: URL = lang === 'fr' || !alternateURL ? canonicalURL : alterna
 			} catch {
 				// Storage unavailable: fall back to the light theme.
 			}
+			// The 404 is a single static file for both locales (GitHub Pages), so its
+			// lang attribute can only be resolved here, before first paint.
+			if (/^en(\/|$)/.test(location.pathname.replace(/^\//, ''))) {
+				document.documentElement.lang = 'en';
+			}
 		</script>
 	</head>
 	<body class="flex min-h-screen flex-col">

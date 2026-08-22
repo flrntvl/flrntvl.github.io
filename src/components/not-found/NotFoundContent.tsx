@@ -1,24 +1,32 @@
 import { getRelativeLocaleUrl } from 'astro:i18n';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import HeroCanvas from '@/components/shared/HeroCanvas';
 import { buildStorm } from '@/components/shared/hero-fx';
 import Terminal from '@/components/shared/Terminal';
 import { NOT_FOUND, WINDOW_DOTS, type Lang } from '@/lib/site-content';
 import { useTheme } from '@/lib/use-theme';
 
-const requestedPath = () => window.location.pathname.replace(/^\//, '') || '.';
-
-const currentLang = (): Lang => (window.location.pathname.replace(/^\//, '').startsWith('en/') ? 'en' : 'fr');
-
+// GitHub Pages serves a single 404.html for every URL, so language and requested
+// path can only be resolved on the client. The French defaults exist so the page
+// can be prerendered without an empty flash; the effect swaps them right after
+// hydration.
 export default function NotFoundContent() {
-	const lang = currentLang();
-	const [dark] = useTheme();
-	const nf = NOT_FOUND[lang];
-	const path = requestedPath();
+	const [{ lang, path }, setRequested] = useState<{ lang: Lang; path: string }>({
+		lang: 'fr',
+		path: '~',
+	});
 
 	useEffect(() => {
-		document.documentElement.lang = lang;
-	}, [lang]);
+		const requested = window.location.pathname.replace(/^\//, '') || '.';
+		// The requested path only exists on the client, so resolving it after mount
+		// IS the feature — the cascading render the rule warns about is intended.
+		// eslint-disable-next-line react-hooks/set-state-in-effect
+		setRequested({ lang: requested.startsWith('en/') ? 'en' : 'fr', path: requested });
+		document.documentElement.lang = requested.startsWith('en/') ? 'en' : 'fr';
+	}, []);
+
+	const [dark] = useTheme();
+	const nf = NOT_FOUND[lang];
 
 	return (
 		<div className="bg-background text-foreground">
