@@ -5,7 +5,7 @@ import { Font } from 'astro:assets';
 import { SITE_DESCRIPTION, SITE_TITLE } from '@/consts';
 import Footer from '@/components/base/Footer';
 import Header from '@/components/base/Header';
-import { AVATAR_URL, type Lang } from '@/lib/site-content';
+import { AVATAR_URL, LABELS, type Lang } from '@/lib/site-content';
 
 interface Props {
 	title?: string;
@@ -30,6 +30,8 @@ const {
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 const otherLang: Lang = lang === 'fr' ? 'en' : 'fr';
 const resolvedLangHref = langHref ?? getRelativeLocaleUrl(otherLang);
+// getRelativeLocaleUrl appends a trailing slash, which breaks the .xml endpoint.
+const feedHref = getRelativeLocaleUrl(lang, 'rss.xml').replace(/\/$/, '');
 ---
 
 <!doctype html>
@@ -42,6 +44,7 @@ const resolvedLangHref = langHref ?? getRelativeLocaleUrl(otherLang);
 		<link rel="icon" type="image/png" href="/icon-192.png" sizes="192x192" />
 		<link rel="apple-touch-icon" href="/apple-touch-icon.png" />
 		<link rel="sitemap" href="/sitemap-index.xml" />
+		<link rel="alternate" type="application/rss+xml" title={LABELS[lang].meta.title} href={feedHref} />
 		{!noindex && <link rel="canonical" href={canonicalURL} />}
 		<meta name="generator" content={Astro.generator} />
 

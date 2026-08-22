@@ -17,8 +17,8 @@ export default defineConfig({
 		locales: ['fr', 'en'],
 	},
 	markdown: {
-		// Swaps Astro's default `satteri()` processor for the remark/rehype pipeline,
-		// needed to run these two remark plugins (see the Astro recipes for both).
+		// Uses the unified remark/rehype pipeline instead of Astro's default
+		// processor, needed to run these two remark plugins (see the Astro recipes for both).
 		processor: unified({
 			remarkPlugins: [remarkReadingTime, remarkModifiedTime],
 		}),
