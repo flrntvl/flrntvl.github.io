@@ -134,3 +134,16 @@ export async function translationHref(entry: Article, targetLang: Lang) {
 		? getRelativeLocaleUrl(targetLang, `blog/${slugOf(translation)}`)
 		: getRelativeLocaleUrl(targetLang);
 }
+
+// Returns null when no translation exists — translationHref's home-page fallback
+// would advertise the wrong URL to crawlers (hreflang, og alternates).
+export async function translationHrefExact(entry: Article, targetLang: Lang): Promise<string | null> {
+	const all = await getCollection('articles');
+
+	const translation = all.find(
+		(candidate) =>
+			langOf(candidate) === targetLang && candidate.data.translationKey === entry.data.translationKey,
+	);
+
+	return translation ? getRelativeLocaleUrl(targetLang, `blog/${slugOf(translation)}`) : null;
+}

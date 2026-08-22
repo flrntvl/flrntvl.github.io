@@ -2,7 +2,7 @@ Personal blog, Astro 7 + React 19 islands, deployed as a static site on GitHub P
 
 ## Design
 
-Read [DESIGN.md](DESIGN.md) before creating or modifying any page, section or component. It is binding: colour tokens, type scale, spacing, signature components, and the command-consistency rule (§7) — the prompt states the current directory, and the command is relative to it.
+Read [DESIGN.md](DESIGN.md) before creating or modifying any page, section or component. It is binding: colour tokens, type scale, spacing, signature components, and the command-consistency rule (§7) — the prompt states the current directory, and the command is relative to it. SEO rules (meta tags, hreflang, feeds, JSON-LD) are binding too: read [SEO.md](SEO.md).
 
 Tokens are implemented in `src/styles/global.css`. Never introduce a colour outside the six tokens.
 

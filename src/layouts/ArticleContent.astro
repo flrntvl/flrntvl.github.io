@@ -2,10 +2,11 @@
 import type { MarkdownHeading } from 'astro';
 import Base from '@/layouts/Base.astro';
 import { formatCommitDateTime } from '@/lib/articles';
-import { LABELS, type Lang } from '@/lib/site-content';
+import { GITHUB_URL, LABELS, type Lang } from '@/lib/site-content';
 
 interface Props {
 	langHref: string;
+	alternateHref: string | null;
 	slug: string;
 	title: string;
 	standfirst: string;
@@ -15,22 +16,47 @@ interface Props {
 	headings: MarkdownHeading[];
 }
 
-const { langHref, slug, title, standfirst, published, modified, readingTime, headings } = Astro.props;
+// prettier-ignore
+const {
+	langHref,
+	alternateHref,
+	slug,
+	title,
+	standfirst,
+	published,
+	modified,
+	readingTime,
+	headings,
+} = Astro.props;
 const lang = (Astro.currentLocale ?? 'fr') as Lang;
 const t = LABELS[lang];
 const publishedLabel = t.publishedLabel(formatCommitDateTime(published, lang) ?? '');
 const modifiedLabel = modified ? t.modifiedLabel(formatCommitDateTime(modified, lang) ?? '') : null;
 const readingTimeLabel = t.readingTimeLabel(readingTime);
 const toc = headings.filter((heading) => heading.depth === 2);
+const jsonLd = {
+	'@context': 'https://schema.org',
+	'@type': 'BlogPosting',
+	headline: title,
+	description: standfirst,
+	datePublished: published,
+	dateModified: modified ?? published,
+	author: { '@type': 'Person', name: 'Florent Val', url: GITHUB_URL },
+	inLanguage: lang,
+	mainEntityOfPage: new URL(Astro.url.pathname, Astro.site).href,
+};
 ---
 
 <Base
 	lang={lang}
 	path="~/blog/"
 	langHref={langHref}
+	alternateHref={alternateHref}
+	publishedTime={published}
 	title={`${title} — flrntvl.dev`}
 	description={standfirst}
 >
+	<script is:inline slot="head" type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
 	<div class="mx-auto max-w-[1400px] px-8 pt-16 pb-24 sm:px-10">
 		<div class="grid grid-cols-1 gap-16 lg:grid-cols-[1fr_760px_1fr]">
 			<article class="min-w-0 lg:col-start-2">
