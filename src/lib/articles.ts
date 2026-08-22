@@ -12,8 +12,10 @@ export function slugOf(entry: Article): string {
 	return entry.id.slice(langOf(entry).length + 1);
 }
 
+// The single source of truth for "published": drafts never reach listings,
+// feeds, translation lookups or page generation.
 export function articlesIn(lang: Lang) {
-	return getCollection('articles', (entry) => langOf(entry) === lang);
+	return getCollection('articles', (entry) => langOf(entry) === lang && !entry.data.draft);
 }
 
 export async function articlesSortedByDate(lang: Lang) {
@@ -123,7 +125,7 @@ export async function summarize(entry: Article): Promise<PostSummary> {
 }
 
 export async function translationHref(entry: Article, targetLang: Lang) {
-	const all = await getCollection('articles');
+	const all = await getCollection('articles', (candidate) => !candidate.data.draft);
 
 	const translation = all.find(
 		(candidate) =>
@@ -135,10 +137,13 @@ export async function translationHref(entry: Article, targetLang: Lang) {
 		: getRelativeLocaleUrl(targetLang);
 }
 
-// Returns null when no translation exists — translationHref's home-page fallback
+// Unlike translationHref, returns null when no translation exists — translationHref's home-page fallback
 // would advertise the wrong URL to crawlers (hreflang, og alternates).
-export async function translationHrefExact(entry: Article, targetLang: Lang): Promise<string | null> {
-	const all = await getCollection('articles');
+export async function translationHrefExact(
+	entry: Article,
+	targetLang: Lang,
+): Promise<string | null> {
+	const all = await getCollection('articles', (candidate) => !candidate.data.draft);
 
 	const translation = all.find(
 		(candidate) =>

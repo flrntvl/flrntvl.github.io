@@ -59,8 +59,6 @@ Everything runs through `make`, which wraps `docker compose` so no command depen
 
 | Command        | What it does                                                                        |
 | -------------- | ----------------------------------------------------------------------------------- |
-| Command        | What it does                                                                        |
-| -------------- | ----------------------------------------------------------------------------------- |
 | `make install` | First run only: builds the image, installs dependencies, starts the dev server      |
 | `make up`      | Starts the dev server in the background, on port 4321, with hot reload              |
 | `make down`    | Stops it and removes the container                                                  |
@@ -106,6 +104,24 @@ npm install <pkg>  # add a dependency
 ```
 
 Note the asymmetry worth remembering: `make build` builds the Docker image, while `npm run build` above builds the site.
+
+## Writing
+
+Articles live in `src/content/blog/<lang>/<slug>.md`, one subfolder per language. The frontmatter drives everything:
+
+```yaml
+---
+title: My post
+standfirst: One-sentence summary, reused in listings and the RSS feed.
+date: 2026-08-22
+translationKey: my-post # links this post to its other-language counterpart
+tags:
+	- Astro
+draft: true # optional — see below
+---
+```
+
+While `draft: true`, the post stays in the repo but is excluded from every listing, the RSS feeds, page generation and the sitemap — you can write and commit it safely. Remove the flag (or set it to `false`) to publish.
 
 ## Design
 

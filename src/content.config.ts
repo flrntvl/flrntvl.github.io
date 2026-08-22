@@ -10,6 +10,9 @@ const articles = defineCollection({
 		date: z.coerce.date(),
 		translationKey: z.string(),
 		tags: z.array(z.string()),
+		// Drafts stay in the repo but are filtered out of every listing, feed,
+		// lookup and page generation — see src/lib/articles.ts.
+		draft: z.boolean().default(false),
 	}),
 });
 
