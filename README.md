@@ -86,6 +86,7 @@ Both steps matter. Committing a `package.json` that its lockfile contradicts bre
 | `make lint`     | ESLint: React hooks rules, unused variables, Astro conventions                  |
 | `make lint-fix` | The same, applying every fix ESLint can make on its own                         |
 | `make format`   | Prettier, rewriting files in place                                              |
+| `make fix`      | `lint-fix` then `format` in one shot                                            |
 
 `make check` chains `types`, `lint` and a Prettier check with `&&`, so it reports one class of problem at a time rather than three overlapping outputs. The quality targets run in a throwaway container, so they work whether or not the dev server is up.
 

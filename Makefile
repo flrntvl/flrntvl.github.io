@@ -1,4 +1,4 @@
-.PHONY: install deps deps-update build up down reup web check types lint lint-fix format cc
+.PHONY: install deps deps-update build up down reup web check types lint lint-fix format fix cc
 
 install:
 	@./scripts/install.sh
@@ -51,3 +51,6 @@ lint-fix:
 
 format:
 	@docker compose run --rm web npm run format
+
+fix:
+	@docker compose run --rm web sh -c 'npm run lint:fix && npm run format'
