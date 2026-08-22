@@ -74,7 +74,8 @@ const xDefaultURL: URL = lang === 'fr' || !alternateURL ? canonicalURL : alterna
 					<meta property="og:url" content={Astro.url} />
 					<meta property="og:title" content={title} />
 					<meta property="og:description" content={description} />
-					<meta property="og:image" content={image} />
+					{/* og:image requires an absolute URL; the prop may be a root-relative path. */}
+					<meta property="og:image" content={new URL(image, Astro.site)} />
 					<meta name="twitter:card" content="summary" />
 				</>
 			)

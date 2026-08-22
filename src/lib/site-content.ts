@@ -159,4 +159,7 @@ export const FLATICON_URL = 'https://www.flaticon.com/free-icons/api';
 
 export const FLATICON_AUTHOR_URL = 'https://www.flaticon.com/authors/tanah-basah';
 
-export const AVATAR_URL = 'https://avatars.githubusercontent.com/u/309853004?v=4';
+// Local mirror of https://avatars.githubusercontent.com/u/309853004 — the site
+// promises zero third-party requests, so re-download it manually if the GitHub
+// avatar ever changes.
+export const AVATAR_URL = '/avatar.jpg';
