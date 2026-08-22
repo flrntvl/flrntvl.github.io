@@ -85,7 +85,7 @@ export const LABELS: Record<Lang, Labels> = {
 		pagination: { prev: '← previous', next: 'next →' },
 		meta: {
 			title: 'Florent Val — flrntvl.dev',
-			description: 'Web engineer — based in France. TypeScript, Astro, React, PHP.',
+			description: 'Web engineer with 7+ years of experience, passionate about web and mobile development, and agentic coding.',
 		},
 	},
 };
@@ -95,27 +95,27 @@ export const SHELL: Record<Lang, ShellLine[]> = {
 		{ cmd: 'whoami', out: 'Florent Val — ingénieur développeur web, 29 ans, France.' },
 		{
 			cmd: 'cat about.txt',
-			out: 'Ingénieur développeur web depuis dix ans : je conçois et construis des applications rapides, accessibles et durables — du backend PHP au front TypeScript.',
+			out: 'Ingénieur développeur web depuis +7 ans, je suis passionné par le développement web et mobile, et l’agentic coding.',
 		},
 		{
 			cmd: 'cat now.md',
-			out: "En ce moment : j'apprends Ruby, et je creuse l'agentic coding — agents, outillage, revue assistée.",
+			out: "En ce moment : j'apprends Ruby, et je creuse l'agentic coding — agents, outils, revue de code assistée.",
 		},
 		{ cmd: 'ls ~/stack', out: 'php 8.5  symfony  laravel  typescript  astro  react  ruby  docker' },
-		{ cmd: 'cat todo.md', out: "Le blog arrive : articles, projets et stack en cours d'écriture." },
+		{ cmd: 'cat todo.md', out: 'Prochaines étapes : premiers articles techniques, page projets.' },
 	],
 	en: [
 		{ cmd: 'whoami', out: 'Florent Val — web engineer, 29, based in France.' },
 		{
 			cmd: 'cat about.txt',
-			out: 'Web engineer for ten years: I design and build fast, accessible, long-lasting applications — from the PHP backend to the TypeScript front end.',
+			out: 'Web engineer with 7+ years of experience, passionate about web and mobile development, and agentic coding.',
 		},
 		{
 			cmd: 'cat now.md',
 			out: 'Right now: learning Ruby, and digging into agentic coding — agents, tooling, assisted review.',
 		},
 		{ cmd: 'ls ~/stack', out: 'php 8.5  symfony  laravel  typescript  astro  react  ruby  docker' },
-		{ cmd: 'cat todo.md', out: 'Blog coming soon: posts, projects and stack in the works.' },
+		{ cmd: 'cat todo.md', out: 'Next up: first technical posts, projects page.' },
 	],
 };
 
