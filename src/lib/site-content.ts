@@ -85,7 +85,8 @@ export const LABELS: Record<Lang, Labels> = {
 		pagination: { prev: '← previous', next: 'next →' },
 		meta: {
 			title: 'Florent Val — flrntvl.dev',
-			description: 'Web engineer with 7+ years of experience, passionate about web and mobile development, and agentic coding.',
+			description:
+				'Web engineer with 7+ years of experience, passionate about web and mobile development, and agentic coding.',
 		},
 	},
 };

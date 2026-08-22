@@ -139,10 +139,7 @@ export async function translationHref(entry: Article, targetLang: Lang) {
 
 // Unlike translationHref, returns null when no translation exists — translationHref's home-page fallback
 // would advertise the wrong URL to crawlers (hreflang, og alternates).
-export async function translationHrefExact(
-	entry: Article,
-	targetLang: Lang,
-): Promise<string | null> {
+export async function translationHrefExact(entry: Article, targetLang: Lang): Promise<string | null> {
 	const all = await getCollection('articles', (candidate) => !candidate.data.draft);
 
 	const translation = all.find(
