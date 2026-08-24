@@ -30,10 +30,6 @@ export default function HomeContent({ lang, posts }: { lang: Lang; posts: PostSu
 					<div className="flex flex-col items-center gap-2">
 						<h1 className="text-[34px] font-medium tracking-[-0.03em]">Florent Val</h1>
 						<span className="text-sm text-muted-foreground">{t.based}</span>
-						<div className="mt-1 flex items-center gap-2 rounded-full border border-dashed bg-card px-[11px] py-[5px] text-center text-[11.5px] text-muted-foreground">
-							<span className="block size-1.5 shrink-0 animate-dot rounded-full bg-primary" />
-							<span>WIP</span>
-						</div>
 					</div>
 				</div>
 
