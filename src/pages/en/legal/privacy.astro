@@ -1,0 +1,44 @@
+---
+import Base from '@/layouts/Base.astro';
+import { getRelativeLocaleUrl } from 'astro:i18n';
+import { LABELS, type Lang } from '@/lib/site-content';
+
+const lang = (Astro.currentLocale ?? 'fr') as Lang;
+const t = LABELS[lang];
+const otherLang: Lang = lang === 'fr' ? 'en' : 'fr';
+---
+
+<Base
+	lang={lang}
+	path="~/legal/"
+	alternateHref={getRelativeLocaleUrl(otherLang, 'legal/confidentialite')}
+	langHref={getRelativeLocaleUrl(otherLang, 'legal/confidentialite')}
+	title={`${t.privacy} — flrntvl.dev`}
+	description="Privacy policy of flrntvl.dev — this site collects no personal data."
+>
+	<section class="mx-auto max-w-[880px] px-6 pt-16 pb-24 sm:px-10">
+		<p class="text-[15px]">
+			<span class="text-primary">~/legal/</span>
+			<span class="text-muted-foreground">$</span>
+			<span class="text-foreground">cat privacy.md</span>
+		</p>
+
+		<h1 class="mt-6 text-[34px] leading-[1.15] font-medium tracking-[-0.03em]">{t.privacy}</h1>
+
+		<div class="prose mt-10">
+			<h2>No collection</h2>
+			<p>This site collects no personal data: no cookies, no analytics, no forms, no third-party service.</p>
+
+			<h2>Display setting</h2>
+			<p>The light or dark theme is remembered in your browser only. It is never transmitted.</p>
+
+			<h2>Your rights</h2>
+			<p>
+				The publisher performs no processing, so the GDPR has nothing to apply to here.
+				<br />
+				<br />
+				For any question, the links in the footer will reach me.
+			</p>
+		</div>
+	</section>
+</Base>

@@ -106,6 +106,59 @@
 	}
 }
 
+/* Shared markdown typography (class "prose"): used by article bodies and the
+   static legal pages. Lives here — not in a component's scoped style — so any
+   layout can render slotted markdown with the same rhythm. */
+.prose p {
+	margin-top: 1.5em;
+	font-size: 15px;
+	line-height: 1.8;
+}
+.prose p:first-child {
+	margin-top: 0;
+}
+.prose h2 {
+	margin-top: 2.5em;
+	margin-bottom: 0.75em;
+	font-size: 15px;
+	font-weight: 500;
+	text-transform: uppercase;
+	letter-spacing: 0.06em;
+	color: var(--muted-foreground);
+}
+/* The `##` stays visible on purpose — see DESIGN.md §3. */
+.prose h2::before {
+	content: '## ';
+}
+.prose a {
+	color: var(--primary);
+	text-decoration: underline;
+	text-underline-offset: 3px;
+}
+.prose code {
+	border-radius: 4px;
+	border: 1px solid var(--border);
+	background: var(--card);
+	padding: 0.1em 0.4em;
+	font-size: 0.9em;
+}
+.prose pre {
+	margin-top: 1.5em;
+	overflow-x: auto;
+	border-radius: 10px;
+	border: 1px solid var(--border);
+	background: var(--card);
+	padding: 16px;
+	font-size: 13px;
+	line-height: 1.65;
+}
+.prose pre code {
+	border: none;
+	background: none;
+	padding: 0;
+	font-size: inherit;
+}
+
 /* Background effects are decorative: they freeze, they don't explain themselves. */
 @media (prefers-reduced-motion: reduce) {
 	*,

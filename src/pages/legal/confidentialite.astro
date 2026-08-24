@@ -1,0 +1,47 @@
+---
+import Base from '@/layouts/Base.astro';
+import { getRelativeLocaleUrl } from 'astro:i18n';
+import { LABELS, type Lang } from '@/lib/site-content';
+
+const lang = (Astro.currentLocale ?? 'fr') as Lang;
+const t = LABELS[lang];
+const otherLang: Lang = lang === 'fr' ? 'en' : 'fr';
+---
+
+<Base
+	lang={lang}
+	path="~/legal/"
+	alternateHref={getRelativeLocaleUrl(otherLang, 'legal/privacy')}
+	langHref={getRelativeLocaleUrl(otherLang, 'legal/privacy')}
+	title={`${t.privacy} — flrntvl.dev`}
+	description="Politique de confidentialité de flrntvl.dev — ce site ne collecte aucune donnée personnelle."
+>
+	<section class="mx-auto max-w-[880px] px-6 pt-16 pb-24 sm:px-10">
+		<p class="text-[15px]">
+			<span class="text-primary">~/legal/</span>
+			<span class="text-muted-foreground">$</span>
+			<span class="text-foreground">cat confidentialite.md</span>
+		</p>
+
+		<h1 class="mt-6 text-[34px] leading-[1.15] font-medium tracking-[-0.03em]">{t.privacy}</h1>
+
+		<div class="prose mt-10">
+			<h2>Aucune collecte</h2>
+			<p>
+				Ce site ne collecte aucune donnée personnelle : pas de cookie, pas d'analytique, pas de formulaire,
+				aucun service tiers.
+			</p>
+
+			<h2>Réglage d'affichage</h2>
+			<p>Le thème clair ou sombre est mémorisé dans votre navigateur uniquement. Il n'est jamais transmis.</p>
+
+			<h2>Vos droits</h2>
+			<p>
+				Aucun traitement n'étant effectué par l'éditeur, le RGPD ne trouve pas à s'appliquer ici.
+				<br />
+				<br />
+				Pour toute question, les liens du pied de page permettent de me joindre.
+			</p>
+		</div>
+	</section>
+</Base>

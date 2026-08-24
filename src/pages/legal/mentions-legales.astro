@@ -1,0 +1,57 @@
+---
+import Base from '@/layouts/Base.astro';
+import { getRelativeLocaleUrl } from 'astro:i18n';
+import { GITHUB_URL, LABELS, LINKEDIN_URL, type Lang } from '@/lib/site-content';
+
+const lang = (Astro.currentLocale ?? 'fr') as Lang;
+const t = LABELS[lang];
+const otherLang: Lang = lang === 'fr' ? 'en' : 'fr';
+---
+
+<Base
+	lang={lang}
+	path="~/legal/"
+	alternateHref={getRelativeLocaleUrl(otherLang, 'legal/legal-notice')}
+	langHref={getRelativeLocaleUrl(otherLang, 'legal/legal-notice')}
+	title={`${t.legal} — flrntvl.dev`}
+	description="Mentions légales du site flrntvl.dev — éditeur et hébergement."
+>
+	<section class="mx-auto max-w-[880px] px-6 pt-16 pb-24 sm:px-10">
+		<p class="text-[15px]">
+			<span class="text-primary">~/legal/</span>
+			<span class="text-muted-foreground">$</span>
+			<span class="text-foreground">cat mentions-legales.md</span>
+		</p>
+
+		<h1 class="mt-6 text-[34px] leading-[1.15] font-medium tracking-[-0.03em]">{t.legal}</h1>
+
+		<div class="prose mt-10">
+			<h2>Éditeur</h2>
+			<p>
+				Site personnel édité par <strong>Florent Val</strong>, à titre non professionnel. Directeur de la
+				publication : Florent Val.
+			</p>
+			<p>
+				Contact: <a href={LINKEDIN_URL}>LinkedIn</a> or <a href={GITHUB_URL}>GitHub</a>.
+			</p>
+
+			<h2>Hébergement</h2>
+			<p>
+				Hébergement : <strong>GitHub Pages</strong> (GitHub, Inc., San Francisco, États-Unis).
+				<br />
+				<br />
+				Nom de domaine enregistré chez <strong>OVHcloud</strong> (Roubaix, France).
+			</p>
+
+			<h2>Propriété intellectuelle</h2>
+			<p>
+				Textes et code réutilisables selon la licence du dépôt du site.
+				<br />
+				<br />
+				Favicon créé par <a href="https://www.flaticon.com/authors/tanah-basah" rel="noopener noreferrer"
+					>Tanah Basah</a
+				> sur <a href="https://www.flaticon.com" rel="noopener noreferrer">Flaticon</a>.
+			</p>
+		</div>
+	</section>
+</Base>

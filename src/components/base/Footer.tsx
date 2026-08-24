@@ -7,9 +7,17 @@ import {
 	X_URL,
 	type Lang,
 } from '@/lib/site-content';
+import { getRelativeLocaleUrl } from 'astro:i18n';
 
 export default function Footer({ lang }: { lang: Lang }) {
 	const t = LABELS[lang];
+
+	// The legal pages have localized slugs (mentions-legales ↔ legal-notice),
+	// so the footer must resolve them per language before adding the locale prefix.
+	const legalPaths =
+		lang === 'fr'
+			? { legal: 'legal/mentions-legales', privacy: 'legal/confidentialite' }
+			: { legal: 'legal/legal-notice', privacy: 'legal/privacy' };
 
 	return (
 		<footer className="border-t px-6 py-10 text-[12.5px] text-muted-foreground sm:px-10">
@@ -59,8 +67,8 @@ export default function Footer({ lang }: { lang: Lang }) {
 
 				<div className="flex flex-col gap-2">
 					<span className="text-foreground">{t.legalTitle}/</span>
-					<a href="#">├─ {t.legal}</a>
-					<a href="#">└─ {t.privacy}</a>
+					<a href={getRelativeLocaleUrl(lang, legalPaths.legal)}>├─ {t.legal}</a>
+					<a href={getRelativeLocaleUrl(lang, legalPaths.privacy)}>└─ {t.privacy}</a>
 				</div>
 			</div>
 		</footer>
