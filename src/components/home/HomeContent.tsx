@@ -4,16 +4,7 @@ import HeroCanvas from '@/components/shared/HeroCanvas';
 import { BUILDERS } from '@/components/shared/hero-fx';
 import Terminal from '@/components/shared/Terminal';
 import type { PostSummary } from '@/lib/articles';
-import {
-	AVATAR_URL,
-	GITHUB_URL,
-	LABELS,
-	SHELL,
-	WINDOW_DOTS,
-	WIP_STATUS,
-	type Fx,
-	type Lang,
-} from '@/lib/site-content';
+import { AVATAR_URL, GITHUB_URL, LABELS, SHELL, WINDOW_DOTS, type Fx, type Lang } from '@/lib/site-content';
 import { useTheme } from '@/lib/use-theme';
 
 const FX_ORDER: Fx[] = ['matrix', 'dots', 'grid'];
@@ -42,8 +33,6 @@ export default function HomeContent({ lang, posts }: { lang: Lang; posts: PostSu
 						<div className="mt-1 flex items-center gap-2 rounded-full border border-dashed bg-card px-[11px] py-[5px] text-center text-[11.5px] text-muted-foreground">
 							<span className="block size-1.5 shrink-0 animate-dot rounded-full bg-primary" />
 							<span>WIP</span>
-							<span className="text-border">|</span>
-							<span>{WIP_STATUS}</span>
 						</div>
 					</div>
 				</div>

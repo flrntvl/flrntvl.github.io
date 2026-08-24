@@ -148,8 +148,6 @@ export const NOT_FOUND: Record<Lang, NotFoundLabels> = {
 
 export const WINDOW_DOTS = ['#ff5f57', '#febc2e', '#28c840'];
 
-export const WIP_STATUS = 'HTTP 206 — Partial Content';
-
 export const GITHUB_URL = 'https://github.com/flrntvl';
 
 export const LINKEDIN_URL = 'https://www.linkedin.com/in/florent-val/';
