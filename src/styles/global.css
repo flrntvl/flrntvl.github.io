@@ -1,4 +1,6 @@
 @import './tokens.css';
+@import './components.css';
+@import './prose.css';
 
 /* ---------- Base ---------- */
 
@@ -206,4 +208,22 @@ kbd {
   .container-narrow {
     padding-inline: 16px;
   }
+}
+
+/* Libellé réservé aux lecteurs d'écran (utilisé aussi par les notes Markdown) */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* L'attribut hidden l'emporte toujours sur les display des composants */
+[hidden] {
+  display: none !important;
 }

@@ -1,0 +1,39 @@
+---
+/* Liens précédent / suivant en bas d'un article ou d'une fiche. */
+import type { Lang } from '../../i18n/ui';
+import { useTranslations } from '../../i18n/utils';
+
+interface Link {
+  href: string;
+  title: string;
+}
+
+interface Props {
+  lang: Lang;
+  prev?: Link;
+  next?: Link;
+  titleClass?: string;
+}
+
+const { lang, prev, next, titleClass } = Astro.props;
+const t = useTranslations(lang);
+---
+
+{
+  (prev || next) && (
+    <nav class="pager no-print" aria-label={`${t('common.prev')} / ${t('common.next')}`}>
+      {prev && (
+        <a href={prev.href} rel="prev">
+          <span class="pager-label lc">← {t('common.prev')}</span>
+          <span class={titleClass}>{prev.title}</span>
+        </a>
+      )}
+      {next && (
+        <a href={next.href} rel="next" class="next">
+          <span class="pager-label lc">{t('common.next')} →</span>
+          <span class={titleClass}>{next.title}</span>
+        </a>
+      )}
+    </nav>
+  )
+}

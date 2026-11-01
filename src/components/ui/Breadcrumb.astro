@@ -1,0 +1,29 @@
+---
+import type { Lang } from '../../i18n/ui';
+import { useTranslations } from '../../i18n/utils';
+
+interface Props {
+  lang: Lang;
+  items: { label: string; href?: string }[];
+}
+
+const { lang, items } = Astro.props;
+const t = useTranslations(lang);
+---
+
+<nav class="breadcrumb muted lc" aria-label={t('common.breadcrumb')}>
+  {
+    items.map((item, i) => (
+      <>
+        {i > 0 && <span aria-hidden="true">/</span>}
+        {item.href ? (
+          <a href={item.href} class="muted">
+            {item.label}
+          </a>
+        ) : (
+          <span aria-current="page">{item.label}</span>
+        )}
+      </>
+    ))
+  }
+</nav>

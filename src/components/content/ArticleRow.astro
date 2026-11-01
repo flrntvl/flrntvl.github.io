@@ -1,0 +1,41 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import { useTranslations } from '../../i18n/utils';
+import { getEntryPath } from '../../lib/content';
+import DateText from '../ui/DateText.astro';
+import Tags from '../ui/Tags.astro';
+
+interface Props {
+  entry: CollectionEntry<'articles'>;
+  /** Affiche le niveau et les tags (liste complète) ; sinon un seul tag en dev (accueil). */
+  detailed?: boolean;
+}
+
+const { entry, detailed = false } = Astro.props;
+const { lang, title, description, tags, level } = entry.data;
+const t = useTranslations(lang);
+---
+
+<a href={getEntryPath('articles', entry)} class="row" data-tags={tags.join('|').toLowerCase()}>
+  <DateText date={entry.data.date} lang={lang} class="code muted row-date" />
+  <span class="row-main">
+    <span class="row-title body">{title}</span>
+    <span class="row-sub body muted">{description}</span>
+    {
+      detailed && (
+        <span class="row-meta code muted">
+          <span class="lc">{t(`level.${level}`)}</span>
+          {tags.length > 0 && ' · '}
+          <Tags tags={tags} />
+        </span>
+      )
+    }
+  </span>
+  {!detailed && tags[0] && <span class="m-only tag muted first-tag">{tags[0]}</span>}
+</a>
+
+<style>
+  .first-tag {
+    font-size: 12px;
+  }
+</style>

@@ -1,0 +1,41 @@
+---
+import ProjectCard from '../components/content/ProjectCard.astro';
+import ListHeader from '../components/ui/ListHeader.astro';
+import type { Lang } from '../i18n/ui';
+import { useTranslations } from '../i18n/utils';
+import Base from '../layouts/Base.astro';
+import { getProjects } from '../lib/content';
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+const projects = await getProjects(lang);
+---
+
+<Base title={t('projects.title')}>
+  <div class="container page">
+    <ListHeader prompt={`ls ~/${t('projects.dir')}`} title={t('projects.title')} intro={t('projects.intro')} />
+
+    {projects.length === 0 && <p class="muted empty">{t('projects.empty')}</p>}
+
+    {
+      projects.length > 0 && (
+        <div class="cards grid">
+          {projects.map((entry) => (
+            <ProjectCard entry={entry} showStatus />
+          ))}
+        </div>
+      )
+    }
+  </div>
+</Base>
+
+<style>
+  .grid {
+    grid-template-columns: repeat(auto-fit, minmax(min(320px, 100%), 1fr));
+    margin-top: 48px;
+  }
+</style>

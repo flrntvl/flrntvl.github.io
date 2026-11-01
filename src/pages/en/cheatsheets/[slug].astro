@@ -1,0 +1,17 @@
+---
+import { getCollection } from 'astro:content';
+import CheatsheetPage from '../../../views/CheatsheetPage.astro';
+import { getSlug } from '../../../lib/content';
+
+export async function getStaticPaths() {
+  const entries = await getCollection(
+    'cheatsheets',
+    (e) => e.data.lang === 'en' && (import.meta.env.DEV || !e.data.draft),
+  );
+  return entries.map((entry) => ({ params: { slug: getSlug(entry) }, props: { entry } }));
+}
+
+const { entry } = Astro.props;
+---
+
+<CheatsheetPage entry={entry} />

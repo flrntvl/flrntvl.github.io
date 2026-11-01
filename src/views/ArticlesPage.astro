@@ -1,0 +1,106 @@
+---
+import ArticleRow from '../components/content/ArticleRow.astro';
+import ListHeader from '../components/ui/ListHeader.astro';
+import { rssPath } from '../config';
+import type { Lang } from '../i18n/ui';
+import { useTranslations } from '../i18n/utils';
+import Base from '../layouts/Base.astro';
+import { getArticles } from '../lib/content';
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+const articles = await getArticles(lang);
+
+// Sujets : tous les tags, du plus fréquent au moins fréquent.
+const counts = new Map<string, number>();
+articles.flatMap((a) => a.data.tags).forEach((tag) => counts.set(tag, (counts.get(tag) ?? 0) + 1));
+const topics = [...counts.entries()].sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0])).map(([tag]) => tag);
+
+// Groupes par année, de la plus récente à la plus ancienne.
+const years = [...new Set(articles.map((a) => a.data.date.getUTCFullYear()))];
+---
+
+<Base title={t('articles.title')}>
+  <div class="container-narrow page">
+    <ListHeader prompt="ls ~/articles" title={t('articles.title')} intro={t('articles.intro')}>
+      <a slot="aside" href={rssPath[lang]} class="muted lc code rss">{t('common.rss')}</a>
+    </ListHeader>
+
+    {
+      topics.length > 1 && (
+        <div class="chips filters no-print" role="group" aria-label={t('articles.filter')} data-topic-filters hidden>
+          <button type="button" class="chip" data-topic="" aria-pressed="true">
+            {t('common.filterAll')}
+          </button>
+          {topics.map((topic) => (
+            <button type="button" class="chip" data-topic={topic.toLowerCase()} aria-pressed="false">
+              {topic}
+            </button>
+          ))}
+        </div>
+      )
+    }
+
+    {articles.length === 0 && <p class="muted empty">{t('articles.empty')}</p>}
+
+    {
+      years.map((year) => (
+        <section class="year" data-year>
+          <h2 class="sh code">{year}</h2>
+          <div class="rows">
+            {articles
+              .filter((a) => a.data.date.getUTCFullYear() === year)
+              .map((entry) => (
+                <ArticleRow entry={entry} detailed />
+              ))}
+          </div>
+        </section>
+      ))
+    }
+  </div>
+</Base>
+
+<style>
+  .rss {
+    font-size: 13px;
+  }
+
+  .filters {
+    margin-top: 32px;
+  }
+
+  .year {
+    margin-top: 48px;
+  }
+
+  .year .sh {
+    margin-bottom: 8px;
+  }
+</style>
+
+<script>
+  // Filtres par sujet : visibles seulement avec JavaScript (sinon tout est affiché).
+  const group = document.querySelector<HTMLElement>('[data-topic-filters]');
+  if (group) {
+    group.hidden = false;
+    const buttons = group.querySelectorAll<HTMLButtonElement>('[data-topic]');
+    const rows = document.querySelectorAll<HTMLElement>('[data-tags]');
+    const years = document.querySelectorAll<HTMLElement>('[data-year]');
+
+    const apply = (topic: string) => {
+      buttons.forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.topic === topic)));
+      rows.forEach((row) => {
+        row.hidden = topic !== '' && !row.dataset.tags!.split('|').includes(topic);
+      });
+      years.forEach((year) => {
+        year.hidden = !year.querySelector('[data-tags]:not([hidden])');
+      });
+    };
+
+    buttons.forEach((b) => b.addEventListener('click', () => apply(b.dataset.topic ?? '')));
+  }
+</script>

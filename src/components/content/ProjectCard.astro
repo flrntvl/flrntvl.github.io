@@ -1,0 +1,26 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import { useTranslations } from '../../i18n/utils';
+import { getEntryPath, getSlug } from '../../lib/content';
+
+interface Props {
+  entry: CollectionEntry<'projects'>;
+  showStatus?: boolean;
+}
+
+const { entry, showStatus = false } = Astro.props;
+const { lang, title, description, stack, status } = entry.data;
+const t = useTranslations(lang);
+---
+
+<a href={getEntryPath('projects', entry)} class="card">
+  <span class="card-path code">~/{t('projects.dir')}/{getSlug(entry)}</span>
+  <span class="card-body">
+    <span class="row-title">{title}</span>
+    <span class="body muted row-sub">{description}</span>
+    <span class="card-foot code muted lc">
+      <span>{stack.join(' · ')}</span>
+      {showStatus && <span>{status}</span>}
+    </span>
+  </span>
+</a>

@@ -1,0 +1,301 @@
+---
+import { render, type CollectionEntry } from 'astro:content';
+import Breadcrumb from '../components/ui/Breadcrumb.astro';
+import DateText from '../components/ui/DateText.astro';
+import Pager from '../components/ui/Pager.astro';
+import Tags from '../components/ui/Tags.astro';
+import { repo, repoBranch } from '../config';
+import { getPath, useTranslations } from '../i18n/utils';
+import Base from '../layouts/Base.astro';
+import { getArticles, getEntryPath, getNeighbours, getTranslation } from '../lib/content';
+import { fill, readingTime } from '../lib/format';
+
+interface Props {
+  entry: CollectionEntry<'articles'>;
+}
+
+const { entry } = Astro.props;
+const { lang, title, description, date, updated, tags, level, prerequisites, history } = entry.data;
+const t = useTranslations(lang);
+const otherLang = lang === 'fr' ? 'en' : 'fr';
+
+const { Content, headings } = await render(entry);
+const toc = headings.filter((h) => h.depth === 2 && h.slug !== 'footnote-label');
+
+const translation = await getTranslation('articles', entry, otherLang);
+const alternatePath = translation ? getEntryPath('articles', translation) : getPath('articles', otherLang);
+
+// Plus récent à gauche (« précédent » = plus ancien dans la lecture chronologique inverse).
+const { prev: newer, next: older } = getNeighbours(await getArticles(lang), entry);
+
+const levels = ['debutant', 'intermediaire', 'avance'] as const;
+const levelIndex = levels.indexOf(level);
+
+const editUrl = `${repo}/edit/${repoBranch}/${entry.filePath}`;
+const reportUrl = `${repo}/issues/new?title=${encodeURIComponent(fill(t('article.reportTitle'), { title }))}&body=${encodeURIComponent(new URL(Astro.url.pathname, Astro.site).href)}`;
+---
+
+<Base title={title} description={description} alternatePath={alternatePath}>
+  <div class="layout">
+    <article class="article">
+      <Breadcrumb
+        lang={lang}
+        items={[{ label: t('articles.title'), href: getPath('articles', lang) }, { label: tags[0] ?? title }]}
+      />
+      <h1 class="title">{title}</h1>
+
+      <div class="meta muted">
+        <DateText date={date} lang={lang} class="code small" />
+        <span aria-hidden="true">·</span>
+        <span class="lc">{fill(t('article.readingTime'), { n: readingTime(entry.body) })}</span>
+        {
+          updated && (
+            <>
+              <span aria-hidden="true">·</span>
+              <span class="lc">
+                {t('common.updated')} <DateText date={updated} lang={lang} />
+              </span>
+            </>
+          )
+        }
+        {
+          tags.length > 0 && (
+            <>
+              <span aria-hidden="true">·</span>
+              <span class="code small">
+                <Tags tags={tags} />
+              </span>
+            </>
+          )
+        }
+        {
+          translation && (
+            <a href={alternatePath} hreflang={otherLang} lang={otherLang} class="muted lc link-underline">
+              {t('common.readOther')}
+            </a>
+          )
+        }
+      </div>
+
+      <div class="level-box">
+        <div class="level">
+          <span class="lbl lc">{t('article.level')}</span>
+          <span class="level-value">
+            <span class="lvl" aria-hidden="true">
+              {levels.map((_, i) => <i class:list={{ on: i <= levelIndex }} />)}
+            </span>
+            <span class="lc">{t(`level.${level}`)}</span>
+          </span>
+        </div>
+        {
+          prerequisites && (
+            <div class="prereq">
+              <span class="lbl lc">{t('article.prerequisites')}</span>
+              <span class="body">{prerequisites}</span>
+            </div>
+          )
+        }
+      </div>
+
+      <div class="prose article-body">
+        <Content />
+      </div>
+
+      {
+        history.length > 0 && (
+          <section id="historique" class="history">
+            <h2 class="sh">{t('article.history')}</h2>
+            <ol>
+              {history.map((item) => (
+                <li>
+                  <DateText date={item.date} lang={lang} class="code muted history-date" />
+                  <span class="body" set:html={item.note.replace(/`([^`]+)`/g, '<code>$1</code>')} />
+                </li>
+              ))}
+            </ol>
+          </section>
+        )
+      }
+
+      <div class="links muted no-print">
+        <a href={editUrl} class="muted lc">{t('article.edit')}</a>
+        <a href={reportUrl} class="muted lc">{t('article.report')}</a>
+      </div>
+
+      <Pager
+        lang={lang}
+        prev={older && { href: getEntryPath('articles', older), title: older.data.title }}
+        next={newer && { href: getEntryPath('articles', newer), title: newer.data.title }}
+      />
+    </article>
+
+    {
+      toc.length > 0 && (
+        <aside class="side no-print">
+          <nav class="toc" aria-label={t('common.toc')}>
+            <span class="toc-title lc">{t('common.toc')}</span>
+            {toc.map((h) => (
+              <a href={`#${h.slug}`}>{h.text}</a>
+            ))}
+            {history.length > 0 && <a href="#historique">{t('article.history')}</a>}
+          </nav>
+        </aside>
+      )
+    }
+  </div>
+</Base>
+
+<style>
+  .layout {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 72px 32px 104px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 48px 56px;
+    align-items: flex-start;
+  }
+
+  .article {
+    flex: 999 1 600px;
+    min-width: 0;
+  }
+
+  .side {
+    flex: 0 0 180px;
+    order: -1;
+    padding-top: 160px;
+    position: sticky;
+    top: 0;
+  }
+
+  .title {
+    margin: 20px 0 0;
+    max-width: 780px;
+    font-size: 46px;
+    line-height: 1.1;
+    letter-spacing: -0.03em;
+    font-weight: 500;
+  }
+
+  .small {
+    font-size: 13px;
+  }
+
+  .level-box {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px 40px;
+    max-width: 650px;
+    margin-top: 28px;
+    padding: 16px 20px;
+    border: 1px solid var(--line);
+    border-radius: calc(var(--radius) - 2px);
+    font-size: 14px;
+  }
+
+  .level,
+  .prereq {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .prereq {
+    flex: 1 1 300px;
+  }
+
+  .lbl {
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--muted);
+  }
+
+  .level-value {
+    display: flex;
+    align-items: center;
+  }
+
+  .article-body {
+    max-width: 650px;
+    margin-top: 40px;
+  }
+
+  .article-body > :global(p:first-child) {
+    font-size: 20px;
+    line-height: 1.6;
+  }
+
+  .history {
+    max-width: 650px;
+    margin-top: 56px;
+  }
+
+  .history .sh {
+    margin-bottom: 12px;
+  }
+
+  .history ol {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    font-size: 14px;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .history li {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px 20px;
+    padding: 12px 0;
+    border-top: 1px solid var(--line);
+  }
+
+  .history li > :global(.history-date) {
+    flex: 0 0 110px;
+    font-size: 13px;
+  }
+
+  .history li > .body {
+    flex: 1 1 300px;
+  }
+
+  .history :global(code) {
+    font-family: var(--code);
+    font-size: 0.9em;
+  }
+
+  .links {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 12px;
+    max-width: 650px;
+    margin-top: 48px;
+    padding-top: 24px;
+    border-top: 1px solid var(--line);
+    font-size: 14px;
+  }
+
+  .article :global(.pager) {
+    max-width: 650px;
+  }
+
+  @media (max-width: 900px) {
+    .side {
+      flex-basis: 100%;
+      padding-top: 0;
+      position: static;
+    }
+  }
+
+  @media (max-width: 600px) {
+    .layout {
+      padding: 48px 16px 72px;
+    }
+
+    .title {
+      font-size: 34px;
+    }
+  }
+</style>

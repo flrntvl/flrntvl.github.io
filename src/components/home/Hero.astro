@@ -1,4 +1,5 @@
 ---
+import { rssPath, social } from "../../config";
 import type { Lang } from "../../i18n/ui";
 import { useTranslations } from "../../i18n/utils";
 
@@ -10,9 +11,9 @@ const { lang } = Astro.props;
 const t = useTranslations(lang);
 
 const links = [
-  { label: "GitHub", href: "https://github.com/flrntvl" },
-  { label: "LinkedIn", href: "http://www.linkedin.com/in/florent-val" },
-  { label: "RSS", href: lang === "fr" ? "/rss.xml" : "/en/rss.xml" },
+  { label: social.github.label, href: social.github.href },
+  { label: social.linkedin.label, href: social.linkedin.href },
+  { label: "RSS", href: rssPath[lang] },
 ];
 ---
 
@@ -20,7 +21,7 @@ const links = [
   <div class="e-only">
     <p class="code muted kicker">{t("home.kicker")}</p>
     <h1 class="title-e">
-      {t("home.title")}
+      {t("home.title")}{" "}
       <span class="serif">{t("home.title.accent")}</span>
     </h1>
   </div>

@@ -1,0 +1,91 @@
+---
+import ArticleRow from '../components/content/ArticleRow.astro';
+import CheatRow from '../components/content/CheatRow.astro';
+import ProjectCard from '../components/content/ProjectCard.astro';
+import Hero from '../components/home/Hero.astro';
+import type { Lang } from '../i18n/ui';
+import { getPath, useTranslations } from '../i18n/utils';
+import Base from '../layouts/Base.astro';
+import { getArticles, getCheatsheets, getProjects } from '../lib/content';
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+
+const articles = (await getArticles(lang)).slice(0, 4);
+const projects = (await getProjects(lang)).slice(0, 4);
+const cheatsheets = (await getCheatsheets(lang)).slice(0, 6);
+---
+
+<Base>
+  <div class="container-narrow">
+    <Hero lang={lang} />
+
+    {
+      articles.length > 0 && (
+        <section class="block">
+          <div class="section-head">
+            <h2 class="sh">{t('home.latest')}</h2>
+            <a href={getPath('articles', lang)} class="muted lc">{t('home.allArticles')}</a>
+          </div>
+          <div class="rows list">
+            {articles.map((entry) => <ArticleRow entry={entry} />)}
+          </div>
+        </section>
+      )
+    }
+
+    {
+      projects.length > 0 && (
+        <section class="block">
+          <div class="section-head">
+            <h2 class="sh">{t('home.projects')}</h2>
+            <a href={getPath('projects', lang)} class="muted lc">{t('home.allProjects')}</a>
+          </div>
+          <div class="cards list-cards">
+            {projects.map((entry) => <ProjectCard entry={entry} />)}
+          </div>
+        </section>
+      )
+    }
+
+    {
+      cheatsheets.length > 0 && (
+        <section class="block last">
+          <div class="section-head">
+            <h2 class="sh">{t('home.cheatsheets')}</h2>
+            <a href={getPath('cheatsheets', lang)} class="muted lc">{t('home.allCheatsheets')}</a>
+          </div>
+          <div class="cs-box list-cs">
+            {cheatsheets.map((entry) => <CheatRow entry={entry} />)}
+          </div>
+        </section>
+      )
+    }
+  </div>
+</Base>
+
+<style>
+  .block {
+    padding-bottom: 80px;
+  }
+
+  .block.last {
+    padding-bottom: 104px;
+  }
+
+  .list {
+    margin-top: 8px;
+  }
+
+  .list-cards {
+    margin-top: 20px;
+  }
+
+  .list-cs {
+    margin-top: 12px;
+  }
+</style>

@@ -1,0 +1,63 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import { useTranslations } from '../../i18n/utils';
+import { getEntryPath } from '../../lib/content';
+import WarnIcon from '../icons/Warn.astro';
+
+interface Props {
+  entry: CollectionEntry<'cheatsheets'>;
+  /** Commande et description sur deux lignes (liste des fiches). */
+  stacked?: boolean;
+}
+
+const { entry, stacked = false } = Astro.props;
+const { lang, title, description, destructive, category, tags } = entry.data;
+const t = useTranslations(lang);
+const search = [title, description, category, ...tags].join(' ');
+---
+
+<a
+  href={getEntryPath('cheatsheets', entry)}
+  class:list={['cs-row', { stacked }]}
+  data-search={search}
+>
+  <span class="cmd-line">
+    <code class="row-title code cmd">{title}</code>
+    {
+      destructive && (
+        <span class="warn" title={t('cheatsheet.destructiveTitle')}>
+          <WarnIcon />
+          {t('cheatsheet.destructive')}
+        </span>
+      )
+    }
+  </span>
+  <span class="cmt muted desc">{description}</span>
+</a>
+
+<style>
+  .cs-row:not(.stacked) .cmd-line {
+    flex: 0 0 280px;
+  }
+
+  .stacked {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 4px;
+  }
+
+  .cmd-line {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 6px 10px;
+  }
+
+  .row-title {
+    font-weight: 500;
+  }
+
+  .desc {
+    font-size: 14px;
+  }
+</style>

@@ -1,0 +1,76 @@
+---
+/*
+ * 404 : servie par GitHub Pages pour toute adresse inconnue.
+ * Version éditoriale sobre / version dev « bash: /page: command not found ».
+ */
+import { useTranslations } from '../i18n/utils';
+import Base from '../layouts/Base.astro';
+
+const t = useTranslations('fr');
+const en = useTranslations('en');
+---
+
+<Base title={t('notFound.title')}>
+  <div class="container-narrow page">
+    <p class="code muted code-404">404</p>
+
+    <div class="e-only">
+      <h1 class="page-title">{t('notFound.title')}</h1>
+      <p class="body muted page-intro">{t('notFound.text')}</p>
+    </div>
+
+    <div class="m-only terminal code">
+      <p><span class="acc">$</span> <span data-path>/page</span></p>
+      <p class="muted">bash: <span data-path>/page</span>: command not found</p>
+      <p><span class="acc">$</span> cd ~<span class="cursor" aria-hidden="true"></span></p>
+    </div>
+
+    <div class="links lc">
+      <a href="/">{t('notFound.back')} →</a>
+      <a href="/en/" lang="en" hreflang="en" class="muted">{en('notFound.title')} · {en('notFound.back')} →</a>
+    </div>
+  </div>
+</Base>
+
+<style>
+  .code-404 {
+    margin: 0 0 16px;
+    font-size: 14px;
+  }
+
+  .terminal {
+    padding: 20px 24px;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    font-size: 15px;
+    line-height: 1.8;
+    overflow-wrap: anywhere;
+  }
+
+  .terminal p {
+    margin: 0;
+  }
+
+
+  .links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px 32px;
+    margin-top: 40px;
+    font-size: 15px;
+    font-weight: 500;
+  }
+
+  .links a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+  }
+</style>
+
+<script>
+  // Affiche l'adresse demandée dans la version « terminal ».
+  const path = decodeURIComponent(location.pathname);
+  document.querySelectorAll('[data-path]').forEach((el) => (el.textContent = path));
+</script>

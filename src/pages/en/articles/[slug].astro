@@ -1,0 +1,17 @@
+---
+import { getCollection } from 'astro:content';
+import ArticlePage from '../../../views/ArticlePage.astro';
+import { getSlug } from '../../../lib/content';
+
+export async function getStaticPaths() {
+  const entries = await getCollection(
+    'articles',
+    (e) => e.data.lang === 'en' && (import.meta.env.DEV || !e.data.draft),
+  );
+  return entries.map((entry) => ({ params: { slug: getSlug(entry) }, props: { entry } }));
+}
+
+const { entry } = Astro.props;
+---
+
+<ArticlePage entry={entry} />

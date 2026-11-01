@@ -1,0 +1,191 @@
+---
+import CheatRow from '../components/content/CheatRow.astro';
+import SearchIcon from '../components/icons/Search.astro';
+import ListHeader from '../components/ui/ListHeader.astro';
+import PrintButton from '../components/ui/PrintButton.astro';
+import { cheatsheetCategories } from '../content.config';
+import type { Lang } from '../i18n/ui';
+import { useTranslations } from '../i18n/utils';
+import Base from '../layouts/Base.astro';
+import { getCheatsheets } from '../lib/content';
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+const cheatsheets = await getCheatsheets(lang);
+const groups = cheatsheetCategories
+  .map((category) => ({ category, items: cheatsheets.filter((c) => c.data.category === category) }))
+  .filter((group) => group.items.length > 0);
+---
+
+<Base title={t('cheatsheets.title')}>
+  <div class="container page">
+    <ListHeader prompt="ls ~/cheatsheets" title={t('cheatsheets.title')} intro={t('cheatsheets.intro')} />
+
+    {
+      cheatsheets.length > 0 && (
+        <div class="tools no-print">
+          <label class="filter" data-cheat-filter hidden>
+            <span class="e-only icon">
+              <SearchIcon />
+            </span>
+            <span class="m-only acc" aria-hidden="true">
+              &gt;
+            </span>
+            <input type="search" aria-label={t('cheatsheets.filterLabel')} placeholder={t('cheatsheets.filter')} autocomplete="off" spellcheck="false" />
+          </label>
+          {groups.length > 1 && (
+            <div class="chips" role="group" aria-label={t('cheatsheets.categories')} data-cheat-categories hidden>
+              <button type="button" class="chip" data-category="" aria-pressed="true">
+                {t('common.filterAll')}
+              </button>
+              {groups.map(({ category }) => (
+                <button type="button" class="chip" data-category={category} aria-pressed="false">
+                  {category}
+                </button>
+              ))}
+            </div>
+          )}
+          <PrintButton lang={lang} class="print" />
+        </div>
+      )
+    }
+
+    {cheatsheets.length === 0 && <p class="muted empty">{t('cheatsheets.empty')}</p>}
+
+    <div class="groups">
+      {
+        groups.map(({ category, items }) => (
+          <section data-group={category}>
+            <h2 class="sh">{category}</h2>
+            <div class="cs-box">
+              {items.map((entry) => (
+                <CheatRow entry={entry} stacked />
+              ))}
+            </div>
+          </section>
+        ))
+      }
+    </div>
+
+    <p class="muted empty" data-no-match hidden data-template={t('cheatsheets.noMatch')}></p>
+  </div>
+</Base>
+
+<style>
+  .tools {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 12px 24px;
+    margin-top: 32px;
+  }
+
+  .filter {
+    flex: 0 1 340px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    height: 44px;
+    padding: 0 12px;
+    border: 1px solid var(--line);
+    border-radius: calc(var(--radius) - 3px);
+    color: var(--muted);
+  }
+
+  .filter:focus-within {
+    border-color: var(--accent);
+  }
+
+  .filter input {
+    flex: 1;
+    min-width: 0;
+    height: 40px;
+    font-size: 14px;
+    color: var(--fg);
+    outline: none;
+  }
+
+  .filter input::-webkit-search-cancel-button {
+    display: none;
+  }
+
+  .tools :global(.print) {
+    margin-left: auto;
+  }
+
+  .groups {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(460px, 100%), 1fr));
+    gap: 40px 48px;
+    align-items: start;
+    margin-top: 48px;
+  }
+
+  .groups .sh {
+    margin-bottom: 8px;
+  }
+
+  @media print {
+    .groups {
+      display: block;
+    }
+
+    .groups section + section {
+      margin-top: 24px;
+    }
+  }
+</style>
+
+<script>
+  // Filtre texte + catégories : visibles seulement avec JavaScript.
+  const filter = document.querySelector<HTMLElement>('[data-cheat-filter]');
+  const input = filter?.querySelector('input');
+  const categories = document.querySelector<HTMLElement>('[data-cheat-categories]');
+  const buttons = categories?.querySelectorAll<HTMLButtonElement>('[data-category]') ?? [];
+  const groups = document.querySelectorAll<HTMLElement>('[data-group]');
+  const noMatch = document.querySelector<HTMLElement>('[data-no-match]');
+
+  const normalize = (text: string) =>
+    text.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
+
+  let category = '';
+
+  const apply = () => {
+    const query = normalize(input?.value.trim() ?? '');
+    let visible = 0;
+    groups.forEach((group) => {
+      const inCategory = !category || group.dataset.group === category;
+      let groupVisible = 0;
+      group.querySelectorAll<HTMLElement>('[data-search]').forEach((row) => {
+        const match = inCategory && (!query || normalize(row.dataset.search ?? '').includes(query));
+        row.hidden = !match;
+        if (match) groupVisible++;
+      });
+      group.hidden = groupVisible === 0;
+      visible += groupVisible;
+    });
+    if (noMatch) {
+      noMatch.hidden = visible > 0;
+      noMatch.textContent = (noMatch.dataset.template ?? '').replace('{q}', input?.value.trim() ?? '');
+    }
+  };
+
+  if (filter && input) {
+    filter.hidden = false;
+    input.addEventListener('input', apply);
+  }
+  if (categories) {
+    categories.hidden = false;
+    buttons.forEach((b) =>
+      b.addEventListener('click', () => {
+        category = b.dataset.category ?? '';
+        buttons.forEach((other) => other.setAttribute('aria-pressed', String(other === b)));
+        apply();
+      }),
+    );
+  }
+</script>

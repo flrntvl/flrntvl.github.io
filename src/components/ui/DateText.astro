@@ -1,0 +1,15 @@
+---
+/* Date : « 14 oct. 2026 » en éditorial, « 2026-10-14 » en dev. */
+import type { Lang } from '../../i18n/ui';
+import { formatDate, isoDate } from '../../lib/format';
+
+interface Props {
+  date: Date;
+  lang: Lang;
+  class?: string;
+}
+
+const { date, lang, class: className } = Astro.props;
+---
+
+<time datetime={isoDate(date)} class={className}><span class="e-only">{formatDate(date, lang)}</span><span class="m-only">{isoDate(date)}</span></time>

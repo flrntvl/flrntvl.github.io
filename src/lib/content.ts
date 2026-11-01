@@ -2,9 +2,17 @@
  * Accès au contenu : brouillons masqués en production, filtrage par langue, tri.
  */
 import { getCollection, type CollectionEntry } from 'astro:content';
-import type { Lang } from '../i18n/ui';
+import { cheatsheetCategories } from '../content.config';
+import type { Lang, RouteKey } from '../i18n/ui';
+import { getPath } from '../i18n/utils';
 
-type Collection = 'articles' | 'projects' | 'cheatsheets';
+export type Collection = 'articles' | 'projects' | 'cheatsheets';
+
+const sectionOf: Record<Collection, RouteKey> = {
+  articles: 'articles',
+  projects: 'projects',
+  cheatsheets: 'cheatsheets',
+};
 
 /** Les brouillons sont visibles en dev, jamais publiés. */
 const isPublished = (entry: { data: { draft: boolean } }) => import.meta.env.DEV || !entry.data.draft;
@@ -30,10 +38,31 @@ export async function getProjects(lang: Lang): Promise<CollectionEntry<'projects
   return entries.sort((a, b) => a.data.order - b.data.order || b.data.year - a.data.year);
 }
 
-/** Cheatsheets d'une langue, par commande. */
+/** Cheatsheets d'une langue, par catégorie (ordre du schéma) puis par commande. */
 export async function getCheatsheets(lang: Lang): Promise<CollectionEntry<'cheatsheets'>[]> {
   const entries = await getEntries('cheatsheets', lang);
-  return entries.sort((a, b) => a.data.title.localeCompare(b.data.title, lang));
+  const rank = (e: CollectionEntry<'cheatsheets'>) => cheatsheetCategories.indexOf(e.data.category);
+  return entries.sort((a, b) => rank(a) - rank(b) || a.data.title.localeCompare(b.data.title, lang));
+}
+
+/** URL d'une entrée : /articles/mon-article/, /en/projects/this-site/… */
+export function getEntryPath(collection: Collection, entry: { id: string; data: { lang: Lang } }): string {
+  return `${getPath(sectionOf[collection], entry.data.lang)}${getSlug(entry)}/`;
+}
+
+/** Entrées précédente et suivante dans une liste déjà triée. */
+export function getNeighbours<T extends { id: string }>(list: T[], entry: T): { prev?: T; next?: T } {
+  const index = list.findIndex((e) => e.id === entry.id);
+  return { prev: list[index - 1], next: list[index + 1] };
+}
+
+/** Langues dans lesquelles une entrée existe (elle-même comprise). */
+export async function getAvailableLangs(collection: Collection, translationKey: string): Promise<Lang[]> {
+  const entries = await getCollection(
+    collection,
+    (e) => isPublished(e) && e.data.translationKey === translationKey,
+  );
+  return [...new Set(entries.map((e) => e.data.lang as Lang))];
 }
 
 /** Traduction d'une entrée dans une autre langue (même translationKey), si elle existe. */

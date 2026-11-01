@@ -1,0 +1,266 @@
+---
+import { render, type CollectionEntry } from 'astro:content';
+import CheckIcon from '../components/icons/Check.astro';
+import WarnIcon from '../components/icons/Warn.astro';
+import Breadcrumb from '../components/ui/Breadcrumb.astro';
+import DateText from '../components/ui/DateText.astro';
+import Pager from '../components/ui/Pager.astro';
+import PrintButton from '../components/ui/PrintButton.astro';
+import { getPath, useTranslations } from '../i18n/utils';
+import Base from '../layouts/Base.astro';
+import { getCheatsheets, getEntryPath, getNeighbours, getTranslation } from '../lib/content';
+import { fill, listParts } from '../lib/format';
+
+interface Props {
+  entry: CollectionEntry<'cheatsheets'>;
+}
+
+const { entry } = Astro.props;
+const { lang, title, description, category, os, testedOn, verifiedAt, destructive, seeAlso } = entry.data;
+const t = useTranslations(lang);
+const otherLang = lang === 'fr' ? 'en' : 'fr';
+
+const { Content, headings } = await render(entry);
+const toc = headings.filter((h) => h.depth === 2);
+const windowsHeading = toc.find((h) => /windows/i.test(h.text));
+
+const translation = await getTranslation('cheatsheets', entry, otherLang);
+const alternatePath = translation ? getEntryPath('cheatsheets', translation) : getPath('cheatsheets', otherLang);
+
+const all = await getCheatsheets(lang);
+const { prev, next } = getNeighbours(all, entry);
+const related = seeAlso
+  .map((key) => all.find((c) => c.data.translationKey === key))
+  .filter((c): c is CollectionEntry<'cheatsheets'> => Boolean(c));
+
+const systems = [
+  { on: os.linux, label: 'Linux' },
+  { on: os.macos, label: 'macOS' },
+  { on: os.windows, label: 'Windows' },
+].filter((s) => s.on);
+---
+
+<Base title={title} description={description} alternatePath={alternatePath}>
+  <div class="layout">
+    <article class="sheet">
+      <Breadcrumb
+        lang={lang}
+        items={[{ label: t('cheatsheets.title'), href: getPath('cheatsheets', lang) }, { label: category }]}
+      />
+      <h1 class="title code"><span class="m-only acc">$ </span>{title}</h1>
+      <p class="body muted lead">{description}</p>
+
+      <div class="meta muted small">
+        <span class="badges">
+          {
+            systems.map((s) => (
+              <span class="os" title={fill(t('cheatsheet.worksOn'), { os: s.label })}>
+                {s.label}
+              </span>
+            ))
+          }
+          {
+            !os.windows && windowsHeading && (
+              <a href={`#${windowsHeading.slug}`} class="os no" title={t('cheatsheet.windowsDiffers')}>
+                {t('cheatsheet.windowsBelow')}
+              </a>
+            )
+          }
+          {
+            destructive && (
+              <span class="warn" title={t('cheatsheet.destructiveTitle')}>
+                <WarnIcon />
+                {t('cheatsheet.destructive')}
+              </span>
+            )
+          }
+        </span>
+        {
+          verifiedAt && (
+            <>
+              <span aria-hidden="true">·</span>
+              <span class="lc">
+                {t('common.updated')} <DateText date={verifiedAt} lang={lang} />
+              </span>
+            </>
+          )
+        }
+        {
+          translation && (
+            <a href={alternatePath} hreflang={otherLang} lang={otherLang} class="muted lc link-underline">
+              {t('common.readOther')}
+            </a>
+          )
+        }
+      </div>
+
+      <div class="tested muted small">
+        {
+          testedOn.length > 0 ? (
+            <span class="tested-text">
+              <CheckIcon />
+              <span>
+                {t('cheatsheet.testedOn')}{' '}
+                {listParts(testedOn, lang).map((part) =>
+                  part.type === 'element' ? <strong>{part.value}</strong> : part.value,
+                )}
+                {verifiedAt && (
+                  <>
+                    {' · '}
+                    {t('cheatsheet.verifiedAt')} <DateText date={verifiedAt} lang={lang} />
+                  </>
+                )}
+              </span>
+            </span>
+          ) : (
+            <span />
+          )
+        }
+        <PrintButton lang={lang} />
+      </div>
+
+      <div class="prose sheet-body">
+        <Content />
+      </div>
+
+      <Pager
+        lang={lang}
+        titleClass="code"
+        prev={prev && { href: getEntryPath('cheatsheets', prev), title: prev.data.title }}
+        next={next && { href: getEntryPath('cheatsheets', next), title: next.data.title }}
+      />
+    </article>
+
+    <aside class="side no-print">
+      {
+        toc.length > 0 && (
+          <nav class="toc" aria-label={t('common.toc')}>
+            <span class="toc-title lc">{t('common.toc')}</span>
+            {toc.map((h) => (
+              <a href={`#${h.slug}`}>{h.text}</a>
+            ))}
+          </nav>
+        )
+      }
+      {
+        related.length > 0 && (
+          <div class="toc see-also">
+            <span class="toc-title lc">{t('cheatsheet.seeAlso')}</span>
+            {related.map((c) => (
+              <a href={getEntryPath('cheatsheets', c)} class="code">
+                {c.data.title}
+              </a>
+            ))}
+          </div>
+        )
+      }
+    </aside>
+  </div>
+</Base>
+
+<style>
+  .layout {
+    max-width: 1120px;
+    margin: 0 auto;
+    padding: 72px 32px 104px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 48px 80px;
+    align-items: flex-start;
+  }
+
+  .sheet {
+    flex: 999 1 560px;
+    min-width: 0;
+    max-width: 720px;
+  }
+
+  .side {
+    flex: 1 1 200px;
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+    padding-top: 48px;
+    position: sticky;
+    top: 0;
+  }
+
+  .see-also a {
+    font-size: 13px;
+  }
+
+  :global(:root[data-style='mono']) .see-also a::before {
+    content: '$ ';
+  }
+
+  .title {
+    margin: 20px 0 0;
+    font-size: 44px;
+    font-weight: 500;
+    letter-spacing: -0.03em;
+    line-height: 1.1;
+    overflow-wrap: anywhere;
+  }
+
+  .lead {
+    margin: 20px 0 0;
+    font-size: 20px;
+    line-height: 1.55;
+  }
+
+  .small {
+    font-size: 13px;
+  }
+
+  .badges {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .tested {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px 24px;
+    margin-top: 24px;
+    padding: 10px 10px 10px 16px;
+    border: 1px solid var(--line);
+    border-radius: calc(var(--radius) - 2px);
+  }
+
+  .tested-text {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .tested strong {
+    color: var(--fg);
+    font-weight: 500;
+  }
+
+  .sheet-body {
+    margin-top: 8px;
+  }
+
+  @media (max-width: 900px) {
+    .side {
+      position: static;
+      padding-top: 0;
+      order: -1;
+    }
+  }
+
+  @media (max-width: 600px) {
+    .layout {
+      padding: 48px 16px 72px;
+    }
+
+    .title {
+      font-size: 32px;
+    }
+  }
+</style>

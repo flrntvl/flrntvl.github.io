@@ -1,0 +1,139 @@
+---
+import { rssPath, social } from '../config';
+import type { Lang } from '../i18n/ui';
+import { useTranslations } from '../i18n/utils';
+import Base from '../layouts/Base.astro';
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+
+// Valeurs entre crochets : à fournir.
+const uses = [
+  { label: t('about.backend'), value: 'PHP · Symfony · Laravel' },
+  { label: t('about.frontend'), value: 'React · [autres]' },
+  { label: t('about.tools'), value: '[Docker, Git, …]' },
+];
+
+const contacts = [
+  { label: social.github.label, value: social.github.handle, href: social.github.href },
+  { label: social.linkedin.label, value: social.linkedin.handle, href: social.linkedin.href },
+  { label: social.email.label, value: social.email.handle, href: social.email.href },
+  { label: t('about.rss'), value: rssPath[lang], href: rssPath[lang] },
+];
+---
+
+<Base title={t('about.title')}>
+  <div class="container-narrow page">
+    <div class="intro">
+      <div class="placeholder photo" role="img" aria-label={t('about.photo')}>[Photo]</div>
+      <div class="intro-text">
+        <p class="m-only muted prompt"><span class="acc">$</span> cat about.md</p>
+        <h1 class="page-title">{t('about.title')}</h1>
+        <p class="body muted tagline">{t('about.tagline')}</p>
+      </div>
+    </div>
+
+    <div class="body bio">
+      <p>{t('about.bio1')}</p>
+      <p>{t('about.bio2')}</p>
+    </div>
+
+    <section class="block">
+      <h2 class="sh">{t('about.uses')}</h2>
+      <dl class="list">
+        {
+          uses.map((item) => (
+            <div class="stack">
+              <dt class="lc">{item.label}</dt>
+              <dd>{item.value}</dd>
+            </div>
+          ))
+        }
+      </dl>
+    </section>
+
+    <section class="block">
+      <h2 class="sh">{t('about.contact')}</h2>
+      <div class="list">
+        {
+          contacts.map((item) => (
+            <a href={item.href} class="contact">
+              <span>{item.label}</span>
+              <span class="muted code handle">{item.value} ↗</span>
+            </a>
+          ))
+        }
+      </div>
+    </section>
+  </div>
+</Base>
+
+<style>
+  .intro {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 24px 32px;
+  }
+
+  .photo {
+    flex: none;
+    width: 112px;
+    height: 112px;
+    border-radius: 50%;
+    font-size: 12px;
+  }
+
+  .intro-text {
+    flex: 1 1 300px;
+  }
+
+  .tagline {
+    margin: 12px 0 0;
+    font-size: 18px;
+  }
+
+  .bio {
+    margin-top: 56px;
+    font-size: 18px;
+    line-height: 1.75;
+  }
+
+  .bio p {
+    margin: 0 0 20px;
+  }
+
+  .block {
+    margin-top: 64px;
+  }
+
+  .block .sh {
+    margin-bottom: 16px;
+  }
+
+  .list {
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .contact {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    min-height: 52px;
+    padding: 0 4px;
+    border-top: 1px solid var(--line);
+    font-size: 15px;
+  }
+
+  .handle {
+    font-size: 13px;
+  }
+</style>

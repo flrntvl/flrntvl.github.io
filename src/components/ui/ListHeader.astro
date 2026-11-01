@@ -1,0 +1,27 @@
+---
+/* En-tête des pages de liste : « $ ls ~/articles » (dev), titre, intro. */
+interface Props {
+  prompt: string;
+  title: string;
+  intro: string;
+}
+
+const { prompt, title, intro } = Astro.props;
+---
+
+<p class="m-only muted prompt"><span class="acc">$</span> {prompt}</p>
+<div class="head">
+  <h1 class="page-title">{title}</h1>
+  <slot name="aside" />
+</div>
+<p class="body muted page-intro">{intro}</p>
+
+<style>
+  .head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 12px 24px;
+  }
+</style>

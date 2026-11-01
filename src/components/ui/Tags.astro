@@ -1,0 +1,24 @@
+---
+/* Tags : « Symfony, PHP » en éditorial, « #symfony #php » en dev. */
+interface Props {
+  tags: string[];
+}
+
+const { tags } = Astro.props;
+---
+
+{
+  tags.length > 0 && (
+    <span class="tags">
+      <span class="e-only">{tags.join(', ')}</span>
+      <span class="m-only">
+        {tags.map((tag, i) => (
+          <>
+            {i > 0 && ' '}
+            <span class="tag">{tag}</span>
+          </>
+        ))}
+      </span>
+    </span>
+  )
+}

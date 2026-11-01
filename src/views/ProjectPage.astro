@@ -1,0 +1,201 @@
+---
+import { Image } from 'astro:assets';
+import { render, type CollectionEntry } from 'astro:content';
+import ProjectCard from '../components/content/ProjectCard.astro';
+import Breadcrumb from '../components/ui/Breadcrumb.astro';
+import { languages } from '../i18n/ui';
+import { getPath, useTranslations } from '../i18n/utils';
+import Base from '../layouts/Base.astro';
+import { getAvailableLangs, getEntryPath, getProjects, getSlug, getTranslation } from '../lib/content';
+import { formatList } from '../lib/format';
+
+interface Props {
+  entry: CollectionEntry<'projects'>;
+}
+
+const { entry } = Astro.props;
+const { lang, title, description, stack, status, year, role, hosting, repo, url, cover, coverAlt, translationKey } =
+  entry.data;
+const t = useTranslations(lang);
+const otherLang = lang === 'fr' ? 'en' : 'fr';
+
+const { Content } = await render(entry);
+
+const translation = await getTranslation('projects', entry, otherLang);
+const alternatePath = translation ? getEntryPath('projects', translation) : getPath('projects', otherLang);
+
+// Langue de la page en premier : « Français et anglais ».
+const availableLangs = (await getAvailableLangs('projects', translationKey)).sort((a) => (a === lang ? -1 : 1));
+const langNames = availableLangs.map((l) =>
+  new Intl.DisplayNames([lang], { type: 'language' }).of(l) ?? languages[l],
+);
+const capitalize = (text: string) => text.charAt(0).toLocaleUpperCase(lang) + text.slice(1);
+const others =(await getProjects(lang)).filter((p) => p.id !== entry.id).slice(0, 2);
+
+const facts = [
+  { label: t('project.role'), value: role },
+  { label: t('project.stack'), value: stack.join(' · '), code: true },
+  { label: t('project.hosting'), value: hosting },
+  { label: t('project.languages'), value: capitalize(formatList(langNames, lang)) },
+  { label: t('project.year'), value: String(year), code: true },
+].filter((fact) => fact.value);
+---
+
+<Base title={title} description={description} alternatePath={alternatePath}>
+  <div class="container page project">
+    <Breadcrumb lang={lang} items={[{ label: t('projects.title'), href: getPath('projects', lang) }, { label: title }]} />
+    <p class="m-only muted cd"><span class="acc">$</span> cd ~/{t('projects.dir')}/{getSlug(entry)}</p>
+    <h1 class="title">{title}</h1>
+    <p class="body muted lead">{description}</p>
+
+    <div class="actions">
+      {repo && <a href={repo} class="btn btn-primary lc">{t('project.source')}</a>}
+      {url && <a href={url} class="btn lc">{t('project.site')}</a>}
+      <span class="status code lc"><span class="dot" aria-hidden="true"></span>{status}</span>
+    </div>
+
+    <figure class="cover">
+      {
+        cover ? (
+          <Image src={cover} alt={coverAlt ?? ''} widths={[640, 1056, 1600]} sizes="(max-width: 1120px) 100vw, 1056px" />
+        ) : (
+          <div class="placeholder cover-placeholder">{t('project.cover')}</div>
+        )
+      }
+    </figure>
+
+    <div class="columns">
+      <div class="prose body-col">
+        <Content />
+      </div>
+      <dl class="facts">
+        {
+          facts.map((fact) => (
+            <div class="fact">
+              <dt class="lc">{fact.label}</dt>
+              <dd class:list={{ 'code lc': fact.code }}>{fact.value}</dd>
+            </div>
+          ))
+        }
+      </dl>
+    </div>
+
+    {
+      others.length > 0 && (
+        <section class="others">
+          <h2 class="sh">{t('project.others')}</h2>
+          <div class="cards">
+            {others.map((other) => (
+              <ProjectCard entry={other} showStatus />
+            ))}
+          </div>
+        </section>
+      )
+    }
+  </div>
+</Base>
+
+<style>
+  .project {
+    padding-top: 72px;
+  }
+
+  .cd {
+    margin: 20px 0 0;
+    font-size: 14px;
+  }
+
+  .title {
+    margin: 16px 0 0;
+    font-size: 52px;
+    line-height: 1.05;
+    letter-spacing: -0.035em;
+    font-weight: 500;
+  }
+
+  .lead {
+    margin: 20px 0 0;
+    max-width: 640px;
+    font-size: 20px;
+    line-height: 1.55;
+  }
+
+  .actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 12px;
+    margin-top: 32px;
+  }
+
+  .status {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-left: 8px;
+    font-size: 13px;
+  }
+
+  .dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--accent);
+  }
+
+  .cover {
+    margin: 56px 0 0;
+  }
+
+  .cover :global(img) {
+    width: 100%;
+    height: auto;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+  }
+
+  .cover-placeholder {
+    aspect-ratio: 16 / 8;
+    border-radius: var(--radius);
+  }
+
+  .columns {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 48px 80px;
+    align-items: flex-start;
+    margin-top: 64px;
+  }
+
+  .body-col {
+    flex: 999 1 560px;
+    min-width: 0;
+    max-width: 700px;
+  }
+
+  .facts {
+    flex: 1 1 240px;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .others {
+    margin-top: 80px;
+  }
+
+  .others .cards {
+    margin-top: 20px;
+  }
+
+  @media (max-width: 600px) {
+    .title {
+      font-size: 38px;
+    }
+
+    .project {
+      padding-top: 48px;
+    }
+  }
+</style>
