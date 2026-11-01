@@ -49,8 +49,7 @@ const contacts = [
     </div>
 
     <div class="body bio">
-      <p>{t('about.bio1')}</p>
-      <p>{t('about.bio2')}</p>
+      {(['about.bio1', 'about.bio2', 'about.bio3', 'about.bio4'] as const).map((key) => <p>{t(key)}</p>)}
     </div>
 
     <section class="block">

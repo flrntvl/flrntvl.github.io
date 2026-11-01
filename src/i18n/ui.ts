@@ -164,8 +164,13 @@ export const ui = {
     'about.tagline': 'Florent, ingénieur développeur web.',
     'about.photo': 'Photo de Florent',
     'about.bio1':
-      "[Quelques lignes sur ton parcours : ce que tu fais aujourd'hui, depuis combien de temps, sur quel type de projets.]",
-    'about.bio2': "[Ce qui t'intéresse en ce moment, et pourquoi tu écris sur ce site.]",
+      "Ingénieur développeur web depuis un peu plus de 8 ans, je conçois et développe des applications web métier complexes, aussi bien côté back-end que front-end.",
+    'about.bio2':
+      "Je travaille principalement avec PHP et les frameworks Symfony, API Platform et Laravel. Côté front-end, je développe des interfaces utilisateur avec React et TypeScript, en m'appuyant notamment sur TanStack et shadcn/ui.",
+    'about.bio3':
+      "J'ai toujours accordé une grande importance à la qualité du code : propre, lisible, testable et maintenable. Pour moi, le développement est une forme d'art qui demande de la rigueur et du soin, que le code soit écrit à la main ou avec l'aide d'agents IA. La productivité ne doit jamais se faire au détriment de la qualité.",
+    'about.bio4':
+      "Je continue d'approfondir mes connaissances autour du DDD, du TDD et de la Clean Architecture. Je cherche à mettre mon expérience et mes compétences d'ingénieur au service du développement assisté par des agents IA, pour concevoir des applications robustes et durables.",
     'about.uses': "Ce que j'utilise",
     'about.backend': 'Back-end',
     'about.frontend': 'Front-end',
@@ -325,11 +330,16 @@ export const ui = {
     'cheatsheet.verifiedAt': 'verified on',
     'cheatsheet.seeAlso': 'See also',
     'about.title': 'About',
-    'about.tagline': 'Florent, web developer.',
+    'about.tagline': 'Florent, software engineer.',
     'about.photo': 'Photo of Florent',
     'about.bio1':
-      '[A few lines about your background: what you do today, for how long, on what kind of projects.]',
-    'about.bio2': "[What you're interested in right now, and why you write on this site.]",
+      "A web software engineer for a little over 8 years, I design and build complex business web applications, on both the back end and the front end.",
+    'about.bio2':
+      "I mainly work with PHP and the Symfony, API Platform and Laravel frameworks. On the front end, I build user interfaces with React and TypeScript, relying in particular on TanStack and shadcn/ui.",
+    'about.bio3':
+      "I've always cared deeply about code quality: clean, readable, testable and maintainable. To me, software development is a craft that calls for rigor and care, whether the code is written by hand or with the help of AI agents. Productivity should never come at the expense of quality.",
+    'about.bio4':
+      "I keep deepening my knowledge of DDD, TDD and Clean Architecture. I aim to put my experience and engineering skills to work in AI-assisted development, to build robust, long-lasting applications.",
     'about.uses': 'What I use',
     'about.backend': 'Back-end',
     'about.frontend': 'Front-end',
