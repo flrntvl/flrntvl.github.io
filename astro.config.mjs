@@ -5,7 +5,7 @@ import mdx from '@astrojs/mdx';
 
 // https://astro.build/config
 export default defineConfig({
-  site: 'https://flrntvl.github.io',
+  site: 'https://flrntvl.dev',
   output: 'static',
   i18n: {
     defaultLocale: 'fr',
