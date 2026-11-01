@@ -5,6 +5,8 @@ import Footer from '../components/Footer.astro';
 import Header from '../components/Header.astro';
 import SearchDialog from '../components/SearchDialog.astro';
 import ShortcutsDialog from '../components/ShortcutsDialog.astro';
+import { rssPath } from '../config';
+import { defaultLang } from '../i18n/ui';
 import { getAlternatePath, getLangFromUrl, useTranslations } from '../i18n/utils';
 import '../styles/global.css';
 
@@ -13,13 +15,24 @@ interface Props {
   description?: string;
   /** Chemin de la page dans l'autre langue (sinon correspondance automatique). */
   alternatePath?: string;
+  /** false : l'autre langue n'est pas une vraie traduction (pas de hreflang). */
+  translated?: boolean;
+  /** Page à ne pas indexer (404, « non traduit »). */
+  noindex?: boolean;
 }
 
 const lang = getLangFromUrl(Astro.url);
+const otherLang = lang === 'fr' ? 'en' : 'fr';
 const t = useTranslations(lang);
-const { title, description = t('site.description'), alternatePath } = Astro.props;
+const { title, description = t('site.description'), alternatePath, translated = true, noindex = false } = Astro.props;
 const pageTitle = title ? `${title} — ${t('site.name')}` : t('site.name');
-const otherPath = alternatePath ?? getAlternatePath(Astro.url.pathname, lang === 'fr' ? 'en' : 'fr');
+const otherPath = alternatePath ?? getAlternatePath(Astro.url.pathname, otherLang);
+
+// URL absolues pour canonical / hreflang (site défini dans astro.config.mjs).
+const canonical = new URL(Astro.url.pathname, Astro.site).href;
+const alternates = translated
+  ? { [lang]: canonical, [otherLang]: new URL(otherPath, Astro.site).href }
+  : undefined;
 ---
 
 <!doctype html>
@@ -30,6 +43,17 @@ const otherPath = alternatePath ?? getAlternatePath(Astro.url.pathname, lang ===
     <AppearanceScript />
     <title>{pageTitle}</title>
     <meta name="description" content={description} />
+    {noindex ? <meta name="robots" content="noindex" /> : <link rel="canonical" href={canonical} />}
+    {
+      !noindex && alternates && (
+        <>
+          <link rel="alternate" hreflang="fr" href={alternates.fr} />
+          <link rel="alternate" hreflang="en" href={alternates.en} />
+          <link rel="alternate" hreflang="x-default" href={alternates[defaultLang]} />
+        </>
+      )
+    }
+    <link rel="alternate" type="application/rss+xml" title={t('rss.title')} href={rssPath[lang]} />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="icon" href="/favicon.ico" />
 

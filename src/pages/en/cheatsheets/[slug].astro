@@ -1,17 +1,13 @@
 ---
-import { getCollection } from 'astro:content';
 import CheatsheetPage from '../../../views/CheatsheetPage.astro';
-import { getSlug, isPublished } from '../../../lib/content';
+import MissingTranslationPage from '../../../views/MissingTranslationPage.astro';
+import { getDetailPaths } from '../../../lib/content';
 
 export async function getStaticPaths() {
-  const entries = await getCollection(
-    'cheatsheets',
-    (e) => e.data.lang === 'en' && isPublished(e),
-  );
-  return entries.map((entry) => ({ params: { slug: getSlug(entry) }, props: { entry } }));
+  return getDetailPaths('cheatsheets', 'en');
 }
 
-const { entry } = Astro.props;
+const { entry, missing } = Astro.props;
 ---
 
-<CheatsheetPage entry={entry} />
+{entry ? <CheatsheetPage entry={entry} /> : <MissingTranslationPage collection="cheatsheets" entry={missing!} lang="en" />}

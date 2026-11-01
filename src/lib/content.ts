@@ -61,6 +61,50 @@ export function getNeighbours<T extends { id: string }>(list: T[], entry: T): { 
   return { prev: list[index - 1], next: list[index + 1] };
 }
 
+const otherLangOf = (lang: Lang): Lang => (lang === 'fr' ? 'en' : 'fr');
+
+/**
+ * Pages de détail d'une langue (getStaticPaths) :
+ * - les entrées de cette langue (props.entry) ;
+ * - pour chaque entrée de l'autre langue sans traduction, une page « disponible seulement en … »
+ *   au même slug (props.missing), vers laquelle pointe le sélecteur de langue.
+ */
+export async function getDetailPaths<C extends Collection>(collection: C, lang: Lang) {
+  const own = await getEntries(collection, lang);
+  const foreign = await getEntries(collection, otherLangOf(lang));
+  const keys = new Set(own.map((e) => e.data.translationKey));
+  const slugs = new Set(own.map(getSlug));
+
+  type Props = { entry?: CollectionEntry<C>; missing?: CollectionEntry<C> };
+  const paths: { params: { slug: string }; props: Props }[] = own.map((entry) => ({
+    params: { slug: getSlug(entry) },
+    props: { entry },
+  }));
+  for (const entry of foreign) {
+    if (keys.has(entry.data.translationKey) || slugs.has(getSlug(entry))) continue;
+    paths.push({ params: { slug: getSlug(entry) }, props: { missing: entry } });
+  }
+  return paths;
+}
+
+/**
+ * La même entrée dans l'autre langue : sa traduction si elle existe (translated: true),
+ * sinon la page « disponible seulement en … » générée par getDetailPaths.
+ */
+export async function getAlternate<C extends Collection>(
+  collection: C,
+  entry: CollectionEntry<C>,
+): Promise<{ path: string; translated: boolean }> {
+  const target = otherLangOf(entry.data.lang as Lang);
+  const translation = await getTranslation(collection, entry, target);
+  if (translation) return { path: getEntryPath(collection, translation), translated: true };
+
+  // Slug déjà pris par un autre contenu dans l'autre langue : pas de page dédiée, on renvoie à la liste.
+  const taken = (await getEntries(collection, target)).some((e) => getSlug(e) === getSlug(entry));
+  const list = getPath(sectionOf[collection], target);
+  return { path: taken ? list : `${list}${getSlug(entry)}/`, translated: false };
+}
+
 /** Langues dans lesquelles une entrée existe (elle-même comprise). */
 export async function getAvailableLangs(collection: Collection, translationKey: string): Promise<Lang[]> {
   const entries = await getCollection(

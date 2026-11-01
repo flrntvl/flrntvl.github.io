@@ -8,7 +8,7 @@ import { getPath, useTranslations } from '../i18n/utils';
 import ProseScripts from '../components/ProseScripts.astro';
 import SearchMeta from '../components/SearchMeta.astro';
 import Base from '../layouts/Base.astro';
-import { getAvailableLangs, getEntryPath, getProjects, getSlug, getTranslation } from '../lib/content';
+import { getAlternate, getAvailableLangs, getEntryPath, getProjects, getSlug } from '../lib/content';
 import { formatList } from '../lib/format';
 
 interface Props {
@@ -19,12 +19,10 @@ const { entry } = Astro.props;
 const { lang, title, description, stack, status, year, role, hosting, repo, url, cover, coverAlt, translationKey } =
   entry.data;
 const t = useTranslations(lang);
-const otherLang = lang === 'fr' ? 'en' : 'fr';
 
 const { Content } = await render(entry);
 
-const translation = await getTranslation('projects', entry, otherLang);
-const alternatePath = translation ? getEntryPath('projects', translation) : getPath('projects', otherLang);
+const { path: alternatePath, translated } = await getAlternate('projects', entry);
 
 // Langue de la page en premier : « Français et anglais ».
 const availableLangs = (await getAvailableLangs('projects', translationKey)).sort((a) => (a === lang ? -1 : 1));
@@ -43,7 +41,7 @@ const facts = [
 ].filter((fact) => fact.value);
 ---
 
-<Base title={title} description={description} alternatePath={alternatePath}>
+<Base title={title} description={description} alternatePath={alternatePath} translated={translated}>
   <div class="container page project" data-pagefind-body>
     <SearchMeta type="project" title={title} sub={description} meta={stack[0] ?? ''} />
     <Breadcrumb lang={lang} items={[{ label: t('projects.title'), href: getPath('projects', lang) }, { label: title }]} />

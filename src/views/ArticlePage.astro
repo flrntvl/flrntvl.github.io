@@ -9,7 +9,7 @@ import { getPath, useTranslations } from '../i18n/utils';
 import ProseScripts from '../components/ProseScripts.astro';
 import SearchMeta from '../components/SearchMeta.astro';
 import Base from '../layouts/Base.astro';
-import { getArticles, getEntryPath, getNeighbours, getTranslation } from '../lib/content';
+import { getAlternate, getArticles, getEntryPath, getNeighbours } from '../lib/content';
 import { fill, formatDate, readingTime } from '../lib/format';
 
 interface Props {
@@ -24,8 +24,7 @@ const otherLang = lang === 'fr' ? 'en' : 'fr';
 const { Content, headings } = await render(entry);
 const toc = headings.filter((h) => h.depth === 2 && h.slug !== 'footnote-label');
 
-const translation = await getTranslation('articles', entry, otherLang);
-const alternatePath = translation ? getEntryPath('articles', translation) : getPath('articles', otherLang);
+const { path: alternatePath, translated } = await getAlternate('articles', entry);
 
 // Plus récent à gauche (« précédent » = plus ancien dans la lecture chronologique inverse).
 const { prev: newer, next: older } = getNeighbours(await getArticles(lang), entry);
@@ -37,7 +36,7 @@ const editUrl = `${repo}/edit/${repoBranch}/${entry.filePath}`;
 const reportUrl = `${repo}/issues/new?title=${encodeURIComponent(fill(t('article.reportTitle'), { title }))}&body=${encodeURIComponent(new URL(Astro.url.pathname, Astro.site).href)}`;
 ---
 
-<Base title={title} description={description} alternatePath={alternatePath}>
+<Base title={title} description={description} alternatePath={alternatePath} translated={translated}>
   <div class="layout">
     <article class="article" data-pagefind-body>
       <SearchMeta type="article" title={title} sub={description} meta={formatDate(date, lang)} />
@@ -72,7 +71,7 @@ const reportUrl = `${repo}/issues/new?title=${encodeURIComponent(fill(t('article
           )
         }
         {
-          translation && (
+          translated && (
             <a href={alternatePath} hreflang={otherLang} lang={otherLang} class="muted lc link-underline">
               {t('common.readOther')}
             </a>

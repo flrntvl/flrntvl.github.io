@@ -10,7 +10,7 @@ import { getPath, useTranslations } from '../i18n/utils';
 import ProseScripts from '../components/ProseScripts.astro';
 import SearchMeta from '../components/SearchMeta.astro';
 import Base from '../layouts/Base.astro';
-import { getCheatsheets, getEntryPath, getNeighbours, getTranslation } from '../lib/content';
+import { getAlternate, getCheatsheets, getEntryPath, getNeighbours } from '../lib/content';
 import { fill, listParts } from '../lib/format';
 
 interface Props {
@@ -26,8 +26,7 @@ const { Content, headings } = await render(entry);
 const toc = headings.filter((h) => h.depth === 2);
 const windowsHeading = toc.find((h) => /windows/i.test(h.text));
 
-const translation = await getTranslation('cheatsheets', entry, otherLang);
-const alternatePath = translation ? getEntryPath('cheatsheets', translation) : getPath('cheatsheets', otherLang);
+const { path: alternatePath, translated } = await getAlternate('cheatsheets', entry);
 
 const all = await getCheatsheets(lang);
 const { prev, next } = getNeighbours(all, entry);
@@ -42,7 +41,7 @@ const systems = [
 ].filter((s) => s.on);
 ---
 
-<Base title={title} description={description} alternatePath={alternatePath}>
+<Base title={title} description={description} alternatePath={alternatePath} translated={translated}>
   <div class="layout">
     <article class="sheet" data-pagefind-body>
       <SearchMeta type="cheatsheet" title={title} sub={description} meta={category} />
@@ -89,7 +88,7 @@ const systems = [
           )
         }
         {
-          translation && (
+          translated && (
             <a href={alternatePath} hreflang={otherLang} lang={otherLang} class="muted lc link-underline">
               {t('common.readOther')}
             </a>

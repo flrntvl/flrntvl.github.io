@@ -1,0 +1,75 @@
+---
+/*
+ * Page « disponible seulement en … » : servie à l'adresse qu'aurait la traduction,
+ * quand un contenu n'existe que dans l'autre langue. Non indexée (noindex, pas de hreflang).
+ */
+import type { CollectionEntry } from 'astro:content';
+import Breadcrumb from '../components/ui/Breadcrumb.astro';
+import type { Lang } from '../i18n/ui';
+import { getPath, useTranslations } from '../i18n/utils';
+import Base from '../layouts/Base.astro';
+import { getEntryPath, type Collection } from '../lib/content';
+
+interface Props {
+  collection: Collection;
+  /** Le contenu original, dans l'autre langue. */
+  entry: CollectionEntry<Collection>;
+  /** Langue de cette page (celle dans laquelle le contenu manque). */
+  lang: Lang;
+}
+
+const { collection, entry, lang } = Astro.props;
+const t = useTranslations(lang);
+const original = getEntryPath(collection, entry);
+const section = collection === 'articles' ? 'articles' : collection === 'projects' ? 'projects' : 'cheatsheets';
+const message = {
+  articles: t('missing.article'),
+  projects: t('missing.project'),
+  cheatsheets: t('missing.cheatsheet'),
+}[collection];
+const listLabel = {
+  articles: t('missing.list.articles'),
+  projects: t('missing.list.projects'),
+  cheatsheets: t('missing.list.cheatsheets'),
+}[collection];
+const sectionTitle = {
+  articles: t('articles.title'),
+  projects: t('projects.title'),
+  cheatsheets: t('cheatsheets.title'),
+}[collection];
+---
+
+<Base title={t('missing.title')} alternatePath={original} translated={false} noindex>
+  <div class="container-narrow page">
+    <Breadcrumb lang={lang} items={[{ label: sectionTitle, href: getPath(section, lang) }, { label: t('missing.title') }]} />
+    <h1 class="title" lang={entry.data.lang} class:list={{ code: collection === 'cheatsheets' }}>{entry.data.title}</h1>
+    <p class="body muted page-intro">{message}</p>
+    <div class="links lc">
+      <a href={original} hreflang={entry.data.lang} class="btn btn-primary">{t('missing.read')}</a>
+      <a href={getPath(section, lang)} class="btn">{listLabel}</a>
+    </div>
+  </div>
+</Base>
+
+<style>
+  .title {
+    margin: 20px 0 0;
+    font-size: 40px;
+    line-height: 1.1;
+    letter-spacing: -0.03em;
+    font-weight: 500;
+  }
+
+  .links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 32px;
+  }
+
+  @media (max-width: 600px) {
+    .title {
+      font-size: 32px;
+    }
+  }
+</style>

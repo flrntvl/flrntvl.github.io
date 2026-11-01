@@ -1,17 +1,13 @@
 ---
-import { getCollection } from 'astro:content';
 import ArticlePage from '../../views/ArticlePage.astro';
-import { getSlug, isPublished } from '../../lib/content';
+import MissingTranslationPage from '../../views/MissingTranslationPage.astro';
+import { getDetailPaths } from '../../lib/content';
 
 export async function getStaticPaths() {
-  const entries = await getCollection(
-    'articles',
-    (e) => e.data.lang === 'fr' && isPublished(e),
-  );
-  return entries.map((entry) => ({ params: { slug: getSlug(entry) }, props: { entry } }));
+  return getDetailPaths('articles', 'fr');
 }
 
-const { entry } = Astro.props;
+const { entry, missing } = Astro.props;
 ---
 
-<ArticlePage entry={entry} />
+{entry ? <ArticlePage entry={entry} /> : <MissingTranslationPage collection="articles" entry={missing!} lang="fr" />}
