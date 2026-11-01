@@ -1,0 +1,266 @@
+---
+/*
+ * Menu plein écran (écran étroit) : navigation en grands liens, Thème, Style, Langue,
+ * liens sociaux. Ouvert par le bouton ☰ de l'en-tête ; fermé par ✕, Échap ou un lien.
+ */
+import { rssPath, social } from '../config';
+import { languages, type Lang, type RouteKey, type UiKey } from '../i18n/ui';
+import { getPath, useTranslations } from '../i18n/utils';
+import AppearanceControls from './AppearanceControls.astro';
+
+interface Props {
+  lang: Lang;
+  alternatePath: string;
+  current?: RouteKey;
+}
+
+const { lang, alternatePath, current } = Astro.props;
+const t = useTranslations(lang);
+
+const nav: { key: RouteKey; label: UiKey; mono?: UiKey }[] = [
+  { key: 'articles', label: 'nav.articles' },
+  { key: 'projects', label: 'nav.projects' },
+  { key: 'cheatsheets', label: 'nav.cheatsheets' },
+  { key: 'about', label: 'nav.about', mono: 'nav.about.mono' },
+];
+
+const socials = [
+  { label: social.github.label, href: social.github.href },
+  { label: social.linkedin.label, href: social.linkedin.href },
+  { label: 'RSS', href: rssPath[lang] },
+];
+---
+
+<dialog id="mobile-menu" class="mmenu" aria-label={t('menu.label')} data-mobile-menu>
+  <div class="top">
+    <a href={getPath('home', lang)} class="logo">
+      <span class="e-only">{t('site.name')}</span>
+      <span class="m-only logo-mono">~/florent<span class="cursor" aria-hidden="true"></span></span>
+    </a>
+    <button type="button" class="icon-btn" aria-label={t('menu.close')} data-menu-close>
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M6 6l12 12M18 6 6 18"></path>
+      </svg>
+    </button>
+  </div>
+
+  <div class="content">
+    <nav class="mnav" aria-label={t('nav.label')}>
+      {
+        nav.map((item) => (
+          <a href={getPath(item.key, lang)} aria-current={current === item.key ? 'page' : undefined}>
+            <span class="t">
+              {item.mono ? (
+                <>
+                  <span class="e-only">{t(item.label)}</span>
+                  <span class="m-only">{t(item.mono)}</span>
+                </>
+              ) : (
+                t(item.label)
+              )}
+            </span>
+            <span class="muted arrow" aria-hidden="true">→</span>
+          </a>
+        ))
+      }
+    </nav>
+
+    <AppearanceControls lang={lang} id="mobile-appearance" large>
+      <div class="field">
+        <span class="lbl" id="mobile-lang">{t('lang.label')}</span>
+        <div class="ctl" role="group" aria-labelledby="mobile-lang">
+          {
+            (Object.keys(languages) as Lang[]).map((l) =>
+              l === lang ? (
+                <a href={Astro.url.pathname} class="seg" aria-current="page" lang={l}>
+                  {languages[l]}
+                </a>
+              ) : (
+                <a href={alternatePath} class="seg" hreflang={l} lang={l}>
+                  {languages[l]}
+                </a>
+              ),
+            )
+          }
+        </div>
+      </div>
+    </AppearanceControls>
+
+    <div class="socials muted lc">
+      {
+        socials.map((link) => (
+          <a href={link.href} class="muted">
+            {link.label} ↗
+          </a>
+        ))
+      }
+    </div>
+  </div>
+</dialog>
+
+<style>
+  .mmenu {
+    width: 100%;
+    max-width: none;
+    height: 100dvh;
+    max-height: none;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    color: var(--fg);
+    background: var(--bg);
+  }
+
+  .mmenu[open] {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .top {
+    flex: none;
+    display: flex;
+    align-items: center;
+    height: 60px;
+    padding: 0 6px 0 16px;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .logo {
+    flex: 1;
+    font-size: 16px;
+    font-weight: 600;
+  }
+
+  .logo-mono {
+    font-size: 15px;
+    font-weight: 700;
+  }
+
+  .icon-btn {
+    width: 44px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: calc(var(--radius) - 3px);
+  }
+
+  .content {
+    flex: 1;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+    padding: 8px 16px 24px;
+  }
+
+  .mnav {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .mnav a {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    min-height: 56px;
+    border-bottom: 1px solid var(--line);
+    font-size: 22px;
+    font-weight: 500;
+    letter-spacing: -0.015em;
+  }
+
+  .mnav a[aria-current='page'] .t {
+    color: var(--accent);
+  }
+
+  .arrow {
+    font-size: 16px;
+  }
+
+  :global(:root[data-style='mono']) .mnav a {
+    font-size: 17px;
+    letter-spacing: 0;
+    text-transform: lowercase;
+  }
+
+  :global(:root[data-style='mono']) .mnav a .t::before {
+    content: './';
+    color: var(--accent);
+  }
+
+  /* Contrôle Langue : mêmes formes que les contrôles Thème (AppearanceControls) */
+  .field {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .lbl {
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--muted);
+  }
+
+  .ctl {
+    display: flex;
+    gap: 2px;
+    padding: 4px;
+    background: var(--surface);
+    border-radius: calc(var(--radius) - 2px);
+  }
+
+  .seg {
+    flex: 1;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: calc(var(--radius) - 5px);
+    color: var(--muted);
+    font-size: 13px;
+  }
+
+  .seg[aria-current='page'] {
+    background: var(--bg);
+    color: var(--fg);
+    box-shadow: 0 0 0 1px var(--line);
+  }
+
+  :global(:root[data-style='mono']) .seg[aria-current='page'] {
+    color: var(--accent);
+  }
+
+  .socials {
+    margin-top: auto;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px 24px;
+    font-size: 14px;
+  }
+
+  .socials a {
+    padding: 12px 0;
+  }
+</style>
+
+<script>
+  const menu = document.querySelector<HTMLDialogElement>('[data-mobile-menu]');
+  const openButton = document.querySelector<HTMLButtonElement>('[data-menu-open]');
+
+  if (menu && openButton) {
+    openButton.addEventListener('click', () => {
+      menu.showModal();
+      openButton.setAttribute('aria-expanded', 'true');
+    });
+    menu.querySelector('[data-menu-close]')?.addEventListener('click', () => menu.close());
+    menu.addEventListener('close', () => {
+      openButton.setAttribute('aria-expanded', 'false');
+      openButton.focus();
+    });
+    // Le menu n'a de sens qu'en écran étroit : on le ferme si la fenêtre s'élargit.
+    matchMedia('(min-width: 1081px)').addEventListener('change', (e) => {
+      if (e.matches && menu.open) menu.close();
+    });
+  }
+</script>

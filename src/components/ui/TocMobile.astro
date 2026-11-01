@@ -1,0 +1,75 @@
+---
+/* Sommaire repliable affiché au-dessus du contenu sur écran étroit (≤ 900 px). */
+import type { Lang } from '../../i18n/ui';
+import { useTranslations } from '../../i18n/utils';
+
+interface Props {
+  lang: Lang;
+  items: { href: string; label: string }[];
+}
+
+const { lang, items } = Astro.props;
+const t = useTranslations(lang);
+---
+
+{
+  items.length > 0 && (
+    <details class="toc-mobile no-print" data-pagefind-ignore>
+      <summary class="lc">
+        {t('common.toc')}
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="m6 9 6 6 6-6" />
+        </svg>
+      </summary>
+      <nav class="toc" aria-label={t('common.toc')}>
+        {items.map((item) => (
+          <a href={item.href}>{item.label}</a>
+        ))}
+      </nav>
+    </details>
+  )
+}
+
+<style>
+  .toc-mobile {
+    display: none;
+    margin-top: 24px;
+    padding: 0 14px;
+    border: 1px solid var(--line);
+    border-radius: calc(var(--radius) - 2px);
+  }
+
+  summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    min-height: 48px;
+    list-style: none;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+  }
+
+  summary::-webkit-details-marker {
+    display: none;
+  }
+
+  details[open] summary svg {
+    transform: rotate(180deg);
+  }
+
+  .toc {
+    padding-bottom: 14px;
+  }
+
+  .toc a {
+    display: block;
+    padding: 6px 0;
+  }
+
+  @media (max-width: 900px) {
+    .toc-mobile {
+      display: block;
+    }
+  }
+</style>

@@ -3,6 +3,7 @@ import { render, type CollectionEntry } from 'astro:content';
 import Breadcrumb from '../components/ui/Breadcrumb.astro';
 import DateText from '../components/ui/DateText.astro';
 import Pager from '../components/ui/Pager.astro';
+import TocMobile from '../components/ui/TocMobile.astro';
 import Tags from '../components/ui/Tags.astro';
 import { repo, repoBranch } from '../config';
 import { getPath, useTranslations } from '../i18n/utils';
@@ -98,6 +99,14 @@ const reportUrl = `${repo}/issues/new?title=${encodeURIComponent(fill(t('article
           )
         }
       </div>
+
+      <TocMobile
+        lang={lang}
+        items={[
+          ...toc.map((h) => ({ href: `#${h.slug}`, label: h.text })),
+          ...(history.length > 0 ? [{ href: '#historique', label: t('article.history') }] : []),
+        ]}
+      />
 
       <div class="prose article-body">
         <Content />
@@ -284,11 +293,10 @@ const reportUrl = `${repo}/issues/new?title=${encodeURIComponent(fill(t('article
     max-width: 650px;
   }
 
+  /* Écran étroit : le sommaire passe au-dessus, en bloc repliable (TocMobile) */
   @media (max-width: 900px) {
     .side {
-      flex-basis: 100%;
-      padding-top: 0;
-      position: static;
+      display: none;
     }
   }
 

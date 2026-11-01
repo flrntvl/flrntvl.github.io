@@ -27,6 +27,7 @@ const t = useTranslations(lang);
 const { title, description = t('site.description'), alternatePath, translated = true, noindex = false } = Astro.props;
 const pageTitle = title ? `${title} — ${t('site.name')}` : t('site.name');
 const otherPath = alternatePath ?? getAlternatePath(Astro.url.pathname, otherLang);
+const isHome = ['/', '/en/'].includes(Astro.url.pathname);
 
 // URL absolues pour canonical / hreflang (site défini dans astro.config.mjs).
 const canonical = new URL(Astro.url.pathname, Astro.site).href;
@@ -57,9 +58,10 @@ const alternates = translated
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="icon" href="/favicon.ico" />
 
-    <!-- Style éditorial (par défaut) : préchargé -->
-    <Font cssVariable="--font-geist" preload />
-    <Font cssVariable="--font-instrument-serif" preload />
+    <!-- Style éditorial (par défaut) : seules les graisses du texte et des titres sont préchargées ;
+         Instrument Serif ne sert qu'au titre de l'accueil. -->
+    <Font cssVariable="--font-geist" preload={[{ weight: 400 }, { weight: 500 }]} />
+    <Font cssVariable="--font-instrument-serif" preload={isHome} />
     <Font cssVariable="--font-geist-mono" />
     <!-- Style dev : téléchargé seulement si le style est actif -->
     <Font cssVariable="--font-jetbrains-mono" />

@@ -1,5 +1,6 @@
 ---
 import AppearanceMenu from './AppearanceMenu.astro';
+import MobileMenu from './MobileMenu.astro';
 import { languages, type Lang, type RouteKey, type UiKey } from '../i18n/ui';
 import { getAlternatePath, getPath, getRouteKey, useTranslations } from '../i18n/utils';
 
@@ -49,7 +50,6 @@ const otherPath = alternatePath ?? getAlternatePath(Astro.url.pathname, otherLan
     </nav>
 
     <div class="tools">
-      <!-- Recherche : branchée à l'étape Pagefind -->
       <button type="button" class="hdr-btn muted search" data-search-open>
         <svg class="e-only" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
           <circle cx="11" cy="11" r="7"></circle>
@@ -82,8 +82,25 @@ const otherPath = alternatePath ?? getAlternatePath(Astro.url.pathname, otherLan
 
       <AppearanceMenu lang={lang} />
     </div>
+
+    <!-- Écran étroit : loupe (recherche plein écran) et menu ☰ -->
+    <div class="mobile-tools">
+      <button type="button" class="icon-btn" aria-label={t('search.open')} data-search-open>
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="11" cy="11" r="7"></circle>
+          <path d="m20 20-3.5-3.5"></path>
+        </svg>
+      </button>
+      <button type="button" class="icon-btn" aria-label={t('menu.open')} aria-haspopup="dialog" aria-controls="mobile-menu" data-menu-open>
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M4 7h16M4 12h16M4 17h16"></path>
+        </svg>
+      </button>
+    </div>
   </div>
 </header>
+
+<MobileMenu lang={lang} alternatePath={otherPath} current={current} />
 
 <style>
   .header {
@@ -120,6 +137,9 @@ const otherPath = alternatePath ?? getAlternatePath(Astro.url.pathname, otherLan
   }
 
   .nav a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
     color: var(--muted);
   }
 
@@ -175,6 +195,48 @@ const otherPath = alternatePath ?? getAlternatePath(Astro.url.pathname, otherLan
 
   .langs .sep {
     color: var(--line);
+  }
+
+  .mobile-tools {
+    display: none;
+    gap: 4px;
+    margin-right: -10px;
+  }
+
+  .icon-btn {
+    width: 44px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: calc(var(--radius) - 3px);
+    color: var(--fg);
+  }
+
+  .icon-btn:hover {
+    background: var(--surface);
+  }
+
+  /* Sous 1080 px (largeur nécessaire en style dev) : logo · loupe · menu ☰ */
+  @media (max-width: 1080px) {
+    .bar {
+      flex-wrap: nowrap;
+      min-height: 60px;
+      padding-block: 8px;
+    }
+
+    .logo {
+      flex: 1;
+    }
+
+    .nav,
+    .tools {
+      display: none;
+    }
+
+    .mobile-tools {
+      display: flex;
+    }
   }
 
   @media print {

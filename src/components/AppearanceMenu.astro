@@ -1,6 +1,11 @@
 ---
+/*
+ * Bouton « Apparence » de l'en-tête (desktop) + menu Thème / Style.
+ * Les contrôles eux-mêmes sont dans AppearanceControls.astro.
+ */
 import type { Lang } from "../i18n/ui";
 import { useTranslations } from "../i18n/utils";
+import AppearanceControls from "./AppearanceControls.astro";
 
 interface Props {
   lang: Lang;
@@ -60,108 +65,9 @@ const t = useTranslations(lang);
     hidden
     data-appearance-panel
   >
-    <div class="field">
-      <span class="lbl" id="appearance-theme-label"
-        >{t("appearance.theme")}</span
-      >
-      <div class="ctl" role="group" aria-labelledby="appearance-theme-label">
-        <button
-          type="button"
-          class="seg"
-          data-theme-pref="auto"
-          aria-pressed="false"
-        >
-          <svg
-            width="14"
-            height="14"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="1.75"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            aria-hidden="true"
-          >
-            <rect x="3" y="4" width="18" height="12" rx="2"></rect>
-            <path d="M8 20h8M12 16v4"></path>
-          </svg>
-          <span class="lc">{t("appearance.theme.auto")}</span>
-        </button>
-        <button
-          type="button"
-          class="seg"
-          data-theme-pref="light"
-          aria-pressed="false"
-        >
-          <svg
-            width="14"
-            height="14"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="1.75"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            aria-hidden="true"
-          >
-            <circle cx="12" cy="12" r="4"></circle>
-            <path
-              d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"
-            ></path>
-          </svg>
-          <span class="lc">{t("appearance.theme.light")}</span>
-        </button>
-        <button
-          type="button"
-          class="seg"
-          data-theme-pref="dark"
-          aria-pressed="false"
-        >
-          <svg
-            width="14"
-            height="14"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="1.75"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            aria-hidden="true"
-          >
-            <path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z"></path>
-          </svg>
-          <span class="lc">{t("appearance.theme.dark")}</span>
-        </button>
-      </div>
-    </div>
-
-    <div class="field">
-      <span class="lbl" id="appearance-style-label"
-        >{t("appearance.style")}</span
-      >
-      <div class="cards" role="group" aria-labelledby="appearance-style-label">
-        <button
-          type="button"
-          class="style-card"
-          data-style-pref="editorial"
-          aria-pressed="false"
-        >
-          <span class="sample sample-editorial" aria-hidden="true">Aa</span>
-          <span class="lc">{t("appearance.style.editorial")}</span>
-        </button>
-        <button
-          type="button"
-          class="style-card"
-          data-style-pref="mono"
-          aria-pressed="false"
-        >
-          <span class="sample sample-mono" aria-hidden="true">&gt;_</span>
-          <span class="lc">{t("appearance.style.mono")}</span>
-        </button>
-      </div>
-    </div>
-
-    <p class="saved muted">{t("appearance.saved")}</p>
+    <AppearanceControls lang={lang} id="appearance">
+      <p class="saved muted">{t("appearance.saved")}</p>
+    </AppearanceControls>
   </div>
 </div>
 
@@ -180,112 +86,11 @@ const t = useTranslations(lang);
     right: 0;
     z-index: 20;
     width: 304px;
-    display: flex;
-    flex-direction: column;
-    gap: 18px;
     padding: 16px;
     background: var(--bg);
     border: 1px solid var(--line);
     border-radius: var(--radius);
     box-shadow: 0 24px 56px -18px rgba(0, 0, 0, 0.35);
-  }
-
-  .pop[hidden] {
-    display: none;
-  }
-
-  .field {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-  }
-
-  .lbl {
-    font-size: 12px;
-    font-weight: 500;
-    color: var(--muted);
-  }
-
-  .ctl {
-    display: flex;
-    gap: 2px;
-    padding: 4px;
-    background: var(--surface);
-    border-radius: calc(var(--radius) - 2px);
-  }
-
-  .seg {
-    flex: 1;
-    height: 36px;
-    min-width: 36px;
-    padding: 0 8px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 6px;
-    border-radius: calc(var(--radius) - 5px);
-    color: var(--muted);
-    font-size: 12px;
-  }
-
-  .seg:hover {
-    color: var(--fg);
-  }
-
-  .seg[aria-pressed="true"] {
-    background: var(--bg);
-    color: var(--fg);
-    box-shadow: 0 0 0 1px var(--line);
-  }
-
-  :global(:root[data-style="mono"]) .seg[aria-pressed="true"] {
-    color: var(--accent);
-  }
-
-  .cards {
-    display: flex;
-    gap: 8px;
-  }
-
-  .style-card {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 6px;
-    padding: 14px 8px 12px;
-    border: 1px solid var(--line);
-    border-radius: calc(var(--radius) - 4px);
-    color: var(--muted);
-    font-size: 12px;
-  }
-
-  .style-card:hover {
-    color: var(--fg);
-  }
-
-  .style-card[aria-pressed="true"] {
-    border-color: var(--accent);
-    color: var(--fg);
-    box-shadow: 0 0 0 1px var(--accent);
-  }
-
-  .sample {
-    color: var(--fg);
-    line-height: 1;
-  }
-
-  .sample-editorial {
-    font-family: var(--font-geist);
-    font-size: 22px;
-    font-weight: 500;
-  }
-
-  .sample-mono {
-    font-family: var(--font-jetbrains-mono);
-    font-size: 20px;
-    font-weight: 700;
-    line-height: 1.1;
   }
 
   .saved {
@@ -295,43 +100,14 @@ const t = useTranslations(lang);
 </style>
 
 <script>
-  import {
-    APPEARANCE_EVENT,
-    getStylePref,
-    getThemePref,
-    setStylePref,
-    setThemePref,
-    type StylePref,
-    type ThemePref,
-  } from "../scripts/appearance";
-
   const root = document.querySelector<HTMLElement>("[data-appearance]");
-  const trigger = root?.querySelector<HTMLButtonElement>(
-    "[data-appearance-trigger]",
-  );
+  const trigger = root?.querySelector<HTMLButtonElement>("[data-appearance-trigger]");
   const panel = root?.querySelector<HTMLElement>("[data-appearance-panel]");
 
   if (root && trigger && panel) {
-    const themeButtons =
-      panel.querySelectorAll<HTMLButtonElement>("[data-theme-pref]");
-    const styleButtons =
-      panel.querySelectorAll<HTMLButtonElement>("[data-style-pref]");
-
-    const sync = () => {
-      const theme = getThemePref();
-      const style = getStylePref();
-      themeButtons.forEach((b) =>
-        b.setAttribute("aria-pressed", String(b.dataset.themePref === theme)),
-      );
-      styleButtons.forEach((b) =>
-        b.setAttribute("aria-pressed", String(b.dataset.stylePref === style)),
-      );
-    };
-
     const open = () => {
       panel.hidden = false;
       trigger.setAttribute("aria-expanded", "true");
-      sync();
       panel.querySelector<HTMLButtonElement>('[aria-pressed="true"]')?.focus();
     };
 
@@ -343,17 +119,6 @@ const t = useTranslations(lang);
     };
 
     trigger.addEventListener("click", () => (panel.hidden ? open() : close()));
-
-    themeButtons.forEach((b) =>
-      b.addEventListener("click", () =>
-        setThemePref(b.dataset.themePref as ThemePref),
-      ),
-    );
-    styleButtons.forEach((b) =>
-      b.addEventListener("click", () =>
-        setStylePref(b.dataset.stylePref as StylePref),
-      ),
-    );
 
     // Échap ferme le menu et rend le focus au bouton.
     root.addEventListener("keydown", (event) => {
@@ -368,11 +133,7 @@ const t = useTranslations(lang);
       if (!root.contains(event.target as Node)) close(false);
     });
     root.addEventListener("focusout", (event) => {
-      if (event.relatedTarget && !root.contains(event.relatedTarget as Node))
-        close(false);
+      if (event.relatedTarget && !root.contains(event.relatedTarget as Node)) close(false);
     });
-
-    document.addEventListener(APPEARANCE_EVENT, sync);
-    sync();
   }
 </script>

@@ -5,6 +5,7 @@ import WarnIcon from '../components/icons/Warn.astro';
 import Breadcrumb from '../components/ui/Breadcrumb.astro';
 import DateText from '../components/ui/DateText.astro';
 import Pager from '../components/ui/Pager.astro';
+import TocMobile from '../components/ui/TocMobile.astro';
 import PrintButton from '../components/ui/PrintButton.astro';
 import { getPath, useTranslations } from '../i18n/utils';
 import ProseScripts from '../components/ProseScripts.astro';
@@ -120,6 +121,8 @@ const systems = [
         }
         <PrintButton lang={lang} />
       </div>
+
+      <TocMobile lang={lang} items={toc.map((h) => ({ href: `#${h.slug}`, label: h.text }))} />
 
       <div class="prose sheet-body">
         <Content />
@@ -246,14 +249,18 @@ const systems = [
   }
 
   .sheet-body {
-    margin-top: 8px;
+    margin-top: 40px;
   }
 
+  /* Écran étroit : sommaire repliable au-dessus (TocMobile), « Voir aussi » après la fiche */
   @media (max-width: 900px) {
     .side {
       position: static;
       padding-top: 0;
-      order: -1;
+    }
+
+    .side > nav.toc {
+      display: none;
     }
   }
 
