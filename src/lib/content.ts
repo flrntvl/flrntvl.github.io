@@ -14,8 +14,13 @@ const sectionOf: Record<Collection, RouteKey> = {
   cheatsheets: 'cheatsheets',
 };
 
-/** Les brouillons sont visibles en dev, jamais publiés. */
-const isPublished = (entry: { data: { draft: boolean } }) => import.meta.env.DEV || !entry.data.draft;
+/**
+ * Les brouillons sont visibles en dev, jamais publiés.
+ * SHOW_DRAFTS=true les inclut dans un build local (npm run search:dev, pour tester la recherche).
+ */
+const showDrafts = import.meta.env.DEV || import.meta.env.SHOW_DRAFTS === 'true';
+
+export const isPublished = (entry: { data: { draft: boolean } }) => showDrafts || !entry.data.draft;
 
 /** Slug d'une entrée, sans le dossier de langue : « fr/last-reboot » → « last-reboot ». */
 export function getSlug(entry: { id: string }): string {

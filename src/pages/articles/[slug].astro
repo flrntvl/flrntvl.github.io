@@ -1,12 +1,12 @@
 ---
 import { getCollection } from 'astro:content';
 import ArticlePage from '../../views/ArticlePage.astro';
-import { getSlug } from '../../lib/content';
+import { getSlug, isPublished } from '../../lib/content';
 
 export async function getStaticPaths() {
   const entries = await getCollection(
     'articles',
-    (e) => e.data.lang === 'fr' && (import.meta.env.DEV || !e.data.draft),
+    (e) => e.data.lang === 'fr' && isPublished(e),
   );
   return entries.map((entry) => ({ params: { slug: getSlug(entry) }, props: { entry } }));
 }

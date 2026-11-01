@@ -11,7 +11,7 @@ const { lang, items } = Astro.props;
 const t = useTranslations(lang);
 ---
 
-<nav class="breadcrumb muted lc" aria-label={t('common.breadcrumb')}>
+<nav data-pagefind-ignore class="breadcrumb muted lc" aria-label={t('common.breadcrumb')}>
   {
     items.map((item, i) => (
       <>

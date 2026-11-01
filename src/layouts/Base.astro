@@ -3,7 +3,8 @@ import { Font } from 'astro:assets';
 import AppearanceScript from '../components/AppearanceScript.astro';
 import Footer from '../components/Footer.astro';
 import Header from '../components/Header.astro';
-import { getLangFromUrl, useTranslations } from '../i18n/utils';
+import SearchDialog from '../components/SearchDialog.astro';
+import { getAlternatePath, getLangFromUrl, useTranslations } from '../i18n/utils';
 import '../styles/global.css';
 
 interface Props {
@@ -17,6 +18,7 @@ const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
 const { title, description = t('site.description'), alternatePath } = Astro.props;
 const pageTitle = title ? `${title} — ${t('site.name')}` : t('site.name');
+const otherPath = alternatePath ?? getAlternatePath(Astro.url.pathname, lang === 'fr' ? 'en' : 'fr');
 ---
 
 <!doctype html>
@@ -45,6 +47,7 @@ const pageTitle = title ? `${title} — ${t('site.name')}` : t('site.name');
       <slot />
     </main>
     <Footer lang={lang} />
+    <SearchDialog lang={lang} alternatePath={otherPath} />
   </body>
 </html>
 

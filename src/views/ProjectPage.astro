@@ -6,6 +6,7 @@ import Breadcrumb from '../components/ui/Breadcrumb.astro';
 import { languages } from '../i18n/ui';
 import { getPath, useTranslations } from '../i18n/utils';
 import ProseScripts from '../components/ProseScripts.astro';
+import SearchMeta from '../components/SearchMeta.astro';
 import Base from '../layouts/Base.astro';
 import { getAvailableLangs, getEntryPath, getProjects, getSlug, getTranslation } from '../lib/content';
 import { formatList } from '../lib/format';
@@ -43,13 +44,14 @@ const facts = [
 ---
 
 <Base title={title} description={description} alternatePath={alternatePath}>
-  <div class="container page project">
+  <div class="container page project" data-pagefind-body>
+    <SearchMeta type="project" title={title} sub={description} meta={stack[0] ?? ''} />
     <Breadcrumb lang={lang} items={[{ label: t('projects.title'), href: getPath('projects', lang) }, { label: title }]} />
     <p class="m-only muted cd"><span class="acc">$</span> cd ~/{t('projects.dir')}/{getSlug(entry)}</p>
     <h1 class="title">{title}</h1>
     <p class="body muted lead">{description}</p>
 
-    <div class="actions">
+    <div class="actions" data-pagefind-ignore>
       {repo && <a href={repo} class="btn btn-primary lc">{t('project.source')}</a>}
       {url && <a href={url} class="btn lc">{t('project.site')}</a>}
       <span class="status code lc"><span class="dot" aria-hidden="true"></span>{status}</span>
@@ -83,7 +85,7 @@ const facts = [
 
     {
       others.length > 0 && (
-        <section class="others">
+        <section class="others" data-pagefind-ignore>
           <h2 class="sh">{t('project.others')}</h2>
           <div class="cards">
             {others.map((other) => (

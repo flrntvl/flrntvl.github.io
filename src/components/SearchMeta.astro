@@ -1,0 +1,21 @@
+---
+/*
+ * Métadonnées lues par Pagefind pour la palette de recherche (non affichées, non indexées).
+ * type : article | project | cheatsheet ; sub : sous-titre ; meta : date, techno ou catégorie.
+ */
+interface Props {
+  type: 'article' | 'project' | 'cheatsheet';
+  title: string;
+  sub: string;
+  meta: string;
+}
+
+const { type, title, sub, meta } = Astro.props;
+---
+
+<div hidden data-pagefind-ignore>
+  <span data-pagefind-meta="type" data-pagefind-filter="type">{type}</span>
+  <span data-pagefind-meta="title">{title}</span>
+  <span data-pagefind-meta="sub">{sub}</span>
+  <span data-pagefind-meta="meta">{meta}</span>
+</div>

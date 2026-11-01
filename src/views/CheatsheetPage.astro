@@ -8,6 +8,7 @@ import Pager from '../components/ui/Pager.astro';
 import PrintButton from '../components/ui/PrintButton.astro';
 import { getPath, useTranslations } from '../i18n/utils';
 import ProseScripts from '../components/ProseScripts.astro';
+import SearchMeta from '../components/SearchMeta.astro';
 import Base from '../layouts/Base.astro';
 import { getCheatsheets, getEntryPath, getNeighbours, getTranslation } from '../lib/content';
 import { fill, listParts } from '../lib/format';
@@ -43,7 +44,8 @@ const systems = [
 
 <Base title={title} description={description} alternatePath={alternatePath}>
   <div class="layout">
-    <article class="sheet">
+    <article class="sheet" data-pagefind-body>
+      <SearchMeta type="cheatsheet" title={title} sub={description} meta={category} />
       <Breadcrumb
         lang={lang}
         items={[{ label: t('cheatsheets.title'), href: getPath('cheatsheets', lang) }, { label: category }]}
@@ -51,7 +53,7 @@ const systems = [
       <h1 class="title code"><span class="m-only acc">$ </span>{title}</h1>
       <p class="body muted lead">{description}</p>
 
-      <div class="meta muted small">
+      <div class="meta muted small" data-pagefind-ignore>
         <span class="badges">
           {
             systems.map((s) => (
@@ -95,7 +97,7 @@ const systems = [
         }
       </div>
 
-      <div class="tested muted small">
+      <div class="tested muted small" data-pagefind-ignore>
         {
           testedOn.length > 0 ? (
             <span class="tested-text">

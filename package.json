@@ -7,14 +7,18 @@
   },
   "scripts": {
     "dev": "astro dev",
-    "build": "astro build",
+    "build": "astro build && pagefind --site dist",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "search:dev": "SHOW_DRAFTS=true astro build && pagefind --site dist --output-path public/pagefind"
   },
   "dependencies": {
     "@astrojs/markdown-satteri": "^0.4.6",
     "@astrojs/mdx": "^8.1.2",
     "astro": "^7.4.4",
     "mermaid": "^12.2.0"
+  },
+  "devDependencies": {
+    "pagefind": "^1.6.0"
   }
 }

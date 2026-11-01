@@ -7,9 +7,10 @@ import Tags from '../components/ui/Tags.astro';
 import { repo, repoBranch } from '../config';
 import { getPath, useTranslations } from '../i18n/utils';
 import ProseScripts from '../components/ProseScripts.astro';
+import SearchMeta from '../components/SearchMeta.astro';
 import Base from '../layouts/Base.astro';
 import { getArticles, getEntryPath, getNeighbours, getTranslation } from '../lib/content';
-import { fill, readingTime } from '../lib/format';
+import { fill, formatDate, readingTime } from '../lib/format';
 
 interface Props {
   entry: CollectionEntry<'articles'>;
@@ -38,14 +39,15 @@ const reportUrl = `${repo}/issues/new?title=${encodeURIComponent(fill(t('article
 
 <Base title={title} description={description} alternatePath={alternatePath}>
   <div class="layout">
-    <article class="article">
+    <article class="article" data-pagefind-body>
+      <SearchMeta type="article" title={title} sub={description} meta={formatDate(date, lang)} />
       <Breadcrumb
         lang={lang}
         items={[{ label: t('articles.title'), href: getPath('articles', lang) }, { label: tags[0] ?? title }]}
       />
       <h1 class="title">{title}</h1>
 
-      <div class="meta muted">
+      <div class="meta muted" data-pagefind-ignore>
         <DateText date={date} lang={lang} class="code small" />
         <span aria-hidden="true">·</span>
         <span class="lc">{fill(t('article.readingTime'), { n: readingTime(entry.body) })}</span>
@@ -118,7 +120,7 @@ const reportUrl = `${repo}/issues/new?title=${encodeURIComponent(fill(t('article
         )
       }
 
-      <div class="links muted no-print">
+      <div class="links muted no-print" data-pagefind-ignore>
         <a href={editUrl} class="muted lc">{t('article.edit')}</a>
         <a href={reportUrl} class="muted lc">{t('article.report')}</a>
       </div>

@@ -22,3 +22,6 @@ pnpm-debug.log*
 
 # jetbrains setting folder
 .idea/
+
+# index de recherche pour le dev (npm run search:dev)
+public/pagefind/
