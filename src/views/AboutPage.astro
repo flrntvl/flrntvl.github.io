@@ -12,11 +12,13 @@ interface Props {
 const { lang } = Astro.props;
 const t = useTranslations(lang);
 
-// Valeurs entre crochets : à fournir.
 const uses = [
   { label: t('about.backend'), value: 'PHP · Symfony · Laravel' },
-  { label: t('about.frontend'), value: 'React · [autres]' },
-  { label: t('about.tools'), value: '[Docker, Git, …]' },
+  { label: t('about.frontend'), value: 'React · TypeScript · Tailwind CSS · shadcn/ui · HTML · CSS' },
+  { label: t('about.data'), value: 'MariaDB · PostgreSQL · SQL Server · Elasticsearch · Kibana' },
+  { label: t('about.cicd'), value: 'GitHub Actions · GitLab CI/CD' },
+  { label: t('about.tools'), value: 'Docker · VS Code · Git' },
+  { label: t('about.agentic'), value: 'Claude Code · Cursor' },
 ];
 
 const contacts = [
