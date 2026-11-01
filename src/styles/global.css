@@ -156,3 +156,54 @@ svg {
     scroll-behavior: auto !important;
   }
 }
+
+/* Raccourci clavier selon le système (data-os posé par le script anti-flash) */
+:root:not([data-os='other']) .kbd-other,
+:root[data-os='other'] .kbd-apple {
+  display: none;
+}
+
+kbd {
+  font-family: var(--code);
+  font-size: 11px;
+  padding: 2px 6px;
+  border: 1px solid var(--line);
+  border-radius: 5px;
+  color: var(--muted);
+}
+
+/* Bouton d'en-tête (Rechercher, Apparence) */
+.hdr-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 44px;
+  padding: 0 10px 0 12px;
+  border: 1px solid var(--line);
+  border-radius: calc(var(--radius) - 3px);
+  font-size: 13px;
+}
+
+.hdr-btn:hover {
+  border-color: var(--muted);
+}
+
+/* Conteneur de page */
+.container {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding-inline: 32px;
+}
+
+.container-narrow {
+  max-width: 760px;
+  margin: 0 auto;
+  padding-inline: 32px;
+}
+
+@media (max-width: 600px) {
+  .container,
+  .container-narrow {
+    padding-inline: 16px;
+  }
+}

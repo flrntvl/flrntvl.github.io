@@ -1,0 +1,206 @@
+---
+import AppearanceMenu from './AppearanceMenu.astro';
+import { languages, type Lang, type RouteKey, type UiKey } from '../i18n/ui';
+import { getAlternatePath, getPath, getRouteKey, useTranslations } from '../i18n/utils';
+
+interface Props {
+  lang: Lang;
+  /** Chemin de la page dans l'autre langue, si différent de la correspondance automatique. */
+  alternatePath?: string;
+}
+
+const { lang, alternatePath } = Astro.props;
+const t = useTranslations(lang);
+const current = getRouteKey(Astro.url.pathname);
+
+const nav: { key: RouteKey; label: UiKey; mono?: UiKey }[] = [
+  { key: 'articles', label: 'nav.articles' },
+  { key: 'projects', label: 'nav.projects' },
+  { key: 'cheatsheets', label: 'nav.cheatsheets' },
+  { key: 'about', label: 'nav.about', mono: 'nav.about.mono' },
+];
+
+const otherLang = (Object.keys(languages) as Lang[]).find((l) => l !== lang)!;
+const otherPath = alternatePath ?? getAlternatePath(Astro.url.pathname, otherLang);
+---
+
+<header class="header">
+  <div class="container bar">
+    <a href={getPath('home', lang)} class="logo" aria-current={current === 'home' ? 'page' : undefined}>
+      <span class="e-only">{t('site.name')}</span>
+      <span class="m-only logo-mono">~/florent<span class="cursor" aria-hidden="true"></span></span>
+    </a>
+
+    <nav class="nav" aria-label={t('nav.label')}>
+      {
+        nav.map((item) => (
+          <a href={getPath(item.key, lang)} aria-current={current === item.key ? 'page' : undefined}>
+            {item.mono ? (
+              <>
+                <span class="e-only">{t(item.label)}</span>
+                <span class="m-only">{t(item.mono)}</span>
+              </>
+            ) : (
+              t(item.label)
+            )}
+          </a>
+        ))
+      }
+    </nav>
+
+    <div class="tools">
+      <!-- Recherche : branchée à l'étape Pagefind -->
+      <button type="button" class="hdr-btn muted search" data-search-open>
+        <svg class="e-only" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="11" cy="11" r="7"></circle>
+          <path d="m20 20-3.5-3.5"></path>
+        </svg>
+        <span class="m-only acc" aria-hidden="true">&gt;</span>
+        <span class="lc search-label">{t('search.open')}</span>
+        <kbd class="kbd-apple" aria-hidden="true">⌘K</kbd>
+        <kbd class="kbd-other" aria-hidden="true">Ctrl K</kbd>
+      </button>
+
+      <div class="langs" role="group" aria-label={t('lang.label')}>
+        {
+          (Object.keys(languages) as Lang[]).map((l, i) => (
+            <>
+              {i > 0 && <span class="sep" aria-hidden="true">/</span>}
+              {l === lang ? (
+                <a href={Astro.url.pathname} aria-current="page" lang={l} title={languages[l]}>
+                  {l.toUpperCase()}
+                </a>
+              ) : (
+                <a href={otherPath} hreflang={l} lang={l} title={languages[l]} class="muted">
+                  {l.toUpperCase()}
+                </a>
+              )}
+            </>
+          ))
+        }
+      </div>
+
+      <AppearanceMenu lang={lang} />
+    </div>
+  </div>
+</header>
+
+<style>
+  .header {
+    position: relative;
+    z-index: 10;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .bar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 16px 32px;
+    padding-block: 16px;
+  }
+
+  .logo {
+    font-size: 16px;
+    font-weight: 600;
+  }
+
+  .logo-mono {
+    font-size: 15px;
+    font-weight: 700;
+  }
+
+  .cursor {
+    display: inline-block;
+    width: 0.55em;
+    height: 1em;
+    margin-left: 2px;
+    vertical-align: -0.12em;
+    background: var(--accent);
+    animation: blink 1.1s steps(1) infinite;
+  }
+
+  @keyframes blink {
+    50% {
+      opacity: 0;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .cursor {
+      animation: none;
+    }
+  }
+
+  .nav {
+    flex: 1 1 auto;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px 24px;
+    font-size: 14px;
+  }
+
+  .nav a {
+    color: var(--muted);
+  }
+
+  .nav a:hover {
+    color: var(--fg);
+  }
+
+  .nav a[aria-current='page'] {
+    color: var(--fg);
+    font-weight: 500;
+  }
+
+  :global(:root[data-style='mono']) .nav a {
+    font-size: 13px;
+    text-transform: lowercase;
+  }
+
+  :global(:root[data-style='mono']) .nav a::before {
+    content: './';
+  }
+
+  :global(:root[data-style='mono']) .nav a[aria-current='page'] {
+    color: var(--accent);
+    font-weight: 400;
+  }
+
+  .tools {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .search {
+    width: 200px;
+  }
+
+  .search-label {
+    flex: 1;
+    text-align: left;
+  }
+
+  .langs {
+    display: flex;
+    align-items: center;
+    font-size: 13px;
+    font-weight: 500;
+  }
+
+  .langs a {
+    padding: 12px 8px;
+  }
+
+  .langs .sep {
+    color: var(--line);
+  }
+
+  @media print {
+    .header {
+      display: none;
+    }
+  }
+</style>

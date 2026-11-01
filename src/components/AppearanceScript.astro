@@ -1,7 +1,7 @@
 ---
 /*
  * Script anti-flash : exécuté dans <head>, avant le premier affichage.
- * Lit les préférences et pose data-theme / data-style sur <html>.
+ * Lit les préférences et pose data-theme / data-style (et data-os) sur <html>.
  * Doit rester synchronisé avec src/scripts/appearance.ts (mêmes clés, même résolution).
  */
 ---
@@ -24,6 +24,9 @@
       root.dataset.style = read('style') === 'mono' ? 'mono' : 'editorial';
     };
     apply();
+    // Raccourci affiché : ⌘K sur Apple, Ctrl K ailleurs (évite un saut du libellé).
+    const platform = navigator.userAgentData?.platform || navigator.platform || navigator.userAgent;
+    root.dataset.os = /mac|iphone|ipad|ipod/i.test(platform) ? 'apple' : 'other';
     // Mode « auto » : suivre les changements de l'appareil.
     darkQuery.addEventListener('change', () => {
       const theme = read('theme');
