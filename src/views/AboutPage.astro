@@ -12,11 +12,13 @@ interface Props {
 const { lang } = Astro.props;
 const t = useTranslations(lang);
 
-// Valeurs entre crochets : à fournir.
 const uses = [
-  { label: t('about.backend'), value: 'PHP · Symfony · Laravel' },
-  { label: t('about.frontend'), value: 'React · [autres]' },
-  { label: t('about.tools'), value: '[Docker, Git, …]' },
+  { label: t('about.backend'), value: 'PHP · Symfony · API Platform · Laravel' },
+  { label: t('about.frontend'), value: 'React · TypeScript · TanStack · Tailwind CSS · shadcn/ui' },
+  { label: t('about.data'), value: 'MariaDB · PostgreSQL · SQL Server · Elasticsearch · Kibana' },
+  { label: t('about.cicd'), value: 'GitHub Actions · GitLab CI/CD' },
+  { label: t('about.tools'), value: 'Docker · VS Code · Git' },
+  { label: t('about.agentic'), value: 'Claude Code · Cursor' },
 ];
 
 const contacts = [
@@ -47,8 +49,7 @@ const contacts = [
     </div>
 
     <div class="body bio">
-      <p>{t('about.bio1')}</p>
-      <p>{t('about.bio2')}</p>
+      {(['about.bio1', 'about.bio2', 'about.bio3', 'about.bio4'] as const).map((key) => <p>{t(key)}</p>)}
     </div>
 
     <section class="block">
