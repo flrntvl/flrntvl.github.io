@@ -1,7 +1,12 @@
 // @ts-check
 import { defineConfig, fontProviders } from 'astro/config';
 
+import { satteri } from '@astrojs/markdown-satteri';
 import mdx from '@astrojs/mdx';
+
+import { codeBlocks } from './src/markdown/code-blocks.ts';
+import { siteTheme } from './src/markdown/shiki-theme.ts';
+import { footnotes } from './src/markdown/footnotes.ts';
 
 // https://astro.build/config
 export default defineConfig({
@@ -66,5 +71,15 @@ export default defineConfig({
       fallbacks: ['sans-serif'],
     },
   ],
+  markdown: {
+    // Notes [^…] : libellés traduits, titre « Notes » visible
+    processor: satteri({ hastPlugins: [footnotes()] }),
+    // Les blocs ```mermaid sont dessinés côté client, pas colorés.
+    syntaxHighlight: { type: 'shiki', excludeLangs: ['mermaid'] },
+    shikiConfig: {
+      theme: siteTheme,
+      transformers: [codeBlocks()],
+    },
+  },
   integrations: [mdx()],
 });

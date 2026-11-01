@@ -1,0 +1,240 @@
+/*
+ * Blocs de code (Shiki + transformer src/markdown/code-blocks.ts),
+ * notes de bas de page (src/markdown/footnotes.ts) et schémas Mermaid.
+ */
+
+/* ---------- Blocs de code ---------- */
+
+.cb {
+  margin: 0 0 20px;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: calc(var(--radius) - 2px);
+  font-family: var(--body);
+}
+
+.cb-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  min-height: 40px;
+  padding: 0 4px 0 16px;
+  background: var(--surface);
+  border-bottom: 1px solid var(--line);
+  color: var(--muted);
+  font-family: var(--code);
+  font-size: 12px;
+}
+
+.cb-title {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.copy {
+  flex: none;
+  height: 40px;
+  padding: 0 12px;
+  color: var(--muted);
+  font-family: var(--code);
+  font-size: 12px;
+}
+
+.copy:hover {
+  color: var(--fg);
+}
+
+.copy.is-done {
+  color: var(--c-str);
+}
+
+.cb pre {
+  margin: 0;
+  padding: 18px 0;
+  overflow-x: auto;
+  background: none;
+  font-family: var(--code);
+  font-size: 13.5px;
+  line-height: 1.7;
+  tab-size: 4;
+}
+
+.cb pre code {
+  display: block;
+  width: max-content;
+  min-width: 100%;
+}
+
+.cb .line {
+  display: inline-block;
+  width: 100%;
+  padding: 0 16px;
+}
+
+/* Lignes surlignées : ```yaml {7-11} */
+.cb .line.hl {
+  background: color-mix(in srgb, var(--accent) 13%, transparent);
+}
+
+/* « $ » des commandes : visible, jamais copié ni sélectionné */
+.cb .prompt {
+  color: var(--accent);
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+/* ---------- Notes de bas de page ---------- */
+
+/* Appel de note dans le texte : ¹ */
+.prose sup:has(> a[data-footnote-ref]) {
+  line-height: 0;
+}
+
+.prose a[data-footnote-ref] {
+  margin-left: 1px;
+  padding: 0 2px;
+  color: var(--accent);
+  font-family: var(--code);
+  font-size: 0.75em;
+  text-decoration: none;
+}
+
+.prose a[data-footnote-ref]:hover {
+  text-decoration: underline;
+}
+
+.prose .footnotes {
+  margin-top: 56px;
+  padding-top: 20px;
+  border-top: 1px solid var(--line);
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--muted);
+}
+
+.prose h2.footnotes-title,
+:root[data-style='mono'] .prose h2.footnotes-title {
+  margin: 0 0 12px;
+  font-size: 14px;
+  letter-spacing: 0;
+}
+
+.prose .footnotes ol {
+  margin: 0;
+  padding-left: 22px;
+}
+
+.prose .footnotes li {
+  margin-bottom: 8px;
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+.prose .footnotes li::marker {
+  color: var(--accent);
+  font-family: var(--code);
+}
+
+.prose .footnotes p {
+  margin: 0;
+}
+
+/* Lien retour ↩ */
+.prose a[data-footnote-backref] {
+  margin-left: 4px;
+  color: var(--accent);
+  text-decoration: none;
+}
+
+/* Cible du lien (note ou appel) : un peu d'air au-dessus et un léger repère */
+.prose [id^='user-content-fn'] {
+  scroll-margin-top: 96px;
+}
+
+.prose .footnotes li:target,
+.prose sup:has(> a:target) {
+  background: color-mix(in srgb, var(--accent) 13%, transparent);
+}
+
+/* ---------- Schémas Mermaid ---------- */
+
+.diagram {
+  position: relative;
+  margin: 8px 0 28px;
+  overflow: hidden;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: calc(var(--radius) - 2px);
+}
+
+.diagram-scroll {
+  padding: 24px 20px;
+  overflow-x: auto;
+  /* Barre toujours visible (sinon masquée sur macOS tant qu'on ne défile pas) */
+  scrollbar-width: thin;
+  scrollbar-color: var(--muted) transparent;
+}
+
+.diagram svg {
+  display: block;
+  max-width: none;
+  margin: 0 auto;
+}
+
+/* Ombres sur les bords quand une partie du schéma est cachée (classes posées par prose.ts) */
+.diagram::before,
+.diagram::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  z-index: 1;
+  width: 48px;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+.diagram::before {
+  left: 0;
+  background: linear-gradient(to right, var(--surface), transparent);
+}
+
+.diagram::after {
+  right: 0;
+  background: linear-gradient(to left, var(--surface), transparent);
+}
+
+.diagram.more-left::before,
+.diagram.more-right::after {
+  opacity: 1;
+}
+
+/* Avant le rendu (ou sans JavaScript) : le code source reste lisible */
+.prose pre:has(> code.language-mermaid) {
+  margin: 0 0 20px;
+  padding: 18px 16px;
+  overflow-x: auto;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: calc(var(--radius) - 2px);
+  font-family: var(--code);
+  font-size: 13px;
+  color: var(--muted);
+}
+
+@media print {
+  .cb pre {
+    white-space: pre-wrap;
+  }
+
+  .cb .line {
+    display: inline;
+  }
+
+  .cb pre code {
+    width: auto;
+  }
+}

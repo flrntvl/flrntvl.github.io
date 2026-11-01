@@ -75,18 +75,6 @@
   font-size: 0.85em;
 }
 
-/* Blocs de code : rendu provisoire */
-.prose pre {
-  margin: 0 0 20px;
-  padding: 18px 16px;
-  overflow-x: auto;
-  border: 1px solid var(--line);
-  border-radius: calc(var(--radius) - 2px);
-  font-family: var(--code);
-  font-size: 13.5px;
-  line-height: 1.7;
-}
-
 /* Tableaux : rendus comme des lignes (ex. « Variantes utiles ») */
 .prose table {
   width: 100%;
@@ -139,19 +127,4 @@
 .prose img {
   height: auto;
   border-radius: calc(var(--radius) - 2px);
-}
-
-/* Notes de bas de page (deviendront des notes en marge à l'étape 6) */
-.prose .footnotes {
-  margin-top: 48px;
-  padding-top: 16px;
-  border-top: 1px solid var(--line);
-  font-size: 14px;
-  color: var(--muted);
-}
-
-.prose sup a {
-  font-family: var(--code);
-  font-size: 0.75em;
-  text-decoration: none;
 }

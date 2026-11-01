@@ -5,6 +5,7 @@ import ProjectCard from '../components/content/ProjectCard.astro';
 import Breadcrumb from '../components/ui/Breadcrumb.astro';
 import { languages } from '../i18n/ui';
 import { getPath, useTranslations } from '../i18n/utils';
+import ProseScripts from '../components/ProseScripts.astro';
 import Base from '../layouts/Base.astro';
 import { getAvailableLangs, getEntryPath, getProjects, getSlug, getTranslation } from '../lib/content';
 import { formatList } from '../lib/format';
@@ -93,6 +94,7 @@ const facts = [
       )
     }
   </div>
+  <ProseScripts />
 </Base>
 
 <style>

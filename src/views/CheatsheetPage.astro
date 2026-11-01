@@ -7,6 +7,7 @@ import DateText from '../components/ui/DateText.astro';
 import Pager from '../components/ui/Pager.astro';
 import PrintButton from '../components/ui/PrintButton.astro';
 import { getPath, useTranslations } from '../i18n/utils';
+import ProseScripts from '../components/ProseScripts.astro';
 import Base from '../layouts/Base.astro';
 import { getCheatsheets, getEntryPath, getNeighbours, getTranslation } from '../lib/content';
 import { fill, listParts } from '../lib/format';
@@ -156,6 +157,7 @@ const systems = [
       }
     </aside>
   </div>
+  <ProseScripts />
 </Base>
 
 <style>
