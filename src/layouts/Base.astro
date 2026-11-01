@@ -4,6 +4,7 @@ import AppearanceScript from '../components/AppearanceScript.astro';
 import Footer from '../components/Footer.astro';
 import Header from '../components/Header.astro';
 import SearchDialog from '../components/SearchDialog.astro';
+import ShortcutsDialog from '../components/ShortcutsDialog.astro';
 import { getAlternatePath, getLangFromUrl, useTranslations } from '../i18n/utils';
 import '../styles/global.css';
 
@@ -48,6 +49,7 @@ const otherPath = alternatePath ?? getAlternatePath(Astro.url.pathname, lang ===
     </main>
     <Footer lang={lang} />
     <SearchDialog lang={lang} alternatePath={otherPath} />
+    <ShortcutsDialog lang={lang} />
   </body>
 </html>
 

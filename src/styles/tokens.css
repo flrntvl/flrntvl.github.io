@@ -99,17 +99,17 @@
 /* ---------- Impression : noir sur blanc, quel que soit le réglage ---------- */
 
 @media print {
-  :root,
-  :root[data-theme],
-  :root[data-style] {
+  /* !important : l'emporte sur les combinaisons plus spécifiques (ex. dev + sombre). */
+  :root {
     color-scheme: light;
-    --bg: #fff;
-    --fg: #000;
-    --muted: #444;
-    --line: #ccc;
-    --surface: #f4f4f4;
-    --accent: #000;
-    --c-str: #000;
-    --c-num: #000;
+    --bg: #fff !important;
+    --fg: #000 !important;
+    --muted: #444 !important;
+    --line: #ccc !important;
+    --surface: #f4f4f4 !important;
+    --accent: #000 !important;
+    --c-str: #000 !important;
+    --c-num: #000 !important;
+    --warn: #000 !important;
   }
 }

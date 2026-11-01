@@ -1,0 +1,143 @@
+---
+/*
+ * Fenêtre d'aide des raccourcis clavier (touche « ? » ou lien du pied de page).
+ * Les raccourcis eux-mêmes sont dans src/scripts/shortcuts.ts.
+ */
+import { routes, type Lang, type RouteKey } from '../i18n/ui';
+import { useTranslations } from '../i18n/utils';
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+
+// Chemins des sections pour « g » puis une lettre.
+const paths = Object.fromEntries((Object.keys(routes) as RouteKey[]).map((key) => [key, routes[key][lang]]));
+
+const goKeys: { key: string; label: string }[] = [
+  { key: 'h', label: t('shortcuts.home') },
+  { key: 'a', label: t('nav.articles') },
+  { key: 'p', label: t('nav.projects') },
+  { key: 'c', label: t('nav.cheatsheets') },
+  { key: 'm', label: t('nav.about') },
+];
+---
+
+<dialog class="shortcuts" aria-labelledby="shortcuts-title" data-shortcuts-dialog data-paths={JSON.stringify(paths)}>
+  <div class="head">
+    <h2 id="shortcuts-title" class="lc">{t('shortcuts.title')}</h2>
+    <button type="button" class="close" aria-label={t('shortcuts.close')} data-shortcuts-close>
+      <kbd>esc</kbd>
+    </button>
+  </div>
+  <dl class="keys">
+    <div>
+      <dd>{t('shortcuts.search')}</dd>
+      <dt><kbd>⌘K</kbd> / <kbd>Ctrl K</kbd> {t('shortcuts.or')} <kbd>/</kbd></dt>
+    </div>
+    <div>
+      <dd>{t('shortcuts.commands')}</dd>
+      <dt><kbd>&gt;</kbd></dt>
+    </div>
+    {
+      goKeys.map((item) => (
+        <div>
+          <dd>{item.label}</dd>
+          <dt>
+            <kbd>g</kbd> {t('shortcuts.then')} <kbd>{item.key}</kbd>
+          </dt>
+        </div>
+      ))
+    }
+    <div>
+      <dd>{t('shortcuts.theme')}</dd>
+      <dt><kbd>t</kbd></dt>
+    </div>
+    <div>
+      <dd>{t('shortcuts.style')}</dd>
+      <dt><kbd>s</kbd></dt>
+    </div>
+    <div>
+      <dd>{t('shortcuts.help')}</dd>
+      <dt><kbd>?</kbd></dt>
+    </div>
+    <div>
+      <dd>{t('shortcuts.escape')}</dd>
+      <dt><kbd>esc</kbd></dt>
+    </div>
+  </dl>
+</dialog>
+
+<style>
+  .shortcuts {
+    width: calc(100% - 48px);
+    max-width: 480px;
+    margin: 96px auto auto;
+    padding: 6px 20px 14px;
+    color: var(--fg);
+    background: var(--bg);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    box-shadow: 0 32px 80px -20px rgba(0, 0, 0, 0.5);
+  }
+
+  .shortcuts::backdrop {
+    background: var(--scrim);
+    backdrop-filter: blur(3px);
+  }
+
+  .head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 6px 0;
+  }
+
+  h2 {
+    margin: 0;
+    font-size: 16px;
+    font-weight: 500;
+  }
+
+  .close {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 44px;
+    height: 44px;
+  }
+
+  .keys {
+    margin: 0;
+  }
+
+  .keys div {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    padding: 10px 0;
+    border-top: 1px solid var(--line);
+    font-size: 14px;
+  }
+
+  .keys dt {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 4px;
+    color: var(--muted);
+    font-size: 12px;
+  }
+
+  .keys dd {
+    margin: 0;
+  }
+</style>
+
+<script>
+  import '../scripts/shortcuts';
+</script>

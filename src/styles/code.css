@@ -238,3 +238,55 @@
     width: auto;
   }
 }
+
+/* ---------- Commandes avec variables (cheatsheets) ---------- */
+
+.vars {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 16px;
+  padding: 14px 16px;
+  background: var(--surface);
+  border-bottom: 1px solid var(--line);
+}
+
+.vfield {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  color: var(--muted);
+  font-family: var(--code);
+  font-size: 11px;
+}
+
+.vfield input {
+  width: 160px;
+  height: 36px;
+  padding: 0 10px;
+  background: var(--bg);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  color: var(--fg);
+  font-family: var(--code);
+  font-size: 13px;
+}
+
+.vfield input[type='number'] {
+  width: 120px;
+}
+
+.vfield input:focus {
+  border-color: var(--accent);
+  outline: none;
+}
+
+/* Valeur saisie : accent, soulignée en pointillés ; champ vide : <nom> en gris */
+.cb pre .v {
+  color: var(--accent);
+  border-bottom: 1px dashed var(--accent);
+}
+
+.cb pre .v.empty {
+  color: var(--muted);
+  border-bottom-color: var(--muted);
+}

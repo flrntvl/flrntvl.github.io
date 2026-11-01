@@ -1,0 +1,92 @@
+/*
+ * Impression / PDF : thème clair forcé (voir tokens.css), en-tête, pied de page,
+ * sommaire, boutons, filtres et champs masqués ; blocs et sections non coupés.
+ */
+
+@media print {
+  @page {
+    margin: 16mm 14mm;
+  }
+
+  html,
+  body {
+    background: #fff !important;
+    color: #000;
+  }
+
+  /* Éléments d'interface inutiles sur papier */
+  .skip-link,
+  .side,
+  .toc,
+  .pager,
+  .chips,
+  .copy,
+  .vars,
+  .search,
+  .shortcuts,
+  [data-cheat-filter],
+  [data-topic-filters],
+  .hdr-btn,
+  .meta a[hreflang] {
+    display: none !important;
+  }
+
+  /* Une seule colonne, pleine largeur */
+  .layout,
+  .container,
+  .container-narrow {
+    display: block !important;
+    max-width: none !important;
+    padding: 0 !important;
+  }
+
+  .page {
+    padding: 0 !important;
+  }
+
+  .article-body,
+  .sheet,
+  .body-col {
+    max-width: none !important;
+  }
+
+  /* Pas de coupure au milieu d'un bloc ; un titre reste avec la suite */
+  .cb,
+  .diagram,
+  figure,
+  table,
+  .tested,
+  .level-box,
+  .cs-row,
+  .row,
+  .card {
+    break-inside: avoid;
+  }
+
+  h1,
+  h2,
+  h3 {
+    break-after: avoid;
+  }
+
+  /* Les blocs de code passent à la ligne au lieu de défiler */
+  .cb pre,
+  .diagram-scroll {
+    overflow: visible !important;
+  }
+
+  .diagram svg {
+    max-width: 100% !important;
+    height: auto;
+  }
+
+  /* Valeurs des variables : imprimées sans soulignement */
+  .cb pre .v {
+    border-bottom: 0;
+  }
+
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+}

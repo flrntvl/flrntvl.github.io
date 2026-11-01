@@ -59,9 +59,73 @@ function extractPrompt(line: Element): void {
   });
 }
 
+/*
+ * Commandes avec variables (cheatsheets) :
+ *   ```bash vars="utilisateur=deploy; serveur=mon-serveur.fr; lignes=5"
+ *   $ ssh <utilisateur>@<serveur> "last -n <lignes> reboot"
+ * Chaque <nom> devient un span.v[data-var] ; src/scripts/prose.ts ajoute les champs.
+ * La valeur après « = » sert d'exemple (placeholder du champ).
+ */
+interface CommandVar {
+  name: string;
+  placeholder: string;
+}
+
+function parseVars(meta: string): CommandVar[] {
+  const raw = meta.match(/vars=(["'])(.*?)\1/)?.[2];
+  if (!raw) return [];
+  return raw
+    .split(';')
+    .map((part) => part.trim())
+    .filter(Boolean)
+    .map((part) => {
+      const [name, ...rest] = part.split('=');
+      return { name: name.trim(), placeholder: rest.join('=').trim() };
+    });
+}
+
+// Marqueur neutre pour la coloration (un <nom> serait lu comme une redirection en bash).
+const marker = (index: number) => `__var${index}__`;
+const MARKER_RE = /__var(\d+)__/g;
+
+/** Remplace les marqueurs restés dans le texte par des span.v[data-var]. */
+function wrapVars(node: Element, vars: CommandVar[]): void {
+  node.children = node.children.flatMap((child): ElementContent[] => {
+    if (child.type === 'element') {
+      wrapVars(child, vars);
+      return [child];
+    }
+    if (child.type !== 'text' || !MARKER_RE.test(child.value)) return [child];
+    MARKER_RE.lastIndex = 0;
+    const parts: ElementContent[] = [];
+    let last = 0;
+    for (const match of child.value.matchAll(MARKER_RE)) {
+      const v = vars[Number(match[1])];
+      if (match.index > last) parts.push({ type: 'text', value: child.value.slice(last, match.index) });
+      parts.push({
+        type: 'element',
+        tagName: 'span',
+        properties: { className: ['v', 'empty'], dataVar: v.name },
+        children: [{ type: 'text', value: `<${v.name}>` }],
+      });
+      last = match.index + match[0].length;
+    }
+    if (last < child.value.length) parts.push({ type: 'text', value: child.value.slice(last) });
+    return parts;
+  });
+}
+
 export function codeBlocks(): ShikiTransformer {
   return {
     name: 'site:code-blocks',
+    preprocess(code) {
+      const vars = parseVars(rawMeta(this.options.meta));
+      if (vars.length === 0) return code;
+      return code.replace(/<([\p{L}\d_-]+)>/gu, (whole, name: string) => {
+        const index = vars.findIndex((v) => v.name === name);
+        return index === -1 ? whole : marker(index);
+      });
+    },
     line(node, line) {
       const meta = rawMeta(this.options.meta);
       if (parseRanges(meta).has(line)) this.addClassToHast(node, 'hl');
@@ -77,6 +141,8 @@ export function codeBlocks(): ShikiTransformer {
       const meta = rawMeta(this.options.meta);
       const lang = this.options.lang;
       const title = parseTitle(meta) ?? lang;
+      const vars = parseVars(meta);
+      if (vars.length > 0) wrapVars(pre, vars);
 
       const bar: ElementContent[] = [
         {
@@ -100,7 +166,11 @@ export function codeBlocks(): ShikiTransformer {
         {
           type: 'element',
           tagName: 'div',
-          properties: { className: ['cb'], dataLang: lang },
+          properties: {
+            className: ['cb'],
+            dataLang: lang,
+            ...(vars.length > 0 && { dataVars: JSON.stringify(vars) }),
+          },
           children: [
             { type: 'element', tagName: 'div', properties: { className: ['cb-bar'] }, children: bar },
             pre,
