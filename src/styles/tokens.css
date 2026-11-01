@@ -1,0 +1,115 @@
+/*
+ * Design tokens.
+ * Deux réglages indépendants posés sur <html> par le script anti-flash :
+ *   data-theme="light|dark"  et  data-style="editorial|mono"
+ * Valeurs reprises de docs/prototype.html.
+ */
+
+/* ---------- Typographie et formes ---------- */
+
+:root {
+  --ui: var(--font-geist);
+  --body: var(--font-geist);
+  --code: var(--font-geist-mono);
+  --serif: var(--font-instrument-serif);
+  --radius: 12px;
+}
+
+:root[data-style='mono'] {
+  --ui: var(--font-jetbrains-mono);
+  --body: var(--font-ibm-plex-sans);
+  --code: var(--font-jetbrains-mono);
+  --radius: 6px;
+}
+
+/* ---------- Couleurs : éditorial (par défaut) ---------- */
+
+:root {
+  color-scheme: light;
+  --bg: #fafaf8;
+  --fg: #18181a;
+  --muted: #5f5f66;
+  --line: #e6e5e1;
+  --surface: #f1f0ec;
+  --accent: #2b54c9;
+  --scrim: rgba(24, 24, 26, 0.28);
+
+  /* communs au thème clair */
+  --c-str: #0e7a3e;
+  --c-num: #6e40c9;
+  --warn: #b42318;
+}
+
+:root[data-theme='dark'] {
+  color-scheme: dark;
+  --bg: #0e0e10;
+  --fg: #ededeb;
+  --muted: #a0a0a8;
+  --line: #26262b;
+  --surface: #18181b;
+  --accent: #8ea9ff;
+  --scrim: rgba(0, 0, 0, 0.62);
+
+  /* communs au thème sombre */
+  --c-str: #7ee2a8;
+  --c-num: #c4b5fd;
+  --warn: #ff8a7a;
+}
+
+/* ---------- Couleurs : dev ---------- */
+
+:root[data-style='mono'] {
+  --bg: #f7f6f2;
+  --fg: #1a1917;
+  --muted: #625f58;
+  --line: #e2e0d9;
+  --surface: #eeece6;
+  --accent: #955600;
+  --scrim: rgba(26, 25, 23, 0.3);
+}
+
+:root[data-style='mono'][data-theme='dark'] {
+  --bg: #111110;
+  --fg: #e8e6e1;
+  --muted: #9a978f;
+  --line: #2a2926;
+  --surface: #1a1a18;
+  --accent: #f2b544;
+  --scrim: rgba(0, 0, 0, 0.62);
+}
+
+/* ---------- Sans JavaScript : suivre l'appareil (style éditorial) ---------- */
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme]) {
+    color-scheme: dark;
+    --bg: #0e0e10;
+    --fg: #ededeb;
+    --muted: #a0a0a8;
+    --line: #26262b;
+    --surface: #18181b;
+    --accent: #8ea9ff;
+    --scrim: rgba(0, 0, 0, 0.62);
+    --c-str: #7ee2a8;
+    --c-num: #c4b5fd;
+    --warn: #ff8a7a;
+  }
+}
+
+/* ---------- Impression : noir sur blanc, quel que soit le réglage ---------- */
+
+@media print {
+  :root,
+  :root[data-theme],
+  :root[data-style] {
+    color-scheme: light;
+    --bg: #fff;
+    --fg: #000;
+    --muted: #444;
+    --line: #ccc;
+    --surface: #f4f4f4;
+    --accent: #000;
+    --c-str: #000;
+    --c-num: #000;
+  }
+}

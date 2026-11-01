@@ -1,0 +1,158 @@
+@import './tokens.css';
+
+/* ---------- Base ---------- */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--ui);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: var(--bg);
+}
+
+h1,
+h2,
+h3,
+h4 {
+  text-wrap: balance;
+}
+
+p,
+li {
+  text-wrap: pretty;
+}
+
+a {
+  color: var(--fg);
+  text-decoration: none;
+}
+
+a:hover {
+  color: var(--accent);
+}
+
+button {
+  font: inherit;
+  color: inherit;
+  background: none;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+}
+
+input {
+  font: inherit;
+  color: inherit;
+  background: none;
+  border: 0;
+  caret-color: var(--accent);
+}
+
+input::placeholder {
+  color: var(--muted);
+}
+
+img,
+svg {
+  display: block;
+  max-width: 100%;
+}
+
+::selection {
+  background: color-mix(in srgb, var(--accent) 25%, transparent);
+}
+
+/* Contour de focus bien visible au clavier */
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+/* ---------- Utilitaires ---------- */
+
+.body {
+  font-family: var(--body);
+}
+
+.code {
+  font-family: var(--code);
+}
+
+.serif {
+  font-family: var(--serif);
+  font-style: italic;
+  font-weight: 400;
+}
+
+.muted {
+  color: var(--muted);
+}
+
+.acc {
+  color: var(--accent);
+}
+
+/* Un seul HTML pour les deux styles : un seul des deux éléments est visible */
+:root[data-style='mono'] .e-only,
+:root:not([data-style='mono']) .m-only {
+  display: none !important;
+}
+
+:root[data-style='mono'] .lc {
+  text-transform: lowercase;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Lien « Aller au contenu » : visible seulement au focus */
+.skip-link {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  z-index: 100;
+  padding: 10px 14px;
+  background: var(--fg);
+  color: var(--bg);
+  border-radius: calc(var(--radius) - 3px);
+  transform: translateY(-200%);
+}
+
+.skip-link:focus {
+  transform: none;
+  color: var(--bg);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

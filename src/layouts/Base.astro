@@ -1,0 +1,39 @@
+---
+import { Font } from 'astro:assets';
+import AppearanceScript from '../components/AppearanceScript.astro';
+import '../styles/global.css';
+
+interface Props {
+  title: string;
+  description?: string;
+  lang?: 'fr' | 'en';
+}
+
+const { title, description, lang = 'fr' } = Astro.props;
+const skipLabel = lang === 'fr' ? 'Aller au contenu' : 'Skip to content';
+---
+
+<!doctype html>
+<html lang={lang}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <AppearanceScript />
+    <title>{title}</title>
+    {description && <meta name="description" content={description} />}
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" href="/favicon.ico" />
+
+    <!-- Style éditorial (par défaut) : préchargé -->
+    <Font cssVariable="--font-geist" preload />
+    <Font cssVariable="--font-instrument-serif" preload />
+    <Font cssVariable="--font-geist-mono" />
+    <!-- Style dev : téléchargé seulement si le style est actif -->
+    <Font cssVariable="--font-jetbrains-mono" />
+    <Font cssVariable="--font-ibm-plex-sans" />
+  </head>
+  <body>
+    <a class="skip-link" href="#contenu">{skipLabel}</a>
+    <slot />
+  </body>
+</html>

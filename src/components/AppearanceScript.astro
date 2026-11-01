@@ -1,0 +1,33 @@
+---
+/*
+ * Script anti-flash : exécuté dans <head>, avant le premier affichage.
+ * Lit les préférences et pose data-theme / data-style sur <html>.
+ * Doit rester synchronisé avec src/scripts/appearance.ts (mêmes clés, même résolution).
+ */
+---
+
+<script is:inline>
+  (() => {
+    const root = document.documentElement;
+    const darkQuery = matchMedia('(prefers-color-scheme: dark)');
+    const read = (key) => {
+      try {
+        return localStorage.getItem(key);
+      } catch {
+        return null;
+      }
+    };
+    const apply = () => {
+      const theme = read('theme');
+      root.dataset.theme =
+        theme === 'light' || theme === 'dark' ? theme : darkQuery.matches ? 'dark' : 'light';
+      root.dataset.style = read('style') === 'mono' ? 'mono' : 'editorial';
+    };
+    apply();
+    // Mode « auto » : suivre les changements de l'appareil.
+    darkQuery.addEventListener('change', () => {
+      const theme = read('theme');
+      if (theme !== 'light' && theme !== 'dark') apply();
+    });
+  })();
+</script>
