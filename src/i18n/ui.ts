@@ -197,7 +197,7 @@ export const ui = {
   en: {
     'site.name': 'Florent',
     'site.description':
-      'Web developer · PHP, Symfony, Laravel, React. Articles, projects and cheatsheets.',
+      'Software engineer · PHP, Symfony, Laravel, React. Articles, projects and cheatsheets.',
     'a11y.skip': 'Skip to content',
     'nav.label': 'Main navigation',
     'nav.articles': 'Articles',
@@ -265,10 +265,10 @@ export const ui = {
     'shortcuts.escape': 'Close the open window',
     'vars.label': 'Command values',
     'footer.built': 'Built with Astro · hosted on GitHub Pages',
-    'home.kicker': 'Web developer · PHP, Symfony, Laravel, React',
+    'home.kicker': 'Software engineer · PHP, Symfony, Laravel, React',
     'home.title': 'I build web applications,',
     'home.title.accent': 'and write about what I learn.',
-    'home.title.mono': 'Web developer. PHP, Symfony, Laravel and React.',
+    'home.title.mono': 'Software engineer. PHP, Symfony, Laravel and React.',
     'home.intro':
       "Here you'll find technical articles, the projects I build, and short sheets for the commands we always end up looking up.",
     'home.latest': 'Latest articles',
