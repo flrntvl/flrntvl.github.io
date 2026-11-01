@@ -1,5 +1,6 @@
 ---
-import { rssPath, social } from '../config';
+import { Image } from 'astro:assets';
+import { avatarUrl, rssPath, social } from '../config';
 import type { Lang } from '../i18n/ui';
 import { useTranslations } from '../i18n/utils';
 import Base from '../layouts/Base.astro';
@@ -21,7 +22,7 @@ const uses = [
 const contacts = [
   { label: social.github.label, value: social.github.handle, href: social.github.href },
   { label: social.linkedin.label, value: social.linkedin.handle, href: social.linkedin.href },
-  { label: social.email.label, value: social.email.handle, href: social.email.href },
+  { label: social.x.label, value: social.x.handle, href: social.x.href },
   { label: t('about.rss'), value: rssPath[lang], href: rssPath[lang] },
 ];
 ---
@@ -29,7 +30,15 @@ const contacts = [
 <Base title={t('about.title')}>
   <div class="container-narrow page">
     <div class="intro">
-      <div class="placeholder photo" role="img" aria-label={t('about.photo')}>[Photo]</div>
+      <Image
+        src={avatarUrl}
+        alt={t('about.photo')}
+        width={224}
+        height={224}
+        class="photo"
+        loading="eager"
+        fetchpriority="high"
+      />
       <div class="intro-text">
         <p class="m-only muted prompt"><span class="acc">$</span> cat about.md</p>
         <h1 class="page-title">{t('about.title')}</h1>
@@ -84,8 +93,10 @@ const contacts = [
     flex: none;
     width: 112px;
     height: 112px;
+    object-fit: cover;
+    border: 1px solid var(--line);
     border-radius: 50%;
-    font-size: 12px;
+    background: var(--surface);
   }
 
   .intro-text {

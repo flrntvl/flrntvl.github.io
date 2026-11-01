@@ -162,7 +162,7 @@ export const ui = {
     'cheatsheet.seeAlso': 'Voir aussi',
     'about.title': 'À propos',
     'about.tagline': 'Florent, ingénieur développeur web.',
-    'about.photo': 'Photo de profil (à venir)',
+    'about.photo': 'Photo de Florent',
     'about.bio1':
       "[Quelques lignes sur ton parcours : ce que tu fais aujourd'hui, depuis combien de temps, sur quel type de projets.]",
     'about.bio2': "[Ce qui t'intéresse en ce moment, et pourquoi tu écris sur ce site.]",
@@ -323,7 +323,7 @@ export const ui = {
     'cheatsheet.seeAlso': 'See also',
     'about.title': 'About',
     'about.tagline': 'Florent, web developer.',
-    'about.photo': 'Profile photo (coming soon)',
+    'about.photo': 'Photo of Florent',
     'about.bio1':
       '[A few lines about your background: what you do today, for how long, on what kind of projects.]',
     'about.bio2': "[What you're interested in right now, and why you write on this site.]",

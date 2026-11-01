@@ -12,6 +12,10 @@ import { footnotes } from './src/markdown/footnotes.ts';
 export default defineConfig({
   site: 'https://flrntvl.dev',
   output: 'static',
+  // Images distantes autorisées (téléchargées et optimisées au build) : avatar GitHub.
+  image: {
+    domains: ['avatars.githubusercontent.com'],
+  },
   i18n: {
     defaultLocale: 'fr',
     locales: ['fr', 'en'],
