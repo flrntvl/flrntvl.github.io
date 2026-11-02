@@ -26,6 +26,7 @@ export type RouteKey = keyof typeof routes;
 export const ui = {
   fr: {
     'site.name': 'Florent',
+    'site.role': 'Ingénieur développeur web',
     'site.description':
       'Ingénieur développeur web · PHP, Symfony, Laravel, React. Articles, projets et cheatsheets.',
     'a11y.skip': 'Aller au contenu',
@@ -196,6 +197,7 @@ export const ui = {
   },
   en: {
     'site.name': 'Florent',
+    'site.role': 'Software engineer',
     'site.description':
       'Software engineer · PHP, Symfony, Laravel, React. Articles, projects and cheatsheets.',
     'a11y.skip': 'Skip to content',

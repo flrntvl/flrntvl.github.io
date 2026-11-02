@@ -5,7 +5,7 @@ import Footer from '../components/Footer.astro';
 import Header from '../components/Header.astro';
 import SearchDialog from '../components/SearchDialog.astro';
 import ShortcutsDialog from '../components/ShortcutsDialog.astro';
-import { rssPath } from '../config';
+import { fullName, rssPath } from '../config';
 import { defaultLang } from '../i18n/ui';
 import { getAlternatePath, getLangFromUrl, useTranslations } from '../i18n/utils';
 import '../styles/global.css';
@@ -25,9 +25,23 @@ const lang = getLangFromUrl(Astro.url);
 const otherLang = lang === 'fr' ? 'en' : 'fr';
 const t = useTranslations(lang);
 const { title, description = t('site.description'), alternatePath, translated = true, noindex = false } = Astro.props;
-const pageTitle = title ? `${title} — ${t('site.name')}` : t('site.name');
+// Sans titre (page d'accueil) : nom complet et métier, ex. « Florent Val — Ingénieur développeur web ».
+const pageTitle = title ? `${title} — ${t('site.name')}` : `${fullName} — ${t('site.role')}`;
 const otherPath = alternatePath ?? getAlternatePath(Astro.url.pathname, otherLang);
 const isHome = ['/', '/en/'].includes(Astro.url.pathname);
+
+// Nom du site affiché par Google au-dessus du lien. Google ne le lit que sur la page
+// d'accueil du domaine, d'où sa seule présence sur « / ».
+const websiteJsonLd =
+  Astro.url.pathname === '/'
+    ? JSON.stringify({
+        '@context': 'https://schema.org',
+        '@type': 'WebSite',
+        name: fullName,
+        alternateName: new URL(Astro.site!).hostname,
+        url: new URL('/', Astro.site).href,
+      })
+    : undefined;
 
 // URL absolues pour canonical / hreflang (site défini dans astro.config.mjs).
 const canonical = new URL(Astro.url.pathname, Astro.site).href;
@@ -54,6 +68,7 @@ const alternates = translated
         </>
       )
     }
+    {websiteJsonLd && <script type="application/ld+json" set:html={websiteJsonLd} />}
     <link rel="alternate" type="application/rss+xml" title={t('rss.title')} href={rssPath[lang]} />
     <link rel="icon" href="/favicon.ico" sizes="32x32" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
