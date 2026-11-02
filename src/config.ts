@@ -3,6 +3,9 @@
  * Les valeurs entre crochets sont à fournir.
  */
 
+/** Nom complet : titre de la page d'accueil et nom du site pour les moteurs de recherche. */
+export const fullName = 'Florent Val';
+
 export const repo = 'https://github.com/flrntvl/flrntvl.github.io';
 export const repoBranch = 'main';
 
