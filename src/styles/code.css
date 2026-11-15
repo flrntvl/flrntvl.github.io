@@ -225,20 +225,6 @@
   color: var(--muted);
 }
 
-@media print {
-  .cb pre {
-    white-space: pre-wrap;
-  }
-
-  .cb .line {
-    display: inline;
-  }
-
-  .cb pre code {
-    width: auto;
-  }
-}
-
 /* ---------- Commandes avec variables (cheatsheets) ---------- */
 
 .vars {

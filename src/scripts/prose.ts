@@ -30,7 +30,7 @@ function setupVariables(): void {
   document.querySelectorAll<HTMLElement>('.cb[data-vars]').forEach((block, blockIndex) => {
     const vars: { name: string; placeholder: string }[] = JSON.parse(block.dataset.vars ?? '[]');
     const fields = document.createElement('div');
-    fields.className = 'vars no-print';
+    fields.className = 'vars';
     fields.setAttribute('role', 'group');
     fields.setAttribute('aria-label', labels[lang].vars);
 

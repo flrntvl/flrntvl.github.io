@@ -32,7 +32,7 @@ const years = [...new Set(articles.map((a) => a.data.date.getUTCFullYear()))];
 
     {
       topics.length > 1 && (
-        <div class="chips filters no-print" role="group" aria-label={t('articles.filter')} data-topic-filters hidden>
+        <div class="chips filters" role="group" aria-label={t('articles.filter')} data-topic-filters hidden>
           <button type="button" class="chip" data-topic="" aria-pressed="true">
             {t('common.filterAll')}
           </button>
