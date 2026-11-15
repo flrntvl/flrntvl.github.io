@@ -1,11 +1,13 @@
 ---
 /*
  * Contrôle Thème (Appareil / Clair / Sombre).
- * Utilisés par le menu Apparence (desktop) et le menu plein écran (mobile) ;
+ * Utilisé par le menu Thème de l'en-tête (desktop, variante « menu » : liste verticale)
+ * et le menu plein écran (mobile, contrôle segmenté) ;
  * tous les contrôles de la page restent synchronisés (src/scripts/appearance-controls.ts).
  */
 import type { Lang } from "../i18n/ui";
 import { useTranslations } from "../i18n/utils";
+import Check from "./icons/Check.astro";
 
 interface Props {
   lang: Lang;
@@ -13,35 +15,40 @@ interface Props {
   id: string;
   /** Taille un peu plus grande dans le menu mobile. */
   large?: boolean;
+  /** Liste verticale (menu de l'en-tête) au lieu du contrôle segmenté ; libellé « Thème » masqué. */
+  menu?: boolean;
 }
 
-const { lang, id, large = false } = Astro.props;
+const { lang, id, large = false, menu = false } = Astro.props;
 const t = useTranslations(lang);
 ---
 
-<div class:list={["controls", { large }]} data-appearance-controls>
+<div class:list={["controls", { large, menu }]} data-appearance-controls>
   <div class="field">
-    <span class="lbl" id={`${id}-theme`}>{t("appearance.theme")}</span>
+    <span class:list={["lbl", { "visually-hidden": menu }]} id={`${id}-theme`}>{t("appearance.theme")}</span>
     <div class="ctl" role="group" aria-labelledby={`${id}-theme`}>
       <button type="button" class="seg" data-theme-pref="auto" aria-pressed="false">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <svg class="ico" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
           <rect x="3" y="4" width="18" height="12" rx="2"></rect>
           <path d="M8 20h8M12 16v4"></path>
         </svg>
         <span>{t("appearance.theme.auto")}</span>
+        {menu && <span class="check"><Check /></span>}
       </button>
       <button type="button" class="seg" data-theme-pref="light" aria-pressed="false">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <svg class="ico" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
           <circle cx="12" cy="12" r="4"></circle>
           <path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"></path>
         </svg>
         <span>{t("appearance.theme.light")}</span>
+        {menu && <span class="check"><Check /></span>}
       </button>
       <button type="button" class="seg" data-theme-pref="dark" aria-pressed="false">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <svg class="ico" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
           <path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z"></path>
         </svg>
         <span>{t("appearance.theme.dark")}</span>
+        {menu && <span class="check"><Check /></span>}
       </button>
     </div>
   </div>
@@ -94,6 +101,15 @@ const t = useTranslations(lang);
     font-size: 12px;
   }
 
+  .seg svg {
+    flex: none;
+  }
+
+  .menu .ico {
+    width: 16px;
+    height: 16px;
+  }
+
   .large .seg {
     height: 44px;
     font-size: 13px;
@@ -107,6 +123,59 @@ const t = useTranslations(lang);
     background: var(--bg);
     color: var(--fg);
     box-shadow: 0 0 0 1px var(--line);
+  }
+
+  /* Variante « menu » : liste verticale, coche sur le choix actif */
+  .menu {
+    gap: 4px;
+  }
+
+  .menu .ctl {
+    flex-direction: column;
+    padding: 0;
+    background: none;
+  }
+
+  /* flex: none, sinon flex: 1 (contrôle segmenté) écrase la hauteur dans la colonne.
+     44 px au doigt ; 32 px à la souris, où la cible n'a pas besoin d'être si haute. */
+  .menu .seg {
+    flex: none;
+    height: 44px;
+    padding: 0 9px;
+    justify-content: flex-start;
+    gap: 10px;
+    font-size: 13px;
+  }
+
+  @media (pointer: fine) {
+    .menu .seg {
+      height: 32px;
+    }
+  }
+
+  .menu .seg:hover {
+    background: var(--surface);
+  }
+
+  .menu .seg[aria-pressed="true"] {
+    background: none;
+    box-shadow: none;
+    font-weight: 500;
+  }
+
+  .menu .seg[aria-pressed="true"]:hover {
+    background: var(--surface);
+  }
+
+  .check {
+    display: flex;
+    margin-left: auto;
+    color: var(--accent);
+    visibility: hidden;
+  }
+
+  .seg[aria-pressed="true"] .check {
+    visibility: visible;
   }
 </style>
 

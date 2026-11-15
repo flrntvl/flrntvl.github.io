@@ -161,16 +161,27 @@ kbd {
   color: var(--muted);
 }
 
-/* Bouton d'en-tête (Rechercher, Apparence) */
+/* Bouton d'en-tête (Rechercher, Thème) : 36 px à l'œil, zone cliquable étendue à 44 px */
 .hdr-btn {
+  position: relative;
   display: flex;
   align-items: center;
   gap: 8px;
-  height: 44px;
-  padding: 0 10px 0 12px;
+  height: 36px;
+  padding: 0 6px 0 10px;
   border: 1px solid var(--line);
-  border-radius: calc(var(--radius) - 3px);
+  border-radius: calc(var(--radius) - 4px);
   font-size: 13px;
+}
+
+.hdr-btn::after {
+  content: '';
+  position: absolute;
+  inset: -5px 0;
+}
+
+.hdr-btn kbd {
+  padding: 1px 5px;
 }
 
 .hdr-btn:hover {

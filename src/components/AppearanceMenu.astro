@@ -1,6 +1,8 @@
 ---
 /*
- * Bouton « Apparence » de l'en-tête (desktop) + menu Thème / Style.
+ * Bouton Thème de l'en-tête (desktop) : icône seule + petit menu Appareil / Clair / Sombre.
+ * L'icône montre le thème affiché (soleil en clair, lune en sombre), posée en CSS
+ * d'après data-theme : pas de JS, pas de saut au chargement.
  * Les contrôles eux-mêmes sont dans AppearanceControls.astro.
  */
 import type { Lang } from "../i18n/ui";
@@ -19,41 +21,19 @@ const t = useTranslations(lang);
   <button
     type="button"
     class="hdr-btn trigger"
+    aria-label={t("appearance.theme")}
+    title={t("appearance.theme")}
     aria-expanded="false"
     aria-haspopup="dialog"
     aria-controls="appearance-panel"
     data-appearance-trigger
   >
-    <svg
-      width="16"
-      height="16"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      stroke-width="1.75"
-      stroke-linecap="round"
-      stroke-linejoin="round"
-      aria-hidden="true"
-    >
-      <path d="M4 6h10M18 6h2M4 12h4M12 12h8M4 18h12"></path>
-      <circle cx="16" cy="6" r="2"></circle>
-      <circle cx="10" cy="12" r="2"></circle>
-      <circle cx="18" cy="18" r="2"></circle>
+    <svg class="sun" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <circle cx="12" cy="12" r="4"></circle>
+      <path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"></path>
     </svg>
-    <span>{t("appearance.open")}</span>
-    <svg
-      class="muted"
-      width="14"
-      height="14"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      stroke-width="1.75"
-      stroke-linecap="round"
-      stroke-linejoin="round"
-      aria-hidden="true"
-    >
-      <path d="m6 9 6 6 6-6"></path>
+    <svg class="moon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z"></path>
     </svg>
   </button>
 
@@ -61,11 +41,11 @@ const t = useTranslations(lang);
     id="appearance-panel"
     class="pop"
     role="dialog"
-    aria-label={t("appearance.open")}
+    aria-label={t("appearance.theme")}
     hidden
     data-appearance-panel
   >
-    <AppearanceControls lang={lang} id="appearance">
+    <AppearanceControls lang={lang} id="appearance" menu>
       <p class="saved muted">{t("appearance.saved")}</p>
     </AppearanceControls>
   </div>
@@ -77,16 +57,36 @@ const t = useTranslations(lang);
   }
 
   .trigger {
-    font-weight: 500;
+    width: 36px;
+    padding: 0;
+    justify-content: center;
+  }
+
+  /* Zone cliquable 44 × 44 autour du bouton de 36 px */
+  .trigger::after {
+    inset: -5px -4px;
+  }
+
+  .trigger[aria-expanded="true"] {
+    border-color: var(--muted);
+  }
+
+  .moon,
+  :global([data-theme="dark"]) .sun {
+    display: none;
+  }
+
+  :global([data-theme="dark"]) .moon {
+    display: block;
   }
 
   .pop {
     position: absolute;
-    top: 54px;
+    top: 44px;
     right: 0;
     z-index: 20;
-    width: 304px;
-    padding: 16px;
+    width: 196px;
+    padding: 5px;
     background: var(--bg);
     border: 1px solid var(--line);
     border-radius: var(--radius);
@@ -95,6 +95,8 @@ const t = useTranslations(lang);
 
   .saved {
     margin: 0;
+    padding: 8px 9px 4px;
+    border-top: 1px solid var(--line);
     font-size: 12px;
   }
 </style>
@@ -119,6 +121,22 @@ const t = useTranslations(lang);
     };
 
     trigger.addEventListener("click", () => (panel.hidden ? open() : close()));
+
+    // Un choix fait ferme le menu (le thème est appliqué par appearance-controls.ts).
+    panel.addEventListener("click", (event) => {
+      if ((event.target as Element).closest("[data-theme-pref]")) close();
+    });
+
+    // Flèches haut / bas : passer d'un choix à l'autre.
+    panel.addEventListener("keydown", (event) => {
+      if (event.key !== "ArrowDown" && event.key !== "ArrowUp") return;
+      const items = [...panel.querySelectorAll<HTMLButtonElement>("[data-theme-pref]")];
+      const index = items.indexOf(document.activeElement as HTMLButtonElement);
+      if (index === -1) return;
+      event.preventDefault();
+      const step = event.key === "ArrowDown" ? 1 : -1;
+      items[(index + step + items.length) % items.length].focus();
+    });
 
     // Échap ferme le menu et rend le focus au bouton.
     root.addEventListener("keydown", (event) => {

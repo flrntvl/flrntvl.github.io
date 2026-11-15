@@ -1,6 +1,6 @@
 /*
  * Boutons Thème ([data-theme-pref]) de toute la page : appliquent la préférence et restent
- * synchronisés (menu Apparence, menu mobile, raccourci t, commandes de la recherche).
+ * synchronisés (menu Thème de l'en-tête, menu mobile, raccourci t, commandes de la recherche).
  */
 import { APPEARANCE_EVENT, getThemePref, setThemePref, type ThemePref } from './appearance';
 

@@ -1,7 +1,7 @@
 /*
  * Préférence de thème (auto / clair / sombre), mémorisée dans localStorage.
  * L'application initiale est faite par le script inline de <head> (AppearanceScript.astro),
- * avant le premier affichage ; ce module sert aux contrôles côté client (menu Apparence, raccourcis…).
+ * avant le premier affichage ; ce module sert aux contrôles côté client (menu Thème, raccourcis…).
  * Les clés et la logique de résolution doivent rester identiques à celles du script inline.
  */
 
