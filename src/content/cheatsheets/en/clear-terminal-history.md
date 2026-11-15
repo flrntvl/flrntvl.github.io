@@ -8,7 +8,7 @@ os:
   linux: true
   macos: true
   windows: true
-testedOn: ['Ubuntu [version] (WSL)', 'macOS 27']
+testedOn: ['Ubuntu 26.04 (WSL)', 'macOS 27']
 verifiedAt: 2026-11-15
 destructive: true
 tags: ['bash', 'zsh', 'powershell', 'wsl', 'history']
