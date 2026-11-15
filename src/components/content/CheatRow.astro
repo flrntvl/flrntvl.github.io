@@ -2,27 +2,38 @@
 import type { CollectionEntry } from 'astro:content';
 import { useTranslations } from '../../i18n/utils';
 import { getEntryPath } from '../../lib/content';
+import { fill } from '../../lib/format';
 import WarnIcon from '../icons/Warn.astro';
 
 interface Props {
   entry: CollectionEntry<'cheatsheets'>;
-  /** Commande et description sur deux lignes (liste des fiches). */
+  /**
+   * Liste des fiches : titre, commande et description sur trois lignes, avec les OS.
+   * Sinon (accueil) : titre et commande sur une ligne.
+   */
   stacked?: boolean;
 }
 
 const { entry, stacked = false } = Astro.props;
-const { lang, title, description, destructive, category, tags } = entry.data;
+const { lang, title, command, description, destructive, category, tags, os } = entry.data;
 const t = useTranslations(lang);
-const search = [title, description, category, ...tags].join(' ');
+const search = [title, command, description, category, ...tags].filter(Boolean).join(' ');
+const systems = [
+  { on: os.linux, label: 'Linux' },
+  { on: os.macos, label: 'macOS' },
+  { on: os.windows, label: 'Windows' },
+]
+  .filter((s) => s.on)
+  .map((s) => s.label);
 ---
 
 <a
   href={getEntryPath('cheatsheets', entry)}
-  class:list={['cs-row', { stacked }]}
+  class:list={['cs-row', { stacked, 'no-cmd': !command }]}
   data-search={search}
 >
-  <span class="cmd-line">
-    <code class="row-title code cmd">{title}</code>
+  <span class="head">
+    <span class="row-title">{title}</span>
     {
       destructive && (
         <span class="warn" title={t('cheatsheet.destructiveTitle')}>
@@ -31,13 +42,33 @@ const search = [title, description, category, ...tags].join(' ');
         </span>
       )
     }
+    {
+      stacked && systems.length > 0 && (
+        <span class="systems muted" title={fill(t('cheatsheet.worksOn'), { os: systems.join(', ') })}>
+          <span class="sr-only">{fill(t('cheatsheet.worksOn'), { os: '' })}</span>
+          {systems.join(' · ')}
+        </span>
+      )
+    }
   </span>
-  <span class="cmt muted desc">{description}</span>
+  {command && <code class="row-cmd code cmd">{command}</code>}
+  {stacked && <span class="cmt muted desc">{description}</span>}
 </a>
 
 <style>
-  .cs-row:not(.stacked) .cmd-line {
-    flex: 0 0 280px;
+  .head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 6px 10px;
+  }
+
+  .cs-row:not(.stacked) .head {
+    flex: 1 1 auto;
+  }
+
+  .cs-row:not(.stacked) .row-cmd {
+    margin-left: auto;
   }
 
   .stacked {
@@ -46,18 +77,50 @@ const search = [title, description, category, ...tags].join(' ');
     gap: 4px;
   }
 
-  .cmd-line {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: 6px 10px;
-  }
-
   .row-title {
     font-weight: 500;
   }
 
+  .row-cmd {
+    color: var(--muted);
+    font-size: 13px;
+  }
+
+  .stacked .row-cmd {
+    color: var(--fg);
+  }
+
   .desc {
     font-size: 14px;
+  }
+
+  .systems {
+    font-family: var(--code);
+    font-size: 12px;
+  }
+
+  :global(:root[data-style='mono']) .systems {
+    text-transform: lowercase;
+  }
+
+  /* Dev, accueil : « $ commande   # titre », comme dans un terminal */
+  :global(:root[data-style='mono']) .cs-row:not(.stacked) .row-cmd {
+    order: -1;
+    flex: 0 0 220px;
+    margin-left: 0;
+    color: var(--fg);
+  }
+
+  :global(:root[data-style='mono']) .cs-row:not(.stacked) .head {
+    flex: 1 1 260px;
+  }
+
+  :global(:root[data-style='mono']) .cs-row:not(.stacked, .no-cmd) .row-title {
+    color: var(--muted);
+    font-weight: 400;
+  }
+
+  :global(:root[data-style='mono']) .cs-row:not(.stacked) .row-title::before {
+    content: '# ';
   }
 </style>

@@ -123,7 +123,7 @@ if (dialog) {
     text.replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]!);
 
   function optionHtml(item: Item, index: number, icon: Type | 'command'): string {
-    const isCode = icon === 'cheatsheet' || icon === 'command';
+    const isCode = icon === 'command';
     const tag = item.url ? `a href="${escape(item.url)}"` : 'div';
     return `<${tag} class="res" role="option" id="search-opt-${index}" data-index="${index}" aria-selected="false">
       <span class="m-only res-caret" aria-hidden="true">&gt;</span>

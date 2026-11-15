@@ -50,12 +50,13 @@ const projects = defineCollection({
     }),
 });
 
-export const cheatsheetCategories = ['Linux', 'Git', 'Symfony', 'Laravel', 'Docker'] as const;
+export const cheatsheetCategories = ['Shell', 'Git', 'Symfony', 'Laravel', 'Docker'] as const;
 
 const cheatsheets = defineCollection({
   loader: glob({ pattern: '**/*.{md,mdx}', base: './src/content/cheatsheets' }),
   schema: z.object({
-    title: z.string(), // la commande, ex. « last reboot »
+    title: z.string(), // la tâche, ex. « Connaître la date du dernier redémarrage »
+    command: z.string().optional(), // si une même commande vaut pour tous les OS, ex. « last reboot »
     description: z.string(),
     lang,
     translationKey: z.string(),

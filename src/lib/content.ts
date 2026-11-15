@@ -43,7 +43,7 @@ export async function getProjects(lang: Lang): Promise<CollectionEntry<'projects
   return entries.sort((a, b) => a.data.order - b.data.order || b.data.year - a.data.year);
 }
 
-/** Cheatsheets d'une langue, par catégorie (ordre du schéma) puis par commande. */
+/** Cheatsheets d'une langue, par catégorie (ordre du schéma) puis par titre. */
 export async function getCheatsheets(lang: Lang): Promise<CollectionEntry<'cheatsheets'>[]> {
   const entries = await getEntries('cheatsheets', lang);
   const rank = (e: CollectionEntry<'cheatsheets'>) => cheatsheetCategories.indexOf(e.data.category);

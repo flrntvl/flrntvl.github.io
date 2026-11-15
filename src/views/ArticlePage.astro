@@ -49,12 +49,12 @@ const reportUrl = `${repo}/issues/new?title=${encodeURIComponent(fill(t('article
 
       <div class="meta muted" data-pagefind-ignore>
         <DateText date={date} lang={lang} class="code small" />
-        <span aria-hidden="true">·</span>
+        <span class="sep" aria-hidden="true">·</span>
         <span class="lc">{fill(t('article.readingTime'), { n: readingTime(entry.body) })}</span>
         {
           updated && (
             <>
-              <span aria-hidden="true">·</span>
+              <span class="sep" aria-hidden="true">·</span>
               <span class="lc">
                 {t('common.updated')} <DateText date={updated} lang={lang} />
               </span>
@@ -64,7 +64,7 @@ const reportUrl = `${repo}/issues/new?title=${encodeURIComponent(fill(t('article
         {
           tags.length > 0 && (
             <>
-              <span aria-hidden="true">·</span>
+              <span class="sep" aria-hidden="true">·</span>
               <span class="code small">
                 <Tags tags={tags} />
               </span>
@@ -128,7 +128,7 @@ const reportUrl = `${repo}/issues/new?title=${encodeURIComponent(fill(t('article
         )
       }
 
-      <div class="links muted no-print" data-pagefind-ignore>
+      <div class="links muted" data-pagefind-ignore>
         <a href={editUrl} class="muted lc">{t('article.edit')}</a>
         <a href={reportUrl} class="muted lc">{t('article.report')}</a>
       </div>
@@ -142,7 +142,7 @@ const reportUrl = `${repo}/issues/new?title=${encodeURIComponent(fill(t('article
 
     {
       toc.length > 0 && (
-        <aside class="side no-print">
+        <aside class="side">
           <nav class="toc" aria-label={t('common.toc')}>
             <span class="toc-title lc">{t('common.toc')}</span>
             {toc.map((h) => (

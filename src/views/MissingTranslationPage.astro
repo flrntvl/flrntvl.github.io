@@ -42,7 +42,7 @@ const sectionTitle = {
 <Base title={t('missing.title')} alternatePath={original} translated={false} noindex>
   <div class="container-narrow page">
     <Breadcrumb lang={lang} items={[{ label: sectionTitle, href: getPath(section, lang) }, { label: t('missing.title') }]} />
-    <h1 class="title" lang={entry.data.lang} class:list={{ code: collection === 'cheatsheets' }}>{entry.data.title}</h1>
+    <h1 class="title" lang={entry.data.lang}>{entry.data.title}</h1>
     <p class="body muted page-intro">{message}</p>
     <div class="links lc">
       <a href={original} hreflang={entry.data.lang} class="btn btn-primary">{t('missing.read')}</a>

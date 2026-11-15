@@ -2,7 +2,6 @@
 import CheatRow from '../components/content/CheatRow.astro';
 import SearchIcon from '../components/icons/Search.astro';
 import ListHeader from '../components/ui/ListHeader.astro';
-import PrintButton from '../components/ui/PrintButton.astro';
 import { cheatsheetCategories } from '../content.config';
 import type { Lang } from '../i18n/ui';
 import { useTranslations } from '../i18n/utils';
@@ -27,7 +26,7 @@ const groups = cheatsheetCategories
 
     {
       cheatsheets.length > 0 && (
-        <div class="tools no-print">
+        <div class="tools">
           <label class="filter" data-cheat-filter hidden>
             <span class="e-only icon">
               <SearchIcon />
@@ -49,7 +48,6 @@ const groups = cheatsheetCategories
               ))}
             </div>
           )}
-          <PrintButton lang={lang} class="print" />
         </div>
       )
     }
@@ -113,10 +111,6 @@ const groups = cheatsheetCategories
     display: none;
   }
 
-  .tools :global(.print) {
-    margin-left: auto;
-  }
-
   .groups {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(min(460px, 100%), 1fr));
@@ -127,16 +121,6 @@ const groups = cheatsheetCategories
 
   .groups .sh {
     margin-bottom: 8px;
-  }
-
-  @media print {
-    .groups {
-      display: block;
-    }
-
-    .groups section + section {
-      margin-top: 24px;
-    }
   }
 </style>
 

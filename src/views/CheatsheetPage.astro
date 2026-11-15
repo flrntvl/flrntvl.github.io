@@ -6,7 +6,6 @@ import Breadcrumb from '../components/ui/Breadcrumb.astro';
 import DateText from '../components/ui/DateText.astro';
 import Pager from '../components/ui/Pager.astro';
 import TocMobile from '../components/ui/TocMobile.astro';
-import PrintButton from '../components/ui/PrintButton.astro';
 import { getPath, useTranslations } from '../i18n/utils';
 import ProseScripts from '../components/ProseScripts.astro';
 import SearchMeta from '../components/SearchMeta.astro';
@@ -19,12 +18,12 @@ interface Props {
 }
 
 const { entry } = Astro.props;
-const { lang, title, description, category, os, testedOn, verifiedAt, destructive, seeAlso } = entry.data;
+const { lang, title, command, description, category, os, testedOn, verifiedAt, destructive, seeAlso } = entry.data;
 const t = useTranslations(lang);
 const otherLang = lang === 'fr' ? 'en' : 'fr';
 
 const { Content, headings } = await render(entry);
-const toc = headings.filter((h) => h.depth === 2);
+const toc = headings.filter((h) => h.depth === 2 && h.slug !== 'footnote-label');
 const windowsHeading = toc.find((h) => /windows/i.test(h.text));
 
 const { path: alternatePath, translated } = await getAlternate('cheatsheets', entry);
@@ -45,12 +44,13 @@ const systems = [
 <Base title={title} description={description} alternatePath={alternatePath} translated={translated}>
   <div class="layout">
     <article class="sheet" data-pagefind-body>
-      <SearchMeta type="cheatsheet" title={title} sub={description} meta={category} />
+      <SearchMeta type="cheatsheet" title={title} sub={command ?? description} meta={category} />
       <Breadcrumb
         lang={lang}
         items={[{ label: t('cheatsheets.title'), href: getPath('cheatsheets', lang) }, { label: category }]}
       />
-      <h1 class="title code"><span class="m-only acc">$ </span>{title}</h1>
+      <h1 class="title">{title}</h1>
+      {command && <p class="command"><code class="code cmd">{command}</code></p>}
       <p class="body muted lead">{description}</p>
 
       <div class="meta muted small" data-pagefind-ignore>
@@ -81,7 +81,7 @@ const systems = [
         {
           verifiedAt && (
             <>
-              <span aria-hidden="true">·</span>
+              <span class="sep" aria-hidden="true">·</span>
               <span class="lc">
                 {t('common.updated')} <DateText date={verifiedAt} lang={lang} />
               </span>
@@ -97,30 +97,25 @@ const systems = [
         }
       </div>
 
-      <div class="tested muted small" data-pagefind-ignore>
-        {
-          testedOn.length > 0 ? (
-            <span class="tested-text">
-              <CheckIcon />
-              <span>
-                {t('cheatsheet.testedOn')}{' '}
-                {listParts(testedOn, lang).map((part) =>
-                  part.type === 'element' ? <strong>{part.value}</strong> : part.value,
-                )}
-                {verifiedAt && (
-                  <>
-                    {' · '}
-                    {t('cheatsheet.verifiedAt')} <DateText date={verifiedAt} lang={lang} />
-                  </>
-                )}
-              </span>
+      {
+        testedOn.length > 0 && (
+          <p class="tested muted small" data-pagefind-ignore>
+            <CheckIcon />
+            <span>
+              {t('cheatsheet.testedOn')}{' '}
+              {listParts(testedOn, lang).map((part) =>
+                part.type === 'element' ? <strong>{part.value}</strong> : part.value,
+              )}
+              {verifiedAt && (
+                <>
+                  {' · '}
+                  {t('cheatsheet.verifiedAt')} <DateText date={verifiedAt} lang={lang} />
+                </>
+              )}
             </span>
-          ) : (
-            <span />
-          )
-        }
-        <PrintButton lang={lang} />
-      </div>
+          </p>
+        )
+      }
 
       <TocMobile lang={lang} items={toc.map((h) => ({ href: `#${h.slug}`, label: h.text }))} />
 
@@ -130,13 +125,12 @@ const systems = [
 
       <Pager
         lang={lang}
-        titleClass="code"
         prev={prev && { href: getEntryPath('cheatsheets', prev), title: prev.data.title }}
         next={next && { href: getEntryPath('cheatsheets', next), title: next.data.title }}
       />
     </article>
 
-    <aside class="side no-print">
+    <aside class="side">
       {
         toc.length > 0 && (
           <nav class="toc" aria-label={t('common.toc')}>
@@ -152,7 +146,7 @@ const systems = [
           <div class="toc see-also">
             <span class="toc-title lc">{t('cheatsheet.seeAlso')}</span>
             {related.map((c) => (
-              <a href={getEntryPath('cheatsheets', c)} class="code">
+              <a href={getEntryPath('cheatsheets', c)}>
                 {c.data.title}
               </a>
             ))}
@@ -191,20 +185,27 @@ const systems = [
     top: 0;
   }
 
-  .see-also a {
-    font-size: 13px;
-  }
-
-  :global(:root[data-style='mono']) .see-also a::before {
-    content: '$ ';
-  }
-
   .title {
     margin: 20px 0 0;
     font-size: 44px;
     font-weight: 500;
     letter-spacing: -0.03em;
     line-height: 1.1;
+    text-wrap: balance;
+    overflow-wrap: anywhere;
+  }
+
+  .command {
+    margin: 20px 0 0;
+  }
+
+  .command code {
+    display: inline-block;
+    padding: 6px 12px;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: calc(var(--radius) - 2px);
+    font-size: 17px;
     overflow-wrap: anywhere;
   }
 
@@ -227,20 +228,16 @@ const systems = [
 
   .tested {
     display: flex;
-    flex-wrap: wrap;
     align-items: center;
-    justify-content: space-between;
-    gap: 12px 24px;
-    margin-top: 24px;
-    padding: 10px 10px 10px 16px;
+    gap: 8px;
+    margin: 24px 0 0;
+    padding: 12px 16px;
     border: 1px solid var(--line);
     border-radius: calc(var(--radius) - 2px);
   }
 
-  .tested-text {
-    display: flex;
-    align-items: center;
-    gap: 8px;
+  .tested :global(svg) {
+    flex: none;
   }
 
   .tested strong {

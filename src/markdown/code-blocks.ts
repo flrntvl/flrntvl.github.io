@@ -9,7 +9,8 @@ import type { Element, ElementContent, Text } from 'hast';
 import type { ShikiTransformer } from 'shiki';
 
 const SHELL_LANGS = new Set(['bash', 'sh', 'shell', 'shellscript', 'zsh', 'console']);
-const NO_COPY_LANGS = new Set(['text', 'txt', 'plaintext', 'output']);
+// Pas de bouton « copier » : sorties, et sessions de terminal (commandes + sortie, ```console).
+const NO_COPY_LANGS = new Set(['text', 'txt', 'plaintext', 'output', 'console']);
 
 /** Lit la chaîne « meta » passée par Astro (chaîne brute ou { __raw }). */
 function rawMeta(meta: unknown): string {
@@ -157,7 +158,7 @@ export function codeBlocks(): ShikiTransformer {
         bar.push({
           type: 'element',
           tagName: 'button',
-          properties: { type: 'button', className: ['copy', 'no-print'], dataCopy: '', hidden: true },
+          properties: { type: 'button', className: ['copy'], dataCopy: '', hidden: true },
           children: [],
         });
       }

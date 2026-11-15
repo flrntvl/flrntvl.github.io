@@ -73,6 +73,13 @@
   font-size: 14px;
 }
 
+/* Écran étroit : les éléments passent à la ligne, un « · » resterait seul en bout de ligne. */
+@media (max-width: 600px) {
+  .meta .sep {
+    display: none;
+  }
+}
+
 .link-underline {
   text-decoration: underline;
   text-underline-offset: 3px;
@@ -236,7 +243,7 @@
 }
 
 .cs-row .row-title {
-  font-size: 14px;
+  font-size: 15px;
 }
 
 /* ---------- Pastilles, badges ---------- */
@@ -392,9 +399,40 @@
   color: var(--fg);
 }
 
+:root[data-style='mono'] .toc a {
+  /* Retrait suspendu : une entrée sur deux lignes s'aligne sous le texte, pas sous le « # ». */
+  padding-left: 2ch;
+  text-indent: -2ch;
+}
+
 :root[data-style='mono'] .toc a::before {
   content: '# ';
   color: var(--accent);
+}
+
+/* Section en cours de lecture (src/scripts/toc.ts) */
+.toc a[aria-current] {
+  position: relative;
+  color: var(--fg);
+}
+
+:root:not([data-style='mono']) .toc a[aria-current]::before {
+  content: '';
+  position: absolute;
+  top: 0.15em;
+  bottom: 0.15em;
+  left: -12px;
+  width: 2px;
+  border-radius: 1px;
+  background: var(--accent);
+}
+
+:root[data-style='mono'] .toc a[aria-current] {
+  color: var(--accent);
+}
+
+:root[data-style='mono'] .toc a[aria-current]::before {
+  content: '> ';
 }
 
 /* ---------- Faits (projet, à propos) ---------- */
@@ -496,17 +534,6 @@
 
   .page-title {
     font-size: 38px;
-  }
-}
-
-@media print {
-  .no-print {
-    display: none !important;
-  }
-
-  section,
-  pre {
-    break-inside: avoid;
   }
 }
 
