@@ -1,6 +1,7 @@
 ---
+import { fullName } from "../config";
 import type { Lang } from "../i18n/ui";
-import { useTranslations } from "../i18n/utils";
+import { getPath, useTranslations } from "../i18n/utils";
 
 interface Props {
   lang: Lang;
@@ -13,7 +14,11 @@ const year = new Date().getFullYear();
 
 <footer class="footer">
   <div class="container bar muted">
-    <span>© {year} {t("site.name")}</span>
+    <span class="owner">
+      <span>© {year} {fullName}</span>
+      <span aria-hidden="true">·</span>
+      <a href={getPath("legal", lang)} class="link muted">{t("footer.legal")}</a>
+    </span>
     <button
       type="button"
       class="shortcuts muted"
@@ -39,6 +44,22 @@ const year = new Date().getFullYear();
     gap: 12px 24px;
     padding-block: 28px;
     font-size: 13px;
+  }
+
+  .owner {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .link {
+    display: inline-flex;
+    align-items: center;
+    min-height: 32px;
+  }
+
+  .link:hover {
+    color: var(--fg);
   }
 
   .shortcuts {

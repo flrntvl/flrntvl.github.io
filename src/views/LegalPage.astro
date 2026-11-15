@@ -1,0 +1,157 @@
+---
+/*
+ * Mentions légales : éditeur, hébergeur (LCEN), données personnelles (RGPD) et licences.
+ * Le texte est ici plutôt que dans ui.ts : il est long et n'existe que sur cette page.
+ * En français, les espaces insécables s'écrivent &nbsp; (pas de traitement automatique hors Markdown).
+ *
+ * À relire si le site ajoute un service tiers (commentaires, statistiques…) :
+ * la section « Données personnelles » affirme qu'il n'y en a aucun.
+ */
+import { fullName, repo } from '../config';
+import type { Lang } from '../i18n/ui';
+import { getPath, useTranslations } from '../i18n/utils';
+import Base from '../layouts/Base.astro';
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+const about = getPath('about', lang);
+
+const ccBy = 'https://creativecommons.org/licenses/by/4.0/deed.' + lang;
+const mit0 = 'https://opensource.org/license/mit-0';
+const mit = 'https://opensource.org/license/mit';
+const githubPrivacy = `https://docs.github.com/${lang}/site-policy/privacy-policies/github-general-privacy-statement`;
+---
+
+<Base title={t('legal.title')} description={t('legal.intro')}>
+  <div class="container-narrow page">
+    <h1 class="page-title">{t('legal.title')}</h1>
+    <p class="body muted page-intro">{t('legal.intro')}</p>
+
+    {
+      lang === 'fr' ? (
+        <div class="prose content">
+          <h2>Éditeur</h2>
+          <p>
+            Ce site est un site personnel, édité à titre non professionnel par {fullName}. Pour me
+            contacter, utilisez les liens de la page <a href={about}>À propos</a>.
+          </p>
+
+          <h2>Hébergement</h2>
+          <p>
+            Le site est hébergé par GitHub Pages, un service de GitHub,&nbsp;Inc., 88 Colin P. Kelly Jr.
+            Street, San Francisco, CA&nbsp;94107, États-Unis (<a href="https://github.com">github.com</a>).
+          </p>
+
+          <h2>Données personnelles</h2>
+          <ul>
+            <li>
+              Ce site ne dépose aucun cookie, ne mesure pas l'audience et ne charge aucun service
+              tiers&nbsp;: les polices, les images et l'index de recherche sont servis par le site
+              lui-même.
+            </li>
+            <li>
+              Le thème que vous choisissez (appareil, clair ou sombre) est enregistré dans le stockage
+              local de votre navigateur. Il ne quitte pas votre appareil, et vous pouvez l'effacer à tout
+              moment depuis les réglages du navigateur.
+            </li>
+            <li>
+              Comme tout hébergeur, GitHub enregistre des données techniques de connexion, dont votre
+              adresse IP, pour faire fonctionner et sécuriser le service. Ce traitement relève de
+              GitHub&nbsp;: voir sa <a href={githubPrivacy}>déclaration de confidentialité</a>.
+            </li>
+          </ul>
+
+          <h2>Réutiliser le contenu</h2>
+          <ul>
+            <li>
+              <strong>Textes et images</strong> (articles, fiches, captures d'écran)&nbsp;: licence{' '}
+              <a href={ccBy}>CC BY 4.0</a>. Vous pouvez les copier, les traduire et les adapter, y
+              compris pour un usage commercial, à condition de citer l'auteur ({fullName}), de mettre un
+              lien vers la page d'origine et vers la licence, et d'indiquer si vous les avez modifiés.
+            </li>
+            <li>
+              <strong>Exemples de code</strong> des articles et des fiches&nbsp;: licence{' '}
+              <a href={mit0} class="nowrap">MIT-0</a>. Copiez-les dans vos projets, sans obligation de citer.
+            </li>
+            <li>
+              <strong>Code source du site</strong>&nbsp;: licence <a href={mit}>MIT</a>, sur{' '}
+              <a href={repo}>GitHub</a>.
+            </li>
+          </ul>
+          <p>La photo de la page À propos n'est pas concernée&nbsp;: merci de ne pas la réutiliser.</p>
+        </div>
+      ) : (
+        <div class="prose content">
+          <h2>Publisher</h2>
+          <p>
+            This is a personal website, published on a non-professional basis by {fullName}. To get in
+            touch, use the links on the <a href={about}>About</a> page.
+          </p>
+
+          <h2>Hosting</h2>
+          <p>
+            The site is hosted on GitHub Pages, a service of GitHub, Inc., 88 Colin P. Kelly Jr. Street,
+            San Francisco, CA 94107, United States (<a href="https://github.com">github.com</a>).
+          </p>
+
+          <h2>Personal data</h2>
+          <ul>
+            <li>
+              This site sets no cookies, does no audience measurement and loads no third-party
+              services: fonts, images and the search index are all served by the site itself.
+            </li>
+            <li>
+              The theme you choose (device, light or dark) is saved in your browser's local storage. It
+              never leaves your device, and you can clear it at any time from your browser settings.
+            </li>
+            <li>
+              Like any host, GitHub records technical connection data, including your IP address, to run
+              and secure the service. This processing is GitHub's responsibility: see its{' '}
+              <a href={githubPrivacy}>privacy statement</a>.
+            </li>
+          </ul>
+
+          <h2>Reusing the content</h2>
+          <ul>
+            <li>
+              <strong>Text and images</strong> (articles, cheatsheets, screenshots): licensed under{' '}
+              <a href={ccBy}>CC BY 4.0</a>. You may copy, translate and adapt them, including for
+              commercial use, as long as you credit the author ({fullName}), link to the original page
+              and to the licence, and indicate if you made changes.
+            </li>
+            <li>
+              <strong>Code examples</strong> in articles and cheatsheets: licensed under{' '}
+              <a href={mit0} class="nowrap">MIT-0</a>. Copy them into your projects, no credit required.
+            </li>
+            <li>
+              <strong>The site's source code</strong>: licensed under <a href={mit}>MIT</a>, on{' '}
+              <a href={repo}>GitHub</a>.
+            </li>
+          </ul>
+          <p>The photo on the About page is not included: please don't reuse it.</p>
+        </div>
+      )
+    }
+
+    <p class="muted updated">{t('legal.updated')}</p>
+  </div>
+</Base>
+
+<style>
+  .content {
+    margin-top: 56px;
+  }
+
+  .nowrap {
+    white-space: nowrap;
+  }
+
+  .updated {
+    margin: 48px 0 0;
+    font-size: 14px;
+  }
+</style>

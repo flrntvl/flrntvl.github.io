@@ -19,6 +19,7 @@ export const routes = {
   projects: { fr: '/projets/', en: '/en/projects/' },
   cheatsheets: { fr: '/cheatsheets/', en: '/en/cheatsheets/' },
   about: { fr: '/a-propos/', en: '/en/about/' },
+  legal: { fr: '/mentions-legales/', en: '/en/legal/' },
 } as const satisfies Record<string, Record<Lang, string>>;
 
 export type RouteKey = keyof typeof routes;
@@ -88,6 +89,10 @@ export const ui = {
     'shortcuts.escape': 'Fermer la fenêtre ouverte',
     'vars.label': 'Valeurs de la commande',
     'footer.built': 'Construit avec Astro · hébergé sur GitHub Pages',
+    'footer.legal': 'Mentions légales',
+    'legal.title': 'Mentions légales',
+    'legal.intro': "Qui publie ce site, ce qu'il fait de vos données et comment réutiliser son contenu.",
+    'legal.updated': 'Dernière mise à jour\u00a0: 15\u00a0novembre 2026.',
     'home.kicker': 'Ingénieur développeur web · PHP, Symfony, Laravel, React',
     'home.title': 'Je construis des applications web,',
     'home.title.accent': "et j'écris ce que j'apprends.",
@@ -151,8 +156,8 @@ export const ui = {
     'cheatsheet.verifiedAt': 'vérifié le',
     'cheatsheet.seeAlso': 'Voir aussi',
     'about.title': 'À propos',
-    'about.tagline': 'Florent, ingénieur développeur web.',
-    'about.photo': 'Photo de Florent',
+    'about.tagline': 'Florent Val, ingénieur développeur web.',
+    'about.photo': 'Photo de Florent Val',
     'about.bio1':
       "Ingénieur développeur web depuis un peu plus de 8 ans, je conçois et développe des applications web métier complexes, aussi bien côté back-end que front-end.",
     'about.bio2':
@@ -248,6 +253,10 @@ export const ui = {
     'shortcuts.escape': 'Close the open window',
     'vars.label': 'Command values',
     'footer.built': 'Built with Astro · hosted on GitHub Pages',
+    'footer.legal': 'Legal notice',
+    'legal.title': 'Legal notice',
+    'legal.intro': 'Who publishes this site, what it does with your data and how to reuse its content.',
+    'legal.updated': 'Last updated: November 15, 2026.',
     'home.kicker': 'Software engineer · PHP, Symfony, Laravel, React',
     'home.title': 'I build web applications,',
     'home.title.accent': 'and write about what I learn.',
@@ -310,8 +319,8 @@ export const ui = {
     'cheatsheet.verifiedAt': 'verified on',
     'cheatsheet.seeAlso': 'See also',
     'about.title': 'About',
-    'about.tagline': 'Florent, software engineer.',
-    'about.photo': 'Photo of Florent',
+    'about.tagline': 'Florent Val, software engineer.',
+    'about.photo': 'Photo of Florent Val',
     'about.bio1':
       "A web software engineer for a little over 8 years, I design and build complex business web applications, on both the back end and the front end.",
     'about.bio2':
