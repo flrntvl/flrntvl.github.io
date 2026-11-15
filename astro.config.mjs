@@ -7,6 +7,7 @@ import mdx from '@astrojs/mdx';
 import { codeBlocks } from './src/markdown/code-blocks.ts';
 import { siteTheme } from './src/markdown/shiki-theme.ts';
 import { footnotes } from './src/markdown/footnotes.ts';
+import { frenchSpacing } from './src/markdown/french-spacing.ts';
 
 // https://astro.build/config
 export default defineConfig({
@@ -76,8 +77,9 @@ export default defineConfig({
     },
   ],
   markdown: {
-    // Notes [^…] : libellés traduits, titre « Notes » visible
-    processor: satteri({ hastPlugins: [footnotes()] }),
+    // Notes [^…] : libellés traduits, titre « Notes » visible.
+    // Contenus FR : espaces insécables devant : ; ! ? » et après «.
+    processor: satteri({ hastPlugins: [footnotes(), frenchSpacing()] }),
     // Les blocs ```mermaid sont dessinés côté client, pas colorés.
     syntaxHighlight: { type: 'shiki', excludeLangs: ['mermaid'] },
     shikiConfig: {
