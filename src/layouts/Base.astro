@@ -74,14 +74,11 @@ const alternates = translated
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
 
-    <!-- Style éditorial (par défaut) : seules les graisses du texte et des titres sont préchargées ;
+    <!-- Seules les graisses du texte et des titres sont préchargées ;
          Instrument Serif ne sert qu'au titre de l'accueil. -->
     <Font cssVariable="--font-geist" preload={[{ weight: 400 }, { weight: 500 }]} />
     <Font cssVariable="--font-instrument-serif" preload={isHome} />
     <Font cssVariable="--font-geist-mono" />
-    <!-- Style dev : téléchargé seulement si le style est actif -->
-    <Font cssVariable="--font-jetbrains-mono" />
-    <Font cssVariable="--font-ibm-plex-sans" />
   </head>
   <body>
     <a class="skip-link" href="#contenu">{t('a11y.skip')}</a>

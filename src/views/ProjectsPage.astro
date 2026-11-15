@@ -17,7 +17,7 @@ const projects = await getProjects(lang);
 
 <Base title={t('projects.title')}>
   <div class="container page">
-    <ListHeader prompt={`ls ~/${t('projects.dir')}`} title={t('projects.title')} intro={t('projects.intro')} />
+    <ListHeader title={t('projects.title')} intro={t('projects.intro')} />
 
     {projects.length === 0 && <p class="muted empty">{t('projects.empty')}</p>}
 

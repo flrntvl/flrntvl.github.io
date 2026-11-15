@@ -105,20 +105,6 @@ svg {
   color: var(--muted);
 }
 
-.acc {
-  color: var(--accent);
-}
-
-/* Un seul HTML pour les deux styles : un seul des deux éléments est visible */
-:root[data-style='mono'] .e-only,
-:root:not([data-style='mono']) .m-only {
-  display: none !important;
-}
-
-:root[data-style='mono'] .lc {
-  text-transform: lowercase;
-}
-
 .visually-hidden {
   position: absolute;
   width: 1px;

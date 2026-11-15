@@ -35,17 +35,6 @@
   scroll-margin-top: 24px;
 }
 
-:root[data-style='mono'] .prose h2 {
-  font-size: 17px;
-  letter-spacing: 0;
-  text-transform: lowercase;
-}
-
-:root[data-style='mono'] .prose h2::before {
-  content: '## ';
-  color: var(--accent);
-}
-
 .prose a {
   color: var(--accent);
   text-decoration: underline;
@@ -106,15 +95,6 @@
 
 .prose td:not(:first-child) {
   color: var(--muted);
-}
-
-:root[data-style='mono'] .prose td {
-  border-top-style: dashed;
-}
-
-:root[data-style='mono'] .prose td:first-child code::before {
-  content: '$ ';
-  color: var(--accent);
 }
 
 .prose blockquote {

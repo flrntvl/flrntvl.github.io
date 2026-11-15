@@ -1,7 +1,7 @@
 ---
 /*
  * Script anti-flash : exécuté dans <head>, avant le premier affichage.
- * Lit les préférences et pose data-theme / data-style (et data-os) sur <html>.
+ * Lit la préférence de thème et pose data-theme (et data-os) sur <html>.
  * Doit rester synchronisé avec src/scripts/appearance.ts (mêmes clés, même résolution).
  */
 ---
@@ -21,9 +21,12 @@
       const theme = read('theme');
       root.dataset.theme =
         theme === 'light' || theme === 'dark' ? theme : darkQuery.matches ? 'dark' : 'light';
-      root.dataset.style = read('style') === 'mono' ? 'mono' : 'editorial';
     };
     apply();
+    // Ancien réglage « style » (éditorial / dev), supprimé le 15 nov. 2026 : on l'efface.
+    try {
+      localStorage.removeItem('style');
+    } catch {}
     // Raccourci affiché : ⌘K sur Apple, Ctrl K ailleurs (évite un saut du libellé).
     const platform = navigator.userAgentData?.platform || navigator.platform || navigator.userAgent;
     root.dataset.os = /mac|iphone|ipad|ipod/i.test(platform) ? 'apple' : 'other';

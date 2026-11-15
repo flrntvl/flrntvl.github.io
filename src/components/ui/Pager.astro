@@ -24,13 +24,13 @@ const t = useTranslations(lang);
     <nav data-pagefind-ignore class="pager" aria-label={`${t('common.prev')} / ${t('common.next')}`}>
       {prev && (
         <a href={prev.href} rel="prev">
-          <span class="pager-label lc">← {t('common.prev')}</span>
+          <span class="pager-label">← {t('common.prev')}</span>
           <span class={titleClass}>{prev.title}</span>
         </a>
       )}
       {next && (
         <a href={next.href} rel="next" class="next">
-          <span class="pager-label lc">{t('common.next')} →</span>
+          <span class="pager-label">{t('common.next')} →</span>
           <span class={titleClass}>{next.title}</span>
         </a>
       )}

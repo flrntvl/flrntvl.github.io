@@ -1,15 +1,13 @@
 /*
- * Préférences d'apparence (thème + style), mémorisées dans localStorage.
+ * Préférence de thème (auto / clair / sombre), mémorisée dans localStorage.
  * L'application initiale est faite par le script inline de <head> (AppearanceScript.astro),
  * avant le premier affichage ; ce module sert aux contrôles côté client (menu Apparence, raccourcis…).
  * Les clés et la logique de résolution doivent rester identiques à celles du script inline.
  */
 
 export type ThemePref = 'auto' | 'light' | 'dark';
-export type StylePref = 'editorial' | 'mono';
 
 const THEME_KEY = 'theme';
-const STYLE_KEY = 'style';
 
 const root = document.documentElement;
 const darkQuery = window.matchMedia('(prefers-color-scheme: dark)');
@@ -35,10 +33,6 @@ export function getThemePref(): ThemePref {
   return value === 'light' || value === 'dark' ? value : 'auto';
 }
 
-export function getStylePref(): StylePref {
-  return read(STYLE_KEY) === 'mono' ? 'mono' : 'editorial';
-}
-
 /** Thème réellement affiché, une fois « auto » résolu. */
 export function getResolvedTheme(): 'light' | 'dark' {
   return root.dataset.theme === 'dark' ? 'dark' : 'light';
@@ -50,18 +44,8 @@ export function setThemePref(pref: ThemePref): void {
   notify();
 }
 
-export function setStylePref(pref: StylePref): void {
-  write(STYLE_KEY, pref);
-  root.dataset.style = pref;
-  notify();
-}
-
 export function toggleTheme(): void {
   setThemePref(getResolvedTheme() === 'dark' ? 'light' : 'dark');
-}
-
-export function toggleStyle(): void {
-  setStylePref(getStylePref() === 'mono' ? 'editorial' : 'mono');
 }
 
 /** Événement émis à chaque changement, pour que les contrôles se mettent à jour. */

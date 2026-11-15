@@ -50,12 +50,12 @@ const reportUrl = `${repo}/issues/new?title=${encodeURIComponent(fill(t('article
       <div class="meta muted" data-pagefind-ignore>
         <DateText date={date} lang={lang} class="code small" />
         <span class="sep" aria-hidden="true">·</span>
-        <span class="lc">{fill(t('article.readingTime'), { n: readingTime(entry.body) })}</span>
+        <span>{fill(t('article.readingTime'), { n: readingTime(entry.body) })}</span>
         {
           updated && (
             <>
               <span class="sep" aria-hidden="true">·</span>
-              <span class="lc">
+              <span>
                 {t('common.updated')} <DateText date={updated} lang={lang} />
               </span>
             </>
@@ -73,7 +73,7 @@ const reportUrl = `${repo}/issues/new?title=${encodeURIComponent(fill(t('article
         }
         {
           translated && (
-            <a href={alternatePath} hreflang={otherLang} lang={otherLang} class="muted lc link-underline">
+            <a href={alternatePath} hreflang={otherLang} lang={otherLang} class="muted link-underline">
               {t('common.readOther')}
             </a>
           )
@@ -82,18 +82,18 @@ const reportUrl = `${repo}/issues/new?title=${encodeURIComponent(fill(t('article
 
       <div class="level-box">
         <div class="level">
-          <span class="lbl lc">{t('article.level')}</span>
+          <span class="lbl">{t('article.level')}</span>
           <span class="level-value">
             <span class="lvl" aria-hidden="true">
               {levels.map((_, i) => <i class:list={{ on: i <= levelIndex }} />)}
             </span>
-            <span class="lc">{t(`level.${level}`)}</span>
+            <span>{t(`level.${level}`)}</span>
           </span>
         </div>
         {
           prerequisites && (
             <div class="prereq">
-              <span class="lbl lc">{t('article.prerequisites')}</span>
+              <span class="lbl">{t('article.prerequisites')}</span>
               <span class="body">{prerequisites}</span>
             </div>
           )
@@ -129,8 +129,8 @@ const reportUrl = `${repo}/issues/new?title=${encodeURIComponent(fill(t('article
       }
 
       <div class="links muted" data-pagefind-ignore>
-        <a href={editUrl} class="muted lc">{t('article.edit')}</a>
-        <a href={reportUrl} class="muted lc">{t('article.report')}</a>
+        <a href={editUrl} class="muted">{t('article.edit')}</a>
+        <a href={reportUrl} class="muted">{t('article.report')}</a>
       </div>
 
       <Pager
@@ -144,7 +144,7 @@ const reportUrl = `${repo}/issues/new?title=${encodeURIComponent(fill(t('article
       toc.length > 0 && (
         <aside class="side">
           <nav class="toc" aria-label={t('common.toc')}>
-            <span class="toc-title lc">{t('common.toc')}</span>
+            <span class="toc-title">{t('common.toc')}</span>
             {toc.map((h) => (
               <a href={`#${h.slug}`}>{h.text}</a>
             ))}

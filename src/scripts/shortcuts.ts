@@ -1,12 +1,12 @@
 /*
  * Raccourcis clavier du site :
  *   g puis h / a / p / c / m → Accueil / Articles / Projets / Cheatsheets / À propos
- *   t → basculer clair / sombre      s → basculer éditorial / dev
+ *   t → basculer clair / sombre
  *   ? → aide des raccourcis          Échap → fermer la fenêtre ouverte (natif des <dialog>)
  * La recherche (⌘K, Ctrl K, /) est gérée par search.ts.
  * Jamais déclenchés quand le focus est dans un champ de saisie.
  */
-import { toggleStyle, toggleTheme } from './appearance';
+import { toggleTheme } from './appearance';
 
 const dialog = document.querySelector<HTMLDialogElement>('[data-shortcuts-dialog]');
 const paths: Record<string, string> = JSON.parse(dialog?.dataset.paths ?? '{}');
@@ -67,10 +67,6 @@ document.addEventListener('keydown', (event) => {
     case 't':
       event.preventDefault();
       toggleTheme();
-      break;
-    case 's':
-      event.preventDefault();
-      toggleStyle();
       break;
   }
 });

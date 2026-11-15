@@ -26,8 +26,8 @@ const years = [...new Set(articles.map((a) => a.data.date.getUTCFullYear()))];
 
 <Base title={t('articles.title')}>
   <div class="container-narrow page">
-    <ListHeader prompt="ls ~/articles" title={t('articles.title')} intro={t('articles.intro')}>
-      <a slot="aside" href={rssPath[lang]} class="muted lc code rss">{t('common.rss')}</a>
+    <ListHeader title={t('articles.title')} intro={t('articles.intro')}>
+      <a slot="aside" href={rssPath[lang]} class="muted code rss">{t('common.rss')}</a>
     </ListHeader>
 
     {

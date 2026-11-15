@@ -27,7 +27,7 @@ const goKeys: { key: string; label: string }[] = [
 
 <dialog class="shortcuts" aria-labelledby="shortcuts-title" data-shortcuts-dialog data-paths={JSON.stringify(paths)}>
   <div class="head">
-    <h2 id="shortcuts-title" class="lc">{t('shortcuts.title')}</h2>
+    <h2 id="shortcuts-title">{t('shortcuts.title')}</h2>
     <button type="button" class="close" aria-label={t('shortcuts.close')} data-shortcuts-close>
       <kbd>esc</kbd>
     </button>
@@ -54,10 +54,6 @@ const goKeys: { key: string; label: string }[] = [
     <div>
       <dd>{t('shortcuts.theme')}</dd>
       <dt><kbd>t</kbd></dt>
-    </div>
-    <div>
-      <dd>{t('shortcuts.style')}</dd>
-      <dt><kbd>s</kbd></dt>
     </div>
     <div>
       <dd>{t('shortcuts.help')}</dd>

@@ -7,7 +7,7 @@ import Tags from '../ui/Tags.astro';
 
 interface Props {
   entry: CollectionEntry<'articles'>;
-  /** Affiche le niveau et les tags (liste complète) ; sinon un seul tag en dev (accueil). */
+  /** Affiche le niveau et les tags (liste des articles). */
   detailed?: boolean;
 }
 
@@ -24,18 +24,12 @@ const t = useTranslations(lang);
     {
       detailed && (
         <span class="row-meta code muted">
-          <span class="lc">{t(`level.${level}`)}</span>
+          <span>{t(`level.${level}`)}</span>
           {tags.length > 0 && ' · '}
           <Tags tags={tags} />
         </span>
       )
     }
   </span>
-  {!detailed && tags[0] && <span class="m-only tag muted first-tag">{tags[0]}</span>}
 </a>
 
-<style>
-  .first-tag {
-    font-size: 12px;
-  }
-</style>

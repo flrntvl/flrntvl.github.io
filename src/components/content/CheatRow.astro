@@ -29,7 +29,7 @@ const systems = [
 
 <a
   href={getEntryPath('cheatsheets', entry)}
-  class:list={['cs-row', { stacked, 'no-cmd': !command }]}
+  class:list={['cs-row', { stacked }]}
   data-search={search}
 >
   <span class="head">
@@ -51,8 +51,8 @@ const systems = [
       )
     }
   </span>
-  {command && <code class="row-cmd code cmd">{command}</code>}
-  {stacked && <span class="cmt muted desc">{description}</span>}
+  {command && <code class="row-cmd code">{command}</code>}
+  {stacked && <span class="muted desc">{description}</span>}
 </a>
 
 <style>
@@ -99,28 +99,4 @@ const systems = [
     font-size: 12px;
   }
 
-  :global(:root[data-style='mono']) .systems {
-    text-transform: lowercase;
-  }
-
-  /* Dev, accueil : « $ commande   # titre », comme dans un terminal */
-  :global(:root[data-style='mono']) .cs-row:not(.stacked) .row-cmd {
-    order: -1;
-    flex: 0 0 220px;
-    margin-left: 0;
-    color: var(--fg);
-  }
-
-  :global(:root[data-style='mono']) .cs-row:not(.stacked) .head {
-    flex: 1 1 260px;
-  }
-
-  :global(:root[data-style='mono']) .cs-row:not(.stacked, .no-cmd) .row-title {
-    color: var(--muted);
-    font-weight: 400;
-  }
-
-  :global(:root[data-style='mono']) .cs-row:not(.stacked) .row-title::before {
-    content: '# ';
-  }
 </style>

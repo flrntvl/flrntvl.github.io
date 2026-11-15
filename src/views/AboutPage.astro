@@ -42,7 +42,6 @@ const contacts = [
         fetchpriority="high"
       />
       <div class="intro-text">
-        <p class="m-only muted prompt"><span class="acc">$</span> cat about.md</p>
         <h1 class="page-title">{t('about.title')}</h1>
         <p class="body muted tagline">{t('about.tagline')}</p>
       </div>
@@ -58,7 +57,7 @@ const contacts = [
         {
           uses.map((item) => (
             <div class="stack">
-              <dt class="lc">{item.label}</dt>
+              <dt>{item.label}</dt>
               <dd>{item.value}</dd>
             </div>
           ))

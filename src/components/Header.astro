@@ -14,11 +14,11 @@ const { lang, alternatePath } = Astro.props;
 const t = useTranslations(lang);
 const current = getRouteKey(Astro.url.pathname);
 
-const nav: { key: RouteKey; label: UiKey; mono?: UiKey }[] = [
+const nav: { key: RouteKey; label: UiKey }[] = [
   { key: 'articles', label: 'nav.articles' },
   { key: 'projects', label: 'nav.projects' },
   { key: 'cheatsheets', label: 'nav.cheatsheets' },
-  { key: 'about', label: 'nav.about', mono: 'nav.about.mono' },
+  { key: 'about', label: 'nav.about' },
 ];
 
 const otherLang = (Object.keys(languages) as Lang[]).find((l) => l !== lang)!;
@@ -28,22 +28,14 @@ const otherPath = alternatePath ?? getAlternatePath(Astro.url.pathname, otherLan
 <header class="header">
   <div class="container bar">
     <a href={getPath('home', lang)} class="logo" aria-current={current === 'home' ? 'page' : undefined}>
-      <span class="e-only">{t('site.name')}</span>
-      <span class="m-only logo-mono">~/florent<span class="cursor" aria-hidden="true"></span></span>
+      {t('site.name')}
     </a>
 
     <nav class="nav" aria-label={t('nav.label')}>
       {
         nav.map((item) => (
           <a href={getPath(item.key, lang)} aria-current={current === item.key ? 'page' : undefined}>
-            {item.mono ? (
-              <>
-                <span class="e-only">{t(item.label)}</span>
-                <span class="m-only">{t(item.mono)}</span>
-              </>
-            ) : (
-              t(item.label)
-            )}
+            {t(item.label)}
           </a>
         ))
       }
@@ -51,12 +43,11 @@ const otherPath = alternatePath ?? getAlternatePath(Astro.url.pathname, otherLan
 
     <div class="tools">
       <button type="button" class="hdr-btn muted search" data-search-open>
-        <svg class="e-only" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
           <circle cx="11" cy="11" r="7"></circle>
           <path d="m20 20-3.5-3.5"></path>
         </svg>
-        <span class="m-only acc" aria-hidden="true">&gt;</span>
-        <span class="lc search-label">{t('search.open')}</span>
+        <span class="search-label">{t('search.open')}</span>
         <kbd class="kbd-apple" aria-hidden="true">⌘K</kbd>
         <kbd class="kbd-other" aria-hidden="true">Ctrl K</kbd>
       </button>
@@ -122,12 +113,6 @@ const otherPath = alternatePath ?? getAlternatePath(Astro.url.pathname, otherLan
     font-weight: 600;
   }
 
-  .logo-mono {
-    font-size: 15px;
-    font-weight: 700;
-  }
-
-
   .nav {
     flex: 1 1 auto;
     display: flex;
@@ -150,20 +135,6 @@ const otherPath = alternatePath ?? getAlternatePath(Astro.url.pathname, otherLan
   .nav a[aria-current='page'] {
     color: var(--fg);
     font-weight: 500;
-  }
-
-  :global(:root[data-style='mono']) .nav a {
-    font-size: 13px;
-    text-transform: lowercase;
-  }
-
-  :global(:root[data-style='mono']) .nav a::before {
-    content: './';
-  }
-
-  :global(:root[data-style='mono']) .nav a[aria-current='page'] {
-    color: var(--accent);
-    font-weight: 400;
   }
 
   .tools {
@@ -217,7 +188,7 @@ const otherPath = alternatePath ?? getAlternatePath(Astro.url.pathname, otherLan
     background: var(--surface);
   }
 
-  /* Sous 1080 px (largeur nécessaire en style dev) : logo · loupe · menu ☰ */
+  /* Sous 1080 px : logo · loupe · menu ☰ */
   @media (max-width: 1080px) {
     .bar {
       flex-wrap: nowrap;

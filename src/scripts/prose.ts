@@ -3,7 +3,7 @@
  * - commandes avec variables (cheatsheets) : champs au-dessus du bloc, mise à jour en direct ;
  * - boutons « copier » des blocs de code (la commande complétée pour les blocs à variables) ;
  * - schémas Mermaid, chargés seulement si la page en contient,
- *   aux couleurs du site et redessinés quand le thème ou le style change.
+ *   aux couleurs du site et redessinés quand le thème change.
  */
 
 const labels = {
@@ -169,10 +169,10 @@ async function setupDiagrams(): Promise<void> {
 
   await render();
 
-  // Thème ou style modifié (menu, raccourci, appareil en mode « auto ») : on redessine.
+  // Thème modifié (menu, raccourci, appareil en mode « auto ») : on redessine.
   new MutationObserver(render).observe(document.documentElement, {
     attributes: true,
-    attributeFilter: ['data-theme', 'data-style'],
+    attributeFilter: ['data-theme'],
   });
 }
 

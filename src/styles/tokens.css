@@ -1,7 +1,6 @@
 /*
  * Design tokens.
- * Deux réglages indépendants posés sur <html> par le script anti-flash :
- *   data-theme="light|dark"  et  data-style="editorial|mono"
+ * Thème posé sur <html> par le script anti-flash : data-theme="light|dark".
  * Valeurs reprises de docs/prototype.html.
  */
 
@@ -15,14 +14,7 @@
   --radius: 12px;
 }
 
-:root[data-style='mono'] {
-  --ui: var(--font-jetbrains-mono);
-  --body: var(--font-ibm-plex-sans);
-  --code: var(--font-jetbrains-mono);
-  --radius: 6px;
-}
-
-/* ---------- Couleurs : éditorial (par défaut) ---------- */
+/* ---------- Couleurs ---------- */
 
 :root {
   color-scheme: light;
@@ -56,29 +48,7 @@
   --warn: #ff8a7a;
 }
 
-/* ---------- Couleurs : dev ---------- */
-
-:root[data-style='mono'] {
-  --bg: #f7f6f2;
-  --fg: #1a1917;
-  --muted: #625f58;
-  --line: #e2e0d9;
-  --surface: #eeece6;
-  --accent: #955600;
-  --scrim: rgba(26, 25, 23, 0.3);
-}
-
-:root[data-style='mono'][data-theme='dark'] {
-  --bg: #111110;
-  --fg: #e8e6e1;
-  --muted: #9a978f;
-  --line: #2a2926;
-  --surface: #1a1a18;
-  --accent: #f2b544;
-  --scrim: rgba(0, 0, 0, 0.62);
-}
-
-/* ---------- Sans JavaScript : suivre l'appareil (style éditorial) ---------- */
+/* ---------- Sans JavaScript : suivre l'appareil ---------- */
 
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme]) {

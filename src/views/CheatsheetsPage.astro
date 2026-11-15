@@ -22,17 +22,14 @@ const groups = cheatsheetCategories
 
 <Base title={t('cheatsheets.title')}>
   <div class="container page">
-    <ListHeader prompt="ls ~/cheatsheets" title={t('cheatsheets.title')} intro={t('cheatsheets.intro')} />
+    <ListHeader title={t('cheatsheets.title')} intro={t('cheatsheets.intro')} />
 
     {
       cheatsheets.length > 0 && (
         <div class="tools">
           <label class="filter" data-cheat-filter hidden>
-            <span class="e-only icon">
+            <span class="icon">
               <SearchIcon />
-            </span>
-            <span class="m-only acc" aria-hidden="true">
-              &gt;
             </span>
             <input type="search" aria-label={t('cheatsheets.filterLabel')} placeholder={t('cheatsheets.filter')} autocomplete="off" spellcheck="false" />
           </label>

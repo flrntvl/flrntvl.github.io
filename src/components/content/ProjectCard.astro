@@ -1,7 +1,7 @@
 ---
 import type { CollectionEntry } from 'astro:content';
 import { useTranslations } from '../../i18n/utils';
-import { getEntryPath, getSlug } from '../../lib/content';
+import { getEntryPath } from '../../lib/content';
 
 interface Props {
   entry: CollectionEntry<'projects'>;
@@ -14,11 +14,10 @@ const t = useTranslations(lang);
 ---
 
 <a href={getEntryPath('projects', entry)} class="card">
-  <span class="card-path code">~/{t('projects.dir')}/{getSlug(entry)}</span>
   <span class="card-body">
     <span class="row-title">{title}</span>
     <span class="body muted row-sub">{description}</span>
-    <span class="card-foot code muted lc">
+    <span class="card-foot code muted">
       <span>{stack.join(' · ')}</span>
       {showStatus && <span>{status}</span>}
     </span>

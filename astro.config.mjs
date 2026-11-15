@@ -28,7 +28,6 @@ export default defineConfig({
   // Polices auto-hébergées : téléchargées depuis Fontsource au build, servies depuis le site.
   // Seul le sous-ensemble latin et les graisses utilisées par le design sont gardés.
   fonts: [
-    // Style éditorial
     {
       provider: fontProviders.fontsource(),
       name: 'Geist',
@@ -55,25 +54,6 @@ export default defineConfig({
       styles: ['italic'],
       subsets: ['latin'],
       fallbacks: ['serif'],
-    },
-    // Style dev
-    {
-      provider: fontProviders.fontsource(),
-      name: 'JetBrains Mono',
-      cssVariable: '--font-jetbrains-mono',
-      weights: [400, 500, 700],
-      styles: ['normal'],
-      subsets: ['latin'],
-      fallbacks: ['monospace'],
-    },
-    {
-      provider: fontProviders.fontsource(),
-      name: 'IBM Plex Sans',
-      cssVariable: '--font-ibm-plex-sans',
-      weights: [400, 500],
-      styles: ['normal'],
-      subsets: ['latin'],
-      fallbacks: ['sans-serif'],
     },
   ],
   markdown: {

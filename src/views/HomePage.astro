@@ -29,7 +29,7 @@ const cheatsheets = (await getCheatsheets(lang)).slice(0, 6);
         <section class="block">
           <div class="section-head">
             <h2 class="sh">{t('home.latest')}</h2>
-            <a href={getPath('articles', lang)} class="muted lc">{t('home.allArticles')}</a>
+            <a href={getPath('articles', lang)} class="muted">{t('home.allArticles')}</a>
           </div>
           <div class="rows list">
             {articles.map((entry) => <ArticleRow entry={entry} />)}
@@ -43,7 +43,7 @@ const cheatsheets = (await getCheatsheets(lang)).slice(0, 6);
         <section class="block">
           <div class="section-head">
             <h2 class="sh">{t('home.projects')}</h2>
-            <a href={getPath('projects', lang)} class="muted lc">{t('home.allProjects')}</a>
+            <a href={getPath('projects', lang)} class="muted">{t('home.allProjects')}</a>
           </div>
           <div class="cards list-cards">
             {projects.map((entry) => <ProjectCard entry={entry} />)}
@@ -57,7 +57,7 @@ const cheatsheets = (await getCheatsheets(lang)).slice(0, 6);
         <section class="block last">
           <div class="section-head">
             <h2 class="sh">{t('home.cheatsheets')}</h2>
-            <a href={getPath('cheatsheets', lang)} class="muted lc">{t('home.allCheatsheets')}</a>
+            <a href={getPath('cheatsheets', lang)} class="muted">{t('home.allCheatsheets')}</a>
           </div>
           <div class="cs-box list-cs">
             {cheatsheets.map((entry) => <CheatRow entry={entry} />)}

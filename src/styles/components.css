@@ -1,6 +1,5 @@
 /*
  * Classes partagées entre les pages (reprises de docs/prototype.html).
- * Les variantes du style dev passent par :root[data-style='mono'].
  */
 
 /* ---------- En-têtes de page et de section ---------- */
@@ -24,26 +23,11 @@
   line-height: 1.6;
 }
 
-.prompt {
-  margin: 0 0 12px;
-  font-size: 14px;
-}
-
 .sh {
   margin: 0;
   font-size: 14px;
   font-weight: 500;
   color: var(--muted);
-}
-
-:root[data-style='mono'] .sh {
-  color: var(--fg);
-  text-transform: lowercase;
-}
-
-:root[data-style='mono'] .sh::before {
-  content: '## ';
-  color: var(--accent);
 }
 
 .section-head {
@@ -88,25 +72,6 @@
 .empty {
   margin: 48px 0 0;
   font-size: 15px;
-}
-
-/* ---------- Préfixes du style dev ---------- */
-
-:root[data-style='mono'] .cmd::before {
-  content: '$ ';
-  color: var(--accent);
-}
-
-:root[data-style='mono'] .cmt::before {
-  content: '# ';
-}
-
-:root[data-style='mono'] .tag {
-  text-transform: lowercase;
-}
-
-:root[data-style='mono'] .tag::before {
-  content: '#';
 }
 
 /* ---------- Lignes de liste (articles, fiches) ---------- */
@@ -177,18 +142,6 @@
   color: var(--accent);
 }
 
-.card-path {
-  padding: 10px 16px;
-  font-size: 12px;
-  color: var(--muted);
-  background: var(--surface);
-  border-bottom: 1px solid var(--line);
-}
-
-:root:not([data-style='mono']) .card-path {
-  display: none;
-}
-
 .card-body {
   flex: 1;
   display: flex;
@@ -218,13 +171,6 @@
   flex-direction: column;
 }
 
-:root[data-style='mono'] .cs-box {
-  padding: 8px 16px;
-  background: var(--surface);
-  border: 1px solid var(--line);
-  border-radius: var(--radius);
-}
-
 .cs-row {
   display: flex;
   flex-wrap: wrap;
@@ -234,7 +180,7 @@
   padding: 12px 0;
 }
 
-:root:not([data-style='mono']) .cs-row {
+.cs-row {
   border-top: 1px solid var(--line);
 }
 
@@ -275,23 +221,6 @@
   border-color: var(--fg);
 }
 
-:root[data-style='mono'] .chip {
-  padding: 0 10px;
-  border-color: transparent;
-  border-radius: 4px;
-  font-size: 12px;
-  text-transform: lowercase;
-}
-
-:root[data-style='mono'] .chip::before {
-  content: '--';
-}
-
-:root[data-style='mono'] .chip[aria-pressed='true'] {
-  background: var(--surface);
-  color: var(--accent);
-}
-
 .warn {
   display: inline-flex;
   align-items: center;
@@ -305,10 +234,6 @@
   font-weight: 500;
 }
 
-:root[data-style='mono'] .warn {
-  border-radius: 4px;
-}
-
 .os {
   padding: 3px 9px;
   border: 1px solid var(--line);
@@ -316,11 +241,6 @@
   color: var(--fg);
   font-family: var(--code);
   font-size: 12px;
-}
-
-:root[data-style='mono'] .os {
-  border-radius: 4px;
-  text-transform: lowercase;
 }
 
 .os.no {
@@ -372,11 +292,6 @@
   opacity: 0.88;
 }
 
-:root[data-style='mono'] .btn-primary {
-  background: var(--accent);
-  border-color: var(--accent);
-}
-
 /* ---------- Sommaire latéral ---------- */
 
 .toc {
@@ -399,24 +314,13 @@
   color: var(--fg);
 }
 
-:root[data-style='mono'] .toc a {
-  /* Retrait suspendu : une entrée sur deux lignes s'aligne sous le texte, pas sous le « # ». */
-  padding-left: 2ch;
-  text-indent: -2ch;
-}
-
-:root[data-style='mono'] .toc a::before {
-  content: '# ';
-  color: var(--accent);
-}
-
 /* Section en cours de lecture (src/scripts/toc.ts) */
 .toc a[aria-current] {
   position: relative;
   color: var(--fg);
 }
 
-:root:not([data-style='mono']) .toc a[aria-current]::before {
+.toc a[aria-current]::before {
   content: '';
   position: absolute;
   top: 0.15em;
@@ -425,14 +329,6 @@
   width: 2px;
   border-radius: 1px;
   background: var(--accent);
-}
-
-:root[data-style='mono'] .toc a[aria-current] {
-  color: var(--accent);
-}
-
-:root[data-style='mono'] .toc a[aria-current]::before {
-  content: '> ';
 }
 
 /* ---------- Faits (projet, à propos) ---------- */
@@ -474,11 +370,6 @@
   flex: 1 1 300px;
   font-family: var(--code);
   font-size: 14px;
-}
-
-:root[data-style='mono'] .fact dt::before,
-:root[data-style='mono'] .stack dt::before {
-  content: '// ';
 }
 
 /* ---------- Précédent / suivant ---------- */
@@ -534,28 +425,5 @@
 
   .page-title {
     font-size: 38px;
-  }
-}
-
-/* Curseur bloc clignotant (logo dev, 404) */
-.cursor {
-  display: inline-block;
-  width: 0.55em;
-  height: 1em;
-  margin-left: 2px;
-  vertical-align: -0.12em;
-  background: var(--accent);
-  animation: blink 1.1s steps(1) infinite;
-}
-
-@keyframes blink {
-  50% {
-    opacity: 0;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .cursor {
-    animation: none;
   }
 }

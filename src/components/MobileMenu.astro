@@ -17,11 +17,11 @@ interface Props {
 const { lang, alternatePath, current } = Astro.props;
 const t = useTranslations(lang);
 
-const nav: { key: RouteKey; label: UiKey; mono?: UiKey }[] = [
+const nav: { key: RouteKey; label: UiKey }[] = [
   { key: 'articles', label: 'nav.articles' },
   { key: 'projects', label: 'nav.projects' },
   { key: 'cheatsheets', label: 'nav.cheatsheets' },
-  { key: 'about', label: 'nav.about', mono: 'nav.about.mono' },
+  { key: 'about', label: 'nav.about' },
 ];
 
 const socials = [
@@ -35,8 +35,7 @@ const socials = [
 <dialog id="mobile-menu" class="mmenu" aria-label={t('menu.label')} data-mobile-menu>
   <div class="top">
     <a href={getPath('home', lang)} class="logo">
-      <span class="e-only">{t('site.name')}</span>
-      <span class="m-only logo-mono">~/florent<span class="cursor" aria-hidden="true"></span></span>
+      {t('site.name')}
     </a>
     <button type="button" class="icon-btn" aria-label={t('menu.close')} data-menu-close>
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -51,14 +50,7 @@ const socials = [
         nav.map((item) => (
           <a href={getPath(item.key, lang)} aria-current={current === item.key ? 'page' : undefined}>
             <span class="t">
-              {item.mono ? (
-                <>
-                  <span class="e-only">{t(item.label)}</span>
-                  <span class="m-only">{t(item.mono)}</span>
-                </>
-              ) : (
-                t(item.label)
-              )}
+              {t(item.label)}
             </span>
             <span class="muted arrow" aria-hidden="true">→</span>
           </a>
@@ -87,7 +79,7 @@ const socials = [
       </div>
     </AppearanceControls>
 
-    <div class="socials muted lc">
+    <div class="socials muted">
       {
         socials.map((link) => (
           <a href={link.href} class="muted">
@@ -132,11 +124,6 @@ const socials = [
     font-weight: 600;
   }
 
-  .logo-mono {
-    font-size: 15px;
-    font-weight: 700;
-  }
-
   .icon-btn {
     width: 44px;
     height: 44px;
@@ -179,17 +166,6 @@ const socials = [
     font-size: 16px;
   }
 
-  :global(:root[data-style='mono']) .mnav a {
-    font-size: 17px;
-    letter-spacing: 0;
-    text-transform: lowercase;
-  }
-
-  :global(:root[data-style='mono']) .mnav a .t::before {
-    content: './';
-    color: var(--accent);
-  }
-
   /* Contrôle Langue : mêmes formes que les contrôles Thème (AppearanceControls) */
   .field {
     display: flex;
@@ -226,10 +202,6 @@ const socials = [
     background: var(--bg);
     color: var(--fg);
     box-shadow: 0 0 0 1px var(--line);
-  }
-
-  :global(:root[data-style='mono']) .seg[aria-current='page'] {
-    color: var(--accent);
   }
 
   .socials {

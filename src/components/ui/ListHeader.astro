@@ -1,15 +1,13 @@
 ---
-/* En-tête des pages de liste : « $ ls ~/articles » (dev), titre, intro. */
+/* En-tête des pages de liste : titre, intro. */
 interface Props {
-  prompt: string;
   title: string;
   intro: string;
 }
 
-const { prompt, title, intro } = Astro.props;
+const { title, intro } = Astro.props;
 ---
 
-<p class="m-only muted prompt"><span class="acc">$</span> {prompt}</p>
 <div class="head">
   <h1 class="page-title">{title}</h1>
   <slot name="aside" />

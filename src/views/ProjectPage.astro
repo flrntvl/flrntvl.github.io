@@ -8,7 +8,7 @@ import { getPath, useTranslations } from '../i18n/utils';
 import ProseScripts from '../components/ProseScripts.astro';
 import SearchMeta from '../components/SearchMeta.astro';
 import Base from '../layouts/Base.astro';
-import { getAlternate, getAvailableLangs, getEntryPath, getProjects, getSlug } from '../lib/content';
+import { getAlternate, getAvailableLangs, getEntryPath, getProjects } from '../lib/content';
 import { formatList } from '../lib/format';
 
 interface Props {
@@ -45,14 +45,13 @@ const facts = [
   <div class="container page project" data-pagefind-body>
     <SearchMeta type="project" title={title} sub={description} meta={stack[0] ?? ''} />
     <Breadcrumb lang={lang} items={[{ label: t('projects.title'), href: getPath('projects', lang) }, { label: title }]} />
-    <p class="m-only muted cd"><span class="acc">$</span> cd ~/{t('projects.dir')}/{getSlug(entry)}</p>
     <h1 class="title">{title}</h1>
     <p class="body muted lead">{description}</p>
 
     <div class="actions" data-pagefind-ignore>
-      {repo && <a href={repo} class="btn btn-primary lc">{t('project.source')}</a>}
-      {url && <a href={url} class="btn lc">{t('project.site')}</a>}
-      <span class="status code lc"><span class="dot" aria-hidden="true"></span>{status}</span>
+      {repo && <a href={repo} class="btn btn-primary">{t('project.source')}</a>}
+      {url && <a href={url} class="btn">{t('project.site')}</a>}
+      <span class="status code"><span class="dot" aria-hidden="true"></span>{status}</span>
     </div>
 
     <figure class="cover">
@@ -73,8 +72,8 @@ const facts = [
         {
           facts.map((fact) => (
             <div class="fact">
-              <dt class="lc">{fact.label}</dt>
-              <dd class:list={{ 'code lc': fact.code }}>{fact.value}</dd>
+              <dt>{fact.label}</dt>
+              <dd class:list={{ code: fact.code }}>{fact.value}</dd>
             </div>
           ))
         }
@@ -100,11 +99,6 @@ const facts = [
 <style>
   .project {
     padding-top: 72px;
-  }
-
-  .cd {
-    margin: 20px 0 0;
-    font-size: 14px;
   }
 
   .title {

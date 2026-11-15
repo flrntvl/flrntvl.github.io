@@ -44,7 +44,7 @@ const sectionTitle = {
     <Breadcrumb lang={lang} items={[{ label: sectionTitle, href: getPath(section, lang) }, { label: t('missing.title') }]} />
     <h1 class="title" lang={entry.data.lang}>{entry.data.title}</h1>
     <p class="body muted page-intro">{message}</p>
-    <div class="links lc">
+    <div class="links">
       <a href={original} hreflang={entry.data.lang} class="btn btn-primary">{t('missing.read')}</a>
       <a href={getPath(section, lang)} class="btn">{listLabel}</a>
     </div>

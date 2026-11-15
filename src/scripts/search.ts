@@ -3,9 +3,9 @@
  * - ouverture : bouton de l'en-tête, ⌘K / Ctrl K, ou « / » (hors champ de saisie) ;
  * - recherche plein texte Pagefind (index généré au build), chargée à la première ouverture ;
  * - résultats groupés par type, filtres, ↑ ↓ pour naviguer, ↵ pour ouvrir, Échap pour fermer ;
- * - mode commandes si la saisie commence par « > » : theme, style, lang, go.
+ * - mode commandes si la saisie commence par « > » : theme, lang, go.
  */
-import { getStylePref, getThemePref, setStylePref, setThemePref } from './appearance';
+import { getThemePref, setThemePref } from './appearance';
 
 type Type = 'article' | 'project' | 'cheatsheet';
 
@@ -83,7 +83,6 @@ if (dialog) {
 
   function commands(): Item[] {
     const theme = getThemePref();
-    const style = getStylePref();
     const go = (path: string) => () => location.assign(path);
     const close = (fn: () => void) => () => {
       fn();
@@ -94,8 +93,6 @@ if (dialog) {
       { title: 'theme auto', desc: s('cmd.theme.auto'), on: theme === 'auto', run: close(() => setThemePref('auto')) },
       { title: 'theme light', desc: s('cmd.theme.light'), on: theme === 'light', run: close(() => setThemePref('light')) },
       { title: 'theme dark', desc: s('cmd.theme.dark'), on: theme === 'dark', run: close(() => setThemePref('dark')) },
-      { title: 'style editorial', desc: s('cmd.style.editorial'), on: style === 'editorial', run: close(() => setStylePref('editorial')) },
-      { title: 'style dev', desc: s('cmd.style.dev'), on: style === 'mono', run: close(() => setStylePref('mono')) },
       { title: 'lang fr', desc: s('cmd.lang.fr'), on: config.lang === 'fr', run: go(config.langPaths.fr) },
       { title: 'lang en', desc: s('cmd.lang.en'), on: config.lang === 'en', run: go(config.langPaths.en) },
       { title: 'go home', desc: s('cmd.go.home'), on: config.current === 'home', run: go(config.paths.home) },
@@ -126,14 +123,13 @@ if (dialog) {
     const isCode = icon === 'command';
     const tag = item.url ? `a href="${escape(item.url)}"` : 'div';
     return `<${tag} class="res" role="option" id="search-opt-${index}" data-index="${index}" aria-selected="false">
-      <span class="m-only res-caret" aria-hidden="true">&gt;</span>
-      <span class="e-only res-icon" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">${ICONS[icon]}</svg></span>
+      <span class="res-icon" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">${ICONS[icon]}</svg></span>
       <span class="res-text">
         <span class="res-title${isCode ? ' is-code' : ''}">${escape(item.title)}</span>
         ${item.sub ? `<span class="res-sub">${escape(item.sub)}</span>` : ''}
       </span>
       ${item.meta || item.state ? `<span class="res-meta${item.state ? ' code' : ''}">${escape(item.state || item.meta)}</span>` : ''}
-      <span class="e-only res-enter" aria-hidden="true">↵</span>
+      <span class="res-enter" aria-hidden="true">↵</span>
     </${item.url ? 'a' : 'div'}>`;
   }
 

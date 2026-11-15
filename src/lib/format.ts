@@ -2,7 +2,7 @@ import type { Lang } from '../i18n/ui';
 
 const locales: Record<Lang, string> = { fr: 'fr-FR', en: 'en-GB' };
 
-/** Date lisible : « 14 oct. 2026 » / « 14 Oct 2026 » (style éditorial). */
+/** Date lisible : « 14 oct. 2026 » / « 14 Oct 2026 ». */
 export function formatDate(date: Date, lang: Lang): string {
   return new Intl.DateTimeFormat(locales[lang], {
     day: 'numeric',
@@ -12,7 +12,7 @@ export function formatDate(date: Date, lang: Lang): string {
   }).format(date);
 }
 
-/** Date ISO : « 2026-10-14 » (style dev, attribut datetime). */
+/** Date ISO : « 2026-10-14 » (attribut datetime). */
 export function isoDate(date: Date): string {
   return date.toISOString().slice(0, 10);
 }
