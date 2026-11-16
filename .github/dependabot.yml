@@ -1,0 +1,48 @@
+# Dependabot configuration: automated dependency update pull requests.
+# Dependabot only reads this file from the default branch (main).
+# Reference: https://docs.github.com/code-security/dependabot/working-with-dependabot/dependabot-options-reference
+#
+# When no update is available, no pull request is opened. Each run still
+# shows up in the Actions tab as a "Dependabot Updates" job with its logs.
+version: 2 # Required; the only supported version of this file format
+
+updates:
+  # npm packages (astro, mdx, markdown-satteri, mermaid, pagefind…)
+  - package-ecosystem: npm
+    directory: / # Location of package.json and package-lock.json
+    schedule:
+      interval: weekly
+      day: monday
+      time: "07:00"
+      timezone: Europe/Paris # Without it, "time" is interpreted as UTC
+    # Only propose versions published at least 7 days ago, so that
+    # compromised or broken releases have time to be detected and pulled.
+    # Does not apply to security updates (fixes for known vulnerabilities),
+    # which are enabled separately in the repository settings.
+    cooldown:
+      default-days: 7
+    # Bundle all npm updates into a single pull request instead of one per package
+    groups:
+      npm: # Group name, used in the PR title
+        patterns: ["*"] # Match every dependency
+    # Commit message and PR title formatted as "chore(deps): …"
+    commit-message:
+      prefix: chore
+      include: scope # Adds the "(deps)" scope ("deps-dev" for devDependencies)
+
+  # Actions used in .github/workflows (checkout, withastro/action, deploy-pages)
+  - package-ecosystem: github-actions
+    directory: / # "/" means .github/workflows for this ecosystem
+    schedule:
+      interval: monthly # Actions release less often than npm packages
+      timezone: Europe/Paris
+    # Same 7-day delay: a hijacked action can be as harmful as a compromised package
+    cooldown:
+      default-days: 7
+    # Bundle all action updates into a single pull request
+    groups:
+      actions:
+        patterns: ["*"]
+    commit-message:
+      prefix: chore
+      include: scope
