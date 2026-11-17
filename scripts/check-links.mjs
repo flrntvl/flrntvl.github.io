@@ -111,6 +111,9 @@ const IGNORED = new Set(['/404.html → /404/']);
 const files = walk(root).filter((f) => ['.html', '.css', '.xml'].includes(extname(f)));
 const errors = [];
 let checked = 0;
+// `checked` counts every occurrence, since each link is checked in its own page. Most of them
+// point to the same few files: distinct targets (file + anchor) show how much is really covered.
+const targets = new Set();
 
 for (const file of files) {
   const text = readFileSync(file, 'utf8');
@@ -119,6 +122,7 @@ for (const file of files) {
     if (!link || IGNORED.has(`${publicPath(file)} → ${url}`)) continue;
     checked++;
     const target = link.samePage ? file : resolveFile(link.pathname);
+    targets.add(target ? publicPath(target) + (link.hash ? `#${link.hash}` : '') : url);
     if (!target) {
       errors.push(`${publicPath(file)} → ${url}: page or file not found`);
       continue;
@@ -135,4 +139,6 @@ if (unique.length > 0) {
   for (const error of unique) console.error(`  ${error}`);
   process.exit(1);
 }
-console.log(`✓ ${checked} internal links checked in ${files.length} files: no broken links.`);
+console.log(`✓ No broken internal links in ${files.length} files.
+  ${checked} links checked where they appear (header, menu and footer links repeat on every page)
+  → ${targets.size} unique targets (file + anchor)`);
