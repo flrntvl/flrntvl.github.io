@@ -25,3 +25,7 @@ pnpm-debug.log*
 
 # index de recherche pour le dev (npm run search:dev)
 public/pagefind/
+
+# browser test output (Playwright)
+test-results/
+playwright-report/
