@@ -22,5 +22,10 @@
   "workers_dev": false,
 
   // Preview URLs on workers.dev (they get an X-Robots-Tag: noindex header automatically)
-  "preview_urls": true
+  "preview_urls": true,
+
+  // Preview settings, required by `wrangler preview` even when empty: a static site needs no
+  // Preview-specific vars, secrets or bindings, and assets above apply to Previews too.
+  // Reference: https://developers.cloudflare.com/workers/previews/configuration/
+  "previews": {}
 }
