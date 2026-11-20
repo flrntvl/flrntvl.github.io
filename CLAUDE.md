@@ -49,7 +49,9 @@ bilingual: French at the root, English under `/en/`, with translated URLs where 
   `https://feat-new-post-flrntvl.flrntvl.workers.dev`). Very long branch names are
   shortened by Cloudflare: check the API or the dashboard. The preview is ready about two
   minutes after the push, behind Cloudflare Access (sign in with the Cloudflare account).
-- Deleting a branch deletes its preview (`.github/workflows/delete-preview.yml`).
+- Deleting a branch deletes its preview: Cloudflare does it itself a few seconds later (the
+  Preview's `auto_delete` setting, on by default; see the Workers Builds API reference).
+  No workflow or token is needed.
 
 ## Languages
 
