@@ -16,7 +16,8 @@
     "check:links": "node scripts/check-links.mjs",
     "check:worker": "wrangler deploy --dry-run",
     "test": "vitest run",
-    "test:e2e": "playwright test"
+    "test:e2e": "playwright test",
+    "verify": "npm run check && npm test && npm run build && npm run check:links && npm run check:worker && npm run test:e2e"
   },
   "dependencies": {
     "@astrojs/markdown-satteri": "^0.4.10",
