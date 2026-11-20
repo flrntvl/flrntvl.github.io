@@ -47,6 +47,13 @@ jobs:
       - name: Check internal links
         run: npm run check:links
 
+      # Dry run of the Cloudflare preview deployment: validates wrangler.jsonc and the dist/
+      # assets without publishing anything (no Cloudflare credentials needed)
+      - name: Validate the Cloudflare Worker config
+        run: npm run check:worker
+        env:
+          WRANGLER_SEND_METRICS: false # no Wrangler telemetry from CI
+
       - name: Install the test browser
         run: npx playwright install --with-deps chromium
 
