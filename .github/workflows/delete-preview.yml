@@ -1,0 +1,62 @@
+name: Delete preview
+
+# When a branch is deleted (automatically after its PR is merged, or by hand), delete its
+# Cloudflare Worker Preview. Previews are created by Cloudflare's GitHub integration
+# (Workers Builds) on every push to a branch other than main: see wrangler.jsonc.
+#
+# Needs two secrets, set both in Actions secrets and in Dependabot secrets (a branch that
+# Dependabot deletes itself runs this workflow with Dependabot secrets only):
+# - CLOUDFLARE_API_TOKEN: API token limited to Account > Workers Scripts > Edit
+# - CLOUDFLARE_ACCOUNT_ID: Cloudflare account ID
+on:
+  delete:
+
+permissions:
+  contents: read
+
+jobs:
+  delete-preview:
+    name: Delete branch preview
+    # Only branches of this repository (not tags, not forks), never main
+    if: >-
+      github.repository == 'flrntvl/flrntvl.github.io' &&
+      github.event.ref_type == 'branch' &&
+      github.event.ref != 'main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      # Checks out main, which holds wrangler.jsonc (Worker name) and the Wrangler version
+      - name: Check out the repository
+        uses: actions/checkout@v7
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version: 26 # same version as the other workflows
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      # The Preview is named after the branch (Wrangler's default), so the deleted branch's
+      # name identifies it. A branch that never had a Preview (Cloudflare error 10025,
+      # "not found") is not an error.
+      - name: Delete the Preview
+        env:
+          BRANCH: ${{ github.event.ref }}
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        run: |
+          set +e
+          output="$(npx wrangler preview delete --name "$BRANCH" --skip-confirmation 2>&1)"
+          status=$?
+          set -e
+          printf '%s\n' "$output"
+          if [ "$status" -eq 0 ]; then
+            exit 0
+          fi
+          if printf '%s' "$output" | grep -q '10025'; then
+            echo "::notice::No Preview found for branch \"$BRANCH\": nothing to delete."
+            exit 0
+          fi
+          exit "$status"

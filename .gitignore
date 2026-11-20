@@ -29,3 +29,6 @@ public/pagefind/
 # browser test output (Playwright)
 test-results/
 playwright-report/
+
+# Wrangler local state (Cloudflare previews)
+.wrangler/

@@ -1,0 +1,26 @@
+// Cloudflare Workers configuration, used only for branch previews.
+// Production stays on GitHub Pages (.github/workflows/deploy.yml).
+//
+// Workers Builds (Cloudflare's GitHub integration) builds every push:
+// - non-production branches run `npx wrangler preview` and get their own Preview URL
+//   (<branch>-flrntvl.flrntvl.workers.dev), protected by Cloudflare Access;
+// - main runs `npx wrangler deploy`, which has no public URL (workers_dev: false, no routes).
+// Previews are deleted when their branch is deleted (.github/workflows/delete-preview.yml).
+// Reference: https://developers.cloudflare.com/workers/previews/
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "flrntvl",
+  "compatibility_date": "2026-11-20",
+
+  // Static site only: serve the Astro build, with the site's own 404 page for unknown paths
+  "assets": {
+    "directory": "./dist",
+    "not_found_handling": "404-page"
+  },
+
+  // No public URL for the production Worker: the real site is on GitHub Pages
+  "workers_dev": false,
+
+  // Preview URLs on workers.dev (they get an X-Robots-Tag: noindex header automatically)
+  "preview_urls": true
+}
