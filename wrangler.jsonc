@@ -5,7 +5,9 @@
 // - non-production branches run `npx wrangler preview` and get their own Preview URL
 //   (<branch>-flrntvl.flrntvl.workers.dev), protected by Cloudflare Access;
 // - main runs `npx wrangler deploy`, which has no public URL (workers_dev: false, no routes).
-// Previews are deleted when their branch is deleted (.github/workflows/delete-preview.yml).
+// Cloudflare deletes a branch's Preview itself when the branch is deleted (the Preview's
+// `auto_delete` setting, on by default): no cleanup workflow needed.
+// Reference: https://developers.cloudflare.com/workers/ci-cd/builds/api-reference/
 // Reference: https://developers.cloudflare.com/workers/previews/
 {
   "$schema": "./node_modules/wrangler/config-schema.json",
