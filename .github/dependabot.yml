@@ -21,6 +21,8 @@ updates:
     # which are enabled separately in the repository settings.
     cooldown:
       default-days: 7
+    # Assign each pull request to the owner, so that GitHub sends a notification
+    assignees: ["flrntvl"]
     # Bundle all npm updates into a single pull request instead of one per package
     groups:
       npm: # Group name, used in the PR title
@@ -39,6 +41,8 @@ updates:
     # Same 7-day delay: a hijacked action can be as harmful as a compromised package
     cooldown:
       default-days: 7
+    # Assign each pull request to the owner, so that GitHub sends a notification
+    assignees: ["flrntvl"]
     # Bundle all action updates into a single pull request
     groups:
       actions:
