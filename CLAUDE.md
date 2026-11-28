@@ -99,3 +99,10 @@ bilingual: French at the root, English under `/en/`, with translated URLs where 
 - Fonts are downloaded from Fontsource (`api.fontsource.org`) at build time. If it cannot be
   reached, the build still succeeds without them (`Copying fonts (0 files)`): do not mistake
   that for a working build in a restricted network.
+- The About page photo is the GitHub avatar (`avatarUrl` in `src/config.ts`), downloaded and
+  optimized at build time: a new GitHub profile picture only shows after a redeploy. Run it
+  by hand (Actions → **Deploy to GitHub Pages** → **Run workflow** on `main`); no code change
+  is needed, the URL stays the same (`?v=4` is the avatar API version, not the picture's).
+  Do not link the avatar directly from the page instead: the image would no longer be resized
+  and optimized, and the page would depend on GitHub to show it, sending every visitor's
+  request there.
